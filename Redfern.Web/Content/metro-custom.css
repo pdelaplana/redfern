@@ -1,0 +1,305 @@
+﻿/*
+ * CSS Customizatons for Metro Bootstrap
+ *
+ * Metro Bootstrap is copyright 2012-2013 of Sergey Pimenov
+ * 
+ */
+
+/*************************************
+ *    Visual Classes 
+ ************************************/
+.lighten
+{
+    color:#aaa !important; 
+}
+.lighten:hover
+{
+    color:#000000 !important
+}
+
+/*
+ * Addresses font-family inconsistency between 'textarea' and other form elements.
+ */
+textarea {
+  font-family: sans-serif;
+}
+
+/*********************************** 
+ * Containers and Layouts
+ ********************************* */
+
+/* 
+ * Remove top and bottom margins
+ */
+.no-margin-top {
+    margin-top:0;
+}
+.no-margin-bottom{
+    margin-bottom:0;
+}
+
+
+/*********************************** 
+ * Navigation Bar
+ ********************************* */
+.metro .navigation-bar .navigation-bar-content .element
+{
+    font-size:15px;
+}
+
+
+/*********************************** 
+ * Tiles 
+ ********************************* */
+
+/* Add 20 px padding for elements  */
+.metro .tiles
+{
+    padding:0 20px;
+}
+
+
+.metro .tiles .tile-group
+{
+    padding-top:0px;
+    /*margin-right:50px;*/
+}
+
+/*********************************** 
+ * Menus
+ ********************************* */
+nav.horizontal-menu.header-menu ul li a.back-button i
+{
+    font-size:32px;
+}
+nav.horizontal-menu.header-menu ul li a.heading
+{
+    font-size:220%;
+    color: #e51400;
+}
+
+nav.horizontal-menu.header-menu ul li:first-child
+{
+    margin-right:0px;
+}
+
+nav.horizontal-menu.header-menu ul li:first-child + li
+{
+    margin-left:0px;
+}
+
+nav.horizontal-menu a.big {
+    font-size:180%;
+}
+
+.horizontal-menu ul
+{
+    margin-right:0px;
+    padding-left:0px;   
+}
+
+/* menus for section headers */
+.metro nav.horizontal-menu.section-header li > a {
+    color: rgba(0, 0, 0, 0.6); 
+    font-size: 16pt; 
+    font-style: normal; 
+    font-weight: 300; 
+    letter-spacing: 0.01em; 
+    line-height: 24pt; 
+    margin: 10px 0; 
+    padding: 0;
+}
+.metro nav.horizontal-menu.section-header li > a.dropdown-toggle:after {
+    color: rgba(0, 0, 0, 0.6); 
+    font-family: iconFont;
+    font-weight: 300; 
+    font-style:normal;
+    font-size: .5em;
+    content: "\e1b3";
+    left: 93%;
+    top: .5em;
+}
+
+/*********************************** 
+ * Tables
+ ********************************* */
+.metro table thead tr th
+{
+    text-align:left;
+    color:rgba(0,0,0,0.3);
+    font-weight:400;
+}
+
+.metro table thead tr td
+{
+    font-size:88%;
+}
+
+/*********************************** 
+ * Grids 
+ **********************************/
+.metro .grid .row
+{
+    margin-top:0px;
+}
+
+
+/************************************ 
+ *   Validation field
+ ************************************/
+span.field-validation-error
+{
+    color:#b91d47 !important;
+    font-size:smaller;
+}
+
+
+/************************************ 
+ *   Date Badge
+ ************************************/
+.entryDate { 
+    border: 1px solid #999; 
+    /*font-family: 'Segoe UI', ,"Times New Roman", serif;*/ 
+    left: 4.8em;
+    left:0px; 
+    line-height: 1; 
+    /*position: absolute;*/ 
+    top: 0; 
+    width: 3.5em;
+    
+    display: block;
+    width: 56px;
+    height: 56px;
+    float: left;
+    margin-right: 10px;
+}
+.entryDate span { 
+    display: block; 
+    text-align: center; 
+}
+.postMonth { 
+    text-transform: uppercase; 
+    font-size: .6em;
+    padding-top: 0.3em; 
+}
+.postDay { font-size: 2em; }
+.postYear { 
+    background-color: #2358B8; 
+    color: #FFF; 
+    font-size: .6em; 
+    padding: 0.3em 0; 
+    margin-top: 0.4em;
+}
+
+
+/************************************ 
+ *   Message Dialog
+ ************************************/
+.metro .message-dialog {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: auto;
+  min-height: 100px;
+  top: 20%;
+  padding: 10px 10px 0;
+}
+
+.message-dialog .message-dialog-inner
+{
+    padding:20px;
+    min-height:200px;
+    width:900px;
+    margin-left:auto;
+    margin-right:auto
+}
+
+/* Fix line-height for labels in message-dialogs */
+.message-dialog-inner label {
+    line-height:21px!important;
+}
+
+
+
+
+/************************************ 
+ *   Listview fluid
+ ************************************/
+.metro div.listview.fluid a.list {
+    display:inline-block;
+    margin:4px 10px 4px 0;
+    border-width:4px;
+
+}
+.metro div.listview.fluid a.list.selected {
+    border-width:4px;   
+    
+}
+
+/************************************ 
+ *  Autocomplete
+ *  Fix margin-left for items in 
+ *  dropdown items
+ ************************************/
+ul.ui-autocomplete{
+    margin-left:10px!important;
+    padding-left:0px!important;
+}
+
+
+/************************************ 
+ *  Text styles
+ ************************************/
+.text-large{
+    font-size:1.3em;
+}
+
+/************************************ 
+ *  input-control text button
+ ************************************/
+.metro .input-control.text .btn-save {
+  /*background-color: #F0F0F0;*/
+  background-color: #fff;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 2;
+  border: 0;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  min-height: 1px;
+  min-width: 1px;
+  padding: 0;
+  margin: 0;
+  display: none;
+}
+.metro .input-control.text .btn-save:after {
+  font-family: iconFont;
+  font-size: 12pt;
+}
+.metro .input-control.text .btn-save:not(:disabled):active {
+  background-color: #1d1d1d;
+  color: #ffffff;
+}
+.metro .input-control.text .btn-save:active {
+  left: auto;
+}
+.metro .input-control.text .btn-save:focus {
+  outline: 1px #ccc dotted ;
+}
+.metro .input-control.text input:focus ~ .btn-save{
+  display: block;
+}
+.metro .input-control.text input:not(:focus) ~ .btn-save:active {
+  display: block;
+}
+.metro .input-control.text .btn-save:after {
+  content: "\e170";
+}
+.metro .input-control.text .btn-save {
+  display: block;
+}
+.metro .input-control.text input:disabled ~ .btn-save {
+  display: none;
+}
