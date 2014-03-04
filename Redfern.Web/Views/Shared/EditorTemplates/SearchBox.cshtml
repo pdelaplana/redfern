@@ -1,0 +1,25 @@
+﻿@model object
+@using System.Dynamic
+@{
+    var id = (string)ViewData["id"];
+    id = !String.IsNullOrEmpty(id) ? "id=" + id : "";
+
+    var style = (string)ViewData["style"];
+    style = !String.IsNullOrEmpty(style) ? "style=" + style : "";
+
+    var databind = (string)ViewData["databind"];
+
+    var htmlAttributes = new Dictionary<string,object>();
+    if (!String.IsNullOrEmpty(databind))
+    {
+        htmlAttributes.Add("data-bind", databind);
+    }
+    htmlAttributes.Add("placeholder", "Search...");
+    
+}
+
+<div @id class="input-control text" @style >
+    @Html.LabelFor(m=>m)  @Html.ValidationMessageFor(m=>m)
+    @Html.TextBoxFor(m => m,  htmlAttributes)
+    <button class="btn-search"></button>
+</div>

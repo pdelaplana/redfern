@@ -34,8 +34,17 @@ namespace Redfern.Web.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("index", "app");
+            }
+            else
+            {
+                ViewBag.ReturnUrl = returnUrl;
+                return View(new LoginViewModel());
+            }
+
+            
         }
 
         //
@@ -374,7 +383,7 @@ namespace Redfern.Web.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("index", "app");
             }
         }
 

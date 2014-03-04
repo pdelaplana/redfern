@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Redfern.Core;
+using Redfern.Core.Models.Configuration;
 using Redfern.Core.Security;
 
 
@@ -44,6 +45,14 @@ namespace Redfern.Core.Models
         }
 
         public RedfernDb() : base("Name=RedfernDbConnection") { }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Configurations.Add(new BoardColumnConfiguration());
+            modelBuilder.Configurations.Add(new CardConfiguration());
+            modelBuilder.Configurations.Add(new CardTagConfiguration());
+        }
 
         public override int SaveChanges()
         {

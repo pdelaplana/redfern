@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles{
+    @RenderSection("Styles", required: false)
+}
+
+@section Scripts{
+    @RenderSection("Scripts", false)
+    
+}
+
+<div id="wrapper">
+    <header class="page">
+        @Html.Partial("_PubNavigationBar")
+    </header>
+    <section class="page" id="application-container">
+        @RenderBody()
+    </section>
+</div>
+<footer class="page">
+    @*
+    @Html.Partial("_Footer")
+    *@
+</footer>

@@ -1,0 +1,18 @@
+﻿@model string
+@{
+    string url = (string)ViewData["url"];
+
+    url = (String.IsNullOrEmpty(Model) ? "" : url);
+
+}
+<p>
+    <span class="text-muted">@Html.DisplayNameFor(m => m)</span><br />
+    @if (String.IsNullOrEmpty(url)) 
+    { 
+    <span class="text-large">@(String.IsNullOrEmpty(Model) ? "-" : Model)</span>
+    }
+    else
+    {    
+    <span class="text-large"><a href="@url">@(String.IsNullOrEmpty(Model) ? "-" : Model)</a> </span>
+    }
+</p>

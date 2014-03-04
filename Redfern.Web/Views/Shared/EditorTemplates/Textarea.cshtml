@@ -1,0 +1,25 @@
+﻿@model object
+
+@{
+    var id = (string)ViewData["id"];
+    id = !String.IsNullOrEmpty(id) ? "id=" + id : "";
+
+    var style = (string)ViewData["style"];
+    style = !String.IsNullOrEmpty(style) ? "style=" + style : "";
+
+    var databind = (string)ViewData["databind"];
+
+    var htmlAttributes = new Dictionary<string,object>();
+    htmlAttributes.Add("style", "height:100%");
+    if (!String.IsNullOrEmpty(databind))
+    {
+        htmlAttributes.Add("data-bind", databind);
+    }
+
+    
+}
+
+@Html.LabelFor(m=>m)  @Html.ValidationMessageFor(m=>m)
+<div @id class="input-control textarea" @style >    
+    @Html.TextAreaFor(m => m,  htmlAttributes)
+</div>

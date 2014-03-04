@@ -52,6 +52,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201403042012504_InitialMigration.cs" />
+    <Compile Include="Migrations\201403042012504_InitialMigration.Designer.cs">
+      <DependentUpon>201403042012504_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
+    <Compile Include="Models\Configuration\CardConfiguration.cs" />
+    <Compile Include="Models\Configuration\BoardColumnConfiguration.cs" />
     <Compile Include="Repository\IRedfernRepository.cs" />
     <Compile Include="Repository\IRepositoryCommand.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -86,6 +93,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repository\Commands\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201403042012504_InitialMigration.resx">
+      <DependentUpon>201403042012504_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

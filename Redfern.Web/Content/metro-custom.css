@@ -52,6 +52,17 @@ textarea {
  * Tiles 
  ********************************* */
 
+.metro .tile-area {
+    padding-top:0px;
+    padding-left:20px;
+    padding-right:20px;
+}
+
+.metro .tile-area .tile-group {
+    padding-top:20px;
+}
+
+
 /* Add 20 px padding for elements  */
 .metro .tiles
 {
@@ -303,3 +314,16 @@ ul.ui-autocomplete{
 .metro .input-control.text input:disabled ~ .btn-save {
   display: none;
 }
+
+
+/************************************ 
+ *  charms
+ ************************************/
+.metro .charms {
+  position: fixed;
+  top:45px;
+  width: 300px;
+  z-index:100;
+}
+
+

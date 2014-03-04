@@ -1,0 +1,31 @@
+﻿@model object
+@using System.Dynamic
+@{
+    
+    var hidelabel = (ViewData["hidelabel"] != null);
+    var id = (string)ViewData["id"];
+    id = !String.IsNullOrEmpty(id) ? "id=" + id : "";
+
+    var style = (string)ViewData["style"];
+    style = !String.IsNullOrEmpty(style) ? "style=" + style : "";
+
+    var databind = (string)ViewData["databind"];
+
+    var htmlAttributes = new Dictionary<string,object>();
+    htmlAttributes.Add("type", "file");
+    htmlAttributes.Add("style", "width:100%");
+    
+    if (!String.IsNullOrEmpty(databind))  
+    {
+        htmlAttributes.Add("data-bind", databind);
+    }
+
+}
+
+@if (!hidelabel) { 
+@Html.LabelFor(m=>m)  @Html.ValidationMessageFor(m=>m)
+}
+<div @id class="input-control file" @style >
+    @Html.TextBoxFor(m => m,  htmlAttributes)
+    <button class="btn-file"></button>
+</div>

@@ -61,6 +61,10 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.2\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -86,9 +90,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Optimization">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.1\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
@@ -111,6 +112,9 @@
     </Reference>
     <Reference Include="Unity.Mvc5">
       <HintPath>..\packages\Unity.Mvc5.1.1\lib\net45\Unity.Mvc5.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0.4\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -183,11 +187,18 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\MetroUICSSBundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Boards\BoardsAreaRegistration.cs" />
+    <Compile Include="Areas\Boards\Controllers\BoardController.cs" />
+    <Compile Include="Areas\Boards\Controllers\CollectionController.cs" />
+    <Compile Include="Areas\Boards\Controllers\CreateController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AppController.cs" />
+    <Compile Include="Controllers\ClientTimeZoneController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -207,12 +218,150 @@
     <Content Include="Content\metro-bootstrap-responsive.css" />
     <Content Include="Content\metro-bootstrap.css" />
     <Content Include="Content\metro-custom.css" />
+    <Content Include="Content\metro-ui\css\metro-bootstrap-responsive.css" />
+    <Content Include="Content\metro-ui\css\metro-bootstrap-responsive.min.css" />
+    <Content Include="Content\metro-ui\css\metro-bootstrap.css" />
+    <Content Include="Content\metro-ui\css\metro-bootstrap.min.css" />
+    <Content Include="Content\metro-ui\fonts\iconFont.dev.svg" />
+    <Content Include="Content\metro-ui\fonts\iconFont.svg" />
+    <Content Include="Scripts\app\views\board.js" />
+    <Content Include="Scripts\jquery.flip.js" />
+    <Content Include="Scripts\jquery.flip.min.js" />
+    <Content Include="Scripts\metro-ui\js\metro-accordion.js" />
+    <Content Include="Scripts\metro-ui\js\metro-button-set.js" />
+    <Content Include="Scripts\metro-ui\js\metro-calendar.js" />
+    <Content Include="Scripts\metro-ui\js\metro-carousel.js" />
+    <Content Include="Scripts\metro-ui\js\metro-core.js" />
+    <Content Include="Scripts\metro-ui\js\metro-countdown.js" />
+    <Content Include="Scripts\metro-ui\js\metro-date-format.js" />
+    <Content Include="Scripts\metro-ui\js\metro-datepicker.js" />
+    <Content Include="Scripts\metro-ui\js\metro-dialog.js" />
+    <Content Include="Scripts\metro-ui\js\metro-drag-tile.js" />
+    <Content Include="Scripts\metro-ui\js\metro-dropdown.js" />
+    <Content Include="Scripts\metro-ui\js\metro-fluentmenu.js" />
+    <Content Include="Scripts\metro-ui\js\metro-global.js" />
+    <Content Include="Scripts\metro-ui\js\metro-hint.js" />
+    <Content Include="Scripts\metro-ui\js\metro-initiator.js" />
+    <Content Include="Scripts\metro-ui\js\metro-input-control.js" />
+    <Content Include="Scripts\metro-ui\js\metro-listview.js" />
+    <Content Include="Scripts\metro-ui\js\metro-live-tile.js" />
+    <Content Include="Scripts\metro-ui\js\metro-loader.js" />
+    <Content Include="Scripts\metro-ui\js\metro-locale.js" />
+    <Content Include="Scripts\metro-ui\js\metro-notify.js" />
+    <Content Include="Scripts\metro-ui\js\metro-panel.js" />
+    <Content Include="Scripts\metro-ui\js\metro-plugin-template.js" />
+    <Content Include="Scripts\metro-ui\js\metro-progressbar.js" />
+    <Content Include="Scripts\metro-ui\js\metro-pull.js" />
+    <Content Include="Scripts\metro-ui\js\metro-rating.js" />
+    <Content Include="Scripts\metro-ui\js\metro-scroll.js" />
+    <Content Include="Scripts\metro-ui\js\metro-slider.js" />
+    <Content Include="Scripts\metro-ui\js\metro-stepper.js" />
+    <Content Include="Scripts\metro-ui\js\metro-streamer.js" />
+    <Content Include="Scripts\metro-ui\js\metro-tab-control.js" />
+    <Content Include="Scripts\metro-ui\js\metro-table.js" />
+    <Content Include="Scripts\metro-ui\js\metro-tile-transform.js" />
+    <Content Include="Scripts\metro-ui\js\metro-times.js" />
+    <Content Include="Scripts\metro-ui\js\metro-touch-handler.js" />
+    <Content Include="Scripts\metro-ui\js\metro-treeview.js" />
+    <Content Include="Scripts\metro-ui\js\metro-wizard.js" />
+    <Content Include="Content\themes\base\images\animated-overlay.gif" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.menu.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
+    <Content Include="Content\themes\base\minified\images\animated-overlay.gif" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\themes\metro\images\ui-icons_3399ff_0.png" />
+    <Content Include="Content\themes\metro\images\ui-icons_525252_0.png" />
+    <Content Include="Content\themes\metro\images\ui-icons_66B3FF_0.png" />
+    <Content Include="Content\themes\metro\images\ui-icons_d4d4d4_0.png" />
+    <Content Include="Content\themes\metro\images\ui-icons_ffffff_0.png" />
+    <Content Include="Content\themes\metro\jquery-ui.css" />
+    <Content Include="Content\themes\metro\modern-custom.css" />
+    <Content Include="Content\themes\metro\modern-responsive.css" />
+    <Content Include="Content\themes\metro\modern.css" />
+    <Content Include="Content\themes\metro\site.css" />
+    <Content Include="Content\themes\metro\theme-dark.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\iconFont.dev.svg" />
+    <Content Include="fonts\iconFont.svg" />
+    <Content Include="fonts\license.txt" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\app\app.js" />
+    <Content Include="Scripts\app\router.js" />
+    <Content Include="Scripts\app\views\boards.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="fonts\iconFont.eot" />
+    <Content Include="fonts\iconFont.json" />
+    <Content Include="fonts\iconFont.ttf" />
+    <Content Include="fonts\iconFont.woff" />
+    <Content Include="Areas\Boards\Views\web.config" />
+    <Content Include="Areas\Boards\Views\Collection\_Index.cshtml" />
+    <Content Include="Content\metro-ui\fonts\iconFont.woff" />
+    <Content Include="Content\metro-ui\fonts\iconFont.ttf" />
+    <Content Include="Content\metro-ui\fonts\iconFont.json" />
+    <Content Include="Content\metro-ui\fonts\iconFont.eot" />
+    <Content Include="Scripts\metro-ui\js\README.md" />
+    <Content Include="Areas\Boards\Views\Board\_Index.cshtml" />
+    <Content Include="Areas\Boards\Views\Board\_BoardNavigationBar.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\google-code-prettify\lang-apollo.js" />
     <Content Include="Scripts\google-code-prettify\lang-clj.js" />
@@ -237,6 +386,11 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.10.4.js" />
+    <Content Include="Scripts\jquery-ui-1.10.4.min.js" />
+    <Content Include="Scripts\jquery.blockui.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\jquery.datepicker.localization.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -246,6 +400,9 @@
     <Content Include="Scripts\knockout.bindings.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\metro-ui\jquery.ui.widget.js" />
+    <Content Include="Scripts\metro-ui\metro.min.js" />
     <Content Include="Scripts\metro\metro-accordion.js" />
     <Content Include="Scripts\metro\metro-button-set.js" />
     <Content Include="Scripts\metro\metro-calendar.js" />
@@ -275,6 +432,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\sammy-0.7.4.js" />
+    <Content Include="Scripts\sammy-0.7.4.min.js" />
+    <Content Include="Scripts\viewmodels\boardcolumn.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -307,11 +467,31 @@
     <Content Include="Scripts\metro\metro-dialog.js_" />
     <Content Include="Scripts\metro\metro-loader.js_" />
     <Content Include="Scripts\metro\README.md" />
+    <Content Include="Views\Shared\_Layout_Auth.cshtml" />
+    <Content Include="Views\Shared\_AppNavigationBar.cshtml" />
+    <Content Include="Views\Shared\_Layout_Public.cshtml" />
+    <Content Include="Views\Shared\_PubNavigationBar.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\String.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CheckBox.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Datepicker.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Datetimepicker.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Dropdown.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\File.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Password.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SearchBox.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Textarea.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TextBox.cshtml" />
+    <Content Include="Views\App\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Scripts\app\" />
+    <Folder Include="Areas\Boards\Models\" />
+    <Folder Include="Areas\Boards\Views\Create\" />
+    <Folder Include="Areas\Boards\Views\Shared\" />
+    <Folder Include="Scripts\app\views\board\" />
+    <Folder Include="Views\ClientTimeZone\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -321,6 +501,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Livefrog\Livefrog.Commons\Livefrog.Commons.csproj">
+      <Project>{9845066a-3c9e-4f51-8f5f-8f513e8d03c1}</Project>
+      <Name>Livefrog.Commons</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Redfern.Core\Redfern.Core.csproj">
       <Project>{80b41a2f-181e-49e4-a530-72455e974603}</Project>
       <Name>Redfern.Core</Name>

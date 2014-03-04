@@ -1,0 +1,20 @@
+﻿
+body {
+    background-color: #fff;
+}
+
+.metrouicss .page {
+    width: 100% ;
+    margin: auto;
+    background-color: #fff;
+    
+    height:auto!important;
+    min-height:0!important;
+    
+}
+
+
+section.page
+{
+	padding:20px;    
+}

@@ -16,6 +16,8 @@ namespace Redfern.Core.Models
         [ForeignKey("BoardId")]
         public virtual Board Board { get; set;}
 
+        public int Sequence { get; set; }
+
         public virtual ICollection<Card> Cards { get; set; }
 
         public bool Expanded { get; set; }

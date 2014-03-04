@@ -1,0 +1,50 @@
+﻿
+<div class="navigation-bar fixed-top opacity shadow dark" id="AppNavigationBar">
+    <div class="navigation-bar-content ">
+        <a href="/" class="element">
+            @*<span class="icon-cloud"></span> <img alt="Logo" src="~/images/bank-alt-2-white-64.png" style="height:15px;padding:0;margin:0" class="place-left" /> &nbsp;*@
+            <span style="font-size:18px; font-weight:600;padding:0;margin:0">Redfern</span>
+        </a>
+
+        <span class="element-divider"></span>
+        <div class="element">
+            
+                <a class="dropdown-toggle" href="#" data-bind="text: selectedMenu">@( !String.IsNullOrEmpty(ViewBag.SelectedMenu) ? ViewBag.SelectedMenu : "My School Tasks")</a>
+                <ul class="dropdown-menu dark" data-role="dropdown" style="z-index:999">
+                    <li><a href="#">Ktchen Project</a></li>
+                    <li><a href="#">Ktchen Project</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#@Url.Action("index", "dashboard", new { area = "" })">Show All</a></li>
+                </ul>
+            
+        </div>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="element place-right">
+                <a href="#" class="fg-white"><i class="icon-cog"></i></a>
+                
+            </div>
+
+            <div class="element place-right">
+                <a href="#" class="dropdown-toggle">
+                    <i class="icon-user"></i>
+                    @User.Identity.Name
+                </a>
+                <ul class="dropdown-menu dark place-right" data-role="dropdown">
+                    <li><a href="#">Profile Settings</a></li>
+                    <li class="divider"></li>
+                    <li><a href="">Sign out</a></li>
+                </ul>
+            </div>
+            
+        }
+        else
+        {
+            <a class="element place-right">
+                Sign in
+            </a>
+        }
+
+    </div>
+</div>

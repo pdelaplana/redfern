@@ -1,0 +1,22 @@
+﻿@model DateTime?
+
+@{
+    var id = (string)ViewData["id"];
+    id = !String.IsNullOrEmpty(id) ? "id=" + id : "";
+
+    var style = (string)ViewData["style"];
+    style = !String.IsNullOrEmpty(style) ? "style=" + style : "";
+
+    var databind = (string)ViewData["databind"];
+    //databind += "datepicker:" + ViewData.ModelMetadata.DisplayName;
+    
+    var htmlAttributes = new Dictionary<string,object>();
+    htmlAttributes.Add("data-bind", databind);
+
+    
+}
+
+@Html.LabelFor(m=>m)  @Html.ValidationMessageFor(m=>m)
+<div @id class="input-control text" @style >
+    @Html.TextBox("", Model.HasValue ? Model.Value.ToShortDateString() : "", htmlAttributes)
+</div>

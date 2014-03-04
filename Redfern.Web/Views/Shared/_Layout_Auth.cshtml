@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles{
+    @RenderSection("Styles", required: false)
+}
+
+@section Scripts{
+    @RenderSection("Scripts", false)
+    @Scripts.Render("~/bundles/knockout", "~/bundles/sammy")
+    @Scripts.Render("~/bundles/app")
+    @Scripts.Render("~/bundles/modules")
+    @if (Request.IsAuthenticated)
+    {
+        <script type="text/javascript" src="@Url.Action("update", "clienttimezone", new { area = "" })"></script>
+    }
+}
+
+<div id="wrapper">
+    <header class="page">
+        @Html.Partial("_AppNavigationBar")
+    </header>
+    <section class="page">
+        @RenderBody()
+    </section>
+</div>
+<footer class="page">
+    @*
+    @Html.Partial("_Footer")
+    *@
+</footer>

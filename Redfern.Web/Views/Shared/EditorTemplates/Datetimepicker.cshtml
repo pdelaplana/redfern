@@ -1,0 +1,46 @@
+﻿@model DateTime
+@using System.Globalization;
+@{
+    var id = (string)ViewData["id"];
+    id = !String.IsNullOrEmpty(id) ? "id=" + id : "";
+
+    var style = (string)ViewData["style"];
+    style = !String.IsNullOrEmpty(style) ? "style=" + style : "";
+
+    var databindDatePicker = (string)ViewData["databindDatePicker"];
+    var databindTimePicker = (string)ViewData["databindTimePicker"];
+    
+    var datepickerAttributes = new Dictionary<string,object>();
+    datepickerAttributes.Add("data-bind", databindDatePicker);
+
+    var timepickerAttributes = new Dictionary<string, object>();
+    timepickerAttributes.Add("data-bind", databindTimePicker);
+    
+    string[] twentyFourHours = { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
+    string[] intervals = { "00", "15", "30", "45" };
+    
+    var options = new List<SelectListItem>();
+    foreach(var hour in twentyFourHours)
+    {
+        foreach (var interval in intervals)
+        {
+            options.Add(new SelectListItem 
+            { 
+                Value = hour + interval, 
+                Text = DateTime.ParseExact(hour + interval, "HHmm", CultureInfo.CurrentCulture).ToString("hh:mm tt") 
+            });
+        }
+    }
+
+}
+
+<div @id @style>
+<div @id class="input-control text as-inline-block" style="width:40%">
+    @Html.LabelFor(m=>m)  @Html.ValidationMessageFor(m=>m)
+    @Html.TextBox("DatePart", Model.ToShortDateString(), datepickerAttributes)
+</div>
+<div class="input-control select as-inline-block" style="width:40%">
+    @Html.Label("When")
+    @Html.DropDownList("TimePart", options, timepickerAttributes)
+</div>
+</div>
