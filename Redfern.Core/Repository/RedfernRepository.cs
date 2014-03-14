@@ -4,22 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Redfern.Core;
+using Redfern.Core.Cache;
 using Redfern.Core.Models;
+using Redfern.Core.Security;
 
 namespace Redfern.Core.Repository
 {
     public class RedfernRepository : IRedfernRepository
     {
         RedfernDb _db;
+        IUserCache<RedfernUser> _userCache;
 
-        public RedfernRepository(RedfernContext context)
+        public RedfernRepository(RedfernContext context, IUserCache<RedfernUser> userCache)
         {
             _db = new RedfernDb(context);
+            _userCache = userCache;
         }
 
-        public T ExecuteCommand<T>(IRepositoryCommand<T> command) where T : class
+        public T ExecuteCommand<T>(IRepositoryCommand<T> command)
         {
-            return command.Execute(_db);
+            return command.Execute(_db, _userCache);
             
         }
 

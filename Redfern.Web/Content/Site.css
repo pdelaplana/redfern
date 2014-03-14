@@ -62,8 +62,14 @@ div.center{
 
 .board .tile {
     height:90px;
-    
+  
 }
+
+.metro .board .pinned.tile.no-outline:hover {
+    border:0;
+    outline-color: transparent!important;
+}
+
 
 .board .tile p {
     font-size:10pt!important;
@@ -73,18 +79,42 @@ div.center{
     float:left;
     display:inline-block;
     padding:15px; 
-    width:305px;
+    /*padding-right:0px;*/
+    width:315px;
     margin-right:10px;
     background-color:#ccc;
-    min-height:500px;
+    min-height:510px;
+    /*height:100%;*/
 }
 
 .board-column-content{
+    
     background-color:#eee;
-    min-height:500px;
+    min-height:510px;
+    height:510px;
     padding:10px;
+    overflow:auto;
+       
+    /*
+    overflow-y:hidden;
+    overflow-x:hidden;
+    */
 }
 
+.board-column-footer{
+    height:25px;
+}
+
+/* Tiny Scrollbar */
+.scrollbar1 { width: 270px; margin: 20px 0 10px;  }
+.scrollbar1 .viewport { width: 270px; height: 500px; overflow: hidden; position: absolute; }
+.scrollbar1 .overview {  list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+.scrollbar1 .scrollbar{ background: transparent url(images/bg-scrollbar-track-y.png) no-repeat 0 0; position: relative; background-position: 0 0; float: right; width: 15px; }
+.scrollbar1 .track { background: transparent url(/images/bg-scrollbar-trackend-y.png) no-repeat 0 100%; height: 100%; width:13px; position: relative; padding: 0 1px; }
+.scrollbar1 .thumb { background: transparent url(/images/bg-scrollbar-thumb-y.png) no-repeat 50% 100%; height: 20px; width: 25px; cursor: pointer; overflow: hidden; position: absolute; top: 0; left: -5px; }
+.scrollbar1 .thumb .end { background: transparent url(/images/bg-scrollbar-thumb-y.png) no-repeat 50% 0; overflow: hidden; height: 5px; width: 25px; }
+.scrollbar1 .disable { display: none; }
+.noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
 
 .ui-state-highlight { height: 90px; }
 
@@ -93,7 +123,7 @@ div.center{
 input,
 select,
 textarea {
-    max-width: 280px;
+  
 }
 
 /* styles for validation helpers */

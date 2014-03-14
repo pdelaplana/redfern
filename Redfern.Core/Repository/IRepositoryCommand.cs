@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Redfern.Core.Cache;
 using Redfern.Core.Models;
+using Redfern.Core.Security;
 
 namespace Redfern.Core.Repository
 {
-    public interface IRepositoryCommand<T> where T: class
+    
+    public interface IRepositoryCommand<T>
     {
-        T Execute(RedfernDb db);
+        T Execute(RedfernDb db, IUserCache<RedfernUser> userCache);
     }
+
+
 }

@@ -8,23 +8,10 @@
 
     var initialize = function () {
 
-        dialog = $.Dialog({
-            overlay: false,
-            shadow: true,
-            flat: true,
-            icon: false,
-            title: '<strong>Participant</strong>',
-            element: $('#NewBoardDialog'),
-            width: '80%',
-            height: '80%'
-        });
-
-        //$.Metro.initDragTiles();
-
-        $('.tile-group').sortable({
-            connectWith:'.tile-group'
-        });
-        
+        var ui = app.ui.extend();
+        ui.addPart('createBoardTile', new CreateBoardTile()).bindTo('#CreateBoardTile');
+    
+        ui.setWindowTitle('Boards');
 
     }
 

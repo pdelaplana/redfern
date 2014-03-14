@@ -1,4 +1,10 @@
-﻿var app = new Application('#application-container');
+﻿//
+// create application object
+//
+var app = new Application({
+    appTitle: 'Redfern',
+    appContainer: '#application-container'
+});
 
 $(function () {
 
@@ -9,8 +15,8 @@ $(function () {
         // Disable caching of AJAX responses
         cache: false,
         error: function (err, type, httpStatus) {
-            //alert(err.status + " - " + err.statusText + " - " + httpStatus);
-            errorDialog.open(err.statusText, err.responseText);
+            alert(err.status + " - " + err.responseText + " - " + httpStatus);
+            //errorDialog.open(err.statusText, err.responseText);
             /*
             if (err.status == '403') {
                 document.location = '/signIn';
@@ -23,8 +29,18 @@ $(function () {
         }
     });
 
-    //app = new Application();
+    app.ui.addPart('appNavigationBar', {
+        selectedMenu: ko.observable('All Boards'),
+        createBoard: function(){
+            var dialog = new CreateBoardDialog('#CreateBoardDialog');
+            dialog.open();
+            
+        }
+        
+    }).bindTo('#AppNavigationBar');
 
+
+    app.ui.setWindowTitle('Home');
     app.start('app/#/boards');
 
 })

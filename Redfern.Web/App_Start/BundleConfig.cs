@@ -21,7 +21,9 @@ namespace Redfern.Web
             bundles.Add(new ScriptBundle("~/bundles/plugins").Include(
                         "~/Scripts/jquery.cookie.js",
                         "~/Scripts/jquery.blockui.js",
-                        "~/Scripts/jquery.flip.js"
+                        "~/Scripts/jquery.flippy.js",
+                        "~/Scripts/jquery.nanoscroller.js",
+                        "~/Scripts/jquery.tinyscrollbar.js"
                         ));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -49,7 +51,7 @@ namespace Redfern.Web
                         "~/scripts/metro-ui/js/metro-countdown.js",
                         "~/scripts/metro-ui/js/metro-date-format.js",
                         "~/scripts/metro-ui/js/metro-datepicker.js",
-                        "~/scripts/metro-ui/js/metro-dialog.js",
+                        "~/scripts/metro-ui/js/metro-dialog-custom.js",
                         "~/scripts/metro-ui/js/metro-drag-tile.js",
                         "~/scripts/metro-ui/js/metro-dropdown.js",
                         "~/scripts/metro-ui/js/metro-fluentmenu.js",
@@ -85,7 +87,10 @@ namespace Redfern.Web
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                         "~/scripts/knockout-{version}.js",
                         "~/scripts/knockout.mapping-latest.js",
-                        "~/scripts/knockout.bindings.js"));
+                        "~/scripts/knockout.bindings.js",
+                        "~/scripts/knockout.bindings.sortable.js",
+                        "~/scripts/knockout.bindings.redfern.js",
+                        "~/scripts/knockout.bindings.editortile.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/sammy").Include(
                         "~/scripts/sammy-{version}.js"));
@@ -93,12 +98,21 @@ namespace Redfern.Web
 
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
                         "~/scripts/app/router.js",
+                        "~/scripts/app/ui.js",
                         "~/scripts/app/app.js",
                         "~/scripts/main.js"
                         ));
 
+
             bundles.Add(new ScriptBundle("~/bundles/modules").Include(
+                        "~/scripts/viewmodels/boardviewmodel.js",
+                        "~/scripts/viewmodels/cardrepository.js",
+                        "~/scripts/viewmodels/boardcolumnrepository.js",
+                        "~/scripts/widgets/createboarddialog.js",
+                        "~/scripts/widgets/addcarddialog.js",
+                        "~/scripts/widgets/createboardtile.js",
                         "~/scripts/app/views/boards.js",
+                        "~/scripts/app/views/boardui.js",
                         "~/scripts/app/views/board.js"));
 
 
@@ -110,6 +124,7 @@ namespace Redfern.Web
                       "~/content/metro-ui/css/metro-bootstrap.css",
                       "~/content/metro-custom.css",
                       "~/content/themes/metro/jquery-ui.css",
+                      "~/content/nanoscroller.css",
                       "~/content/site.css"));
         }
     }

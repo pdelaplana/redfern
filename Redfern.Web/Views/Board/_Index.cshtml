@@ -1,0 +1,70 @@
+﻿@using Newtonsoft.Json;
+
+@model Redfern.Web.Models.BoardViewModel
+
+<div class="page-region" style="">
+    <div class="page-region-content" id="Board" style="min-width:100px;width:1500px; margin-top:10px;float:left;display:inline-block">
+        <div class="board" data-bind="sortable: { data: columns, afterMove: resequenceAllColumns, options:{ placeholder: BoardColumnPlaceHolder }  }">
+            <div class="board-column border">
+                <div class="board-column-wrapper">
+                    <div class="board-column-header ntm ntp clearfix">
+                        <h4 class="ntm ntp"><strong data-bind="text: name"></strong>  <i class="icon-forward place-right"  style="cursor:pointer" data-bind="click:openColumnProperties"></i> </h4>
+                    </div>
+                    <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', options: { placeholder: CardPlaceHolder, items: '> div:not(.pinned)', scroll: true} }">
+                        <div class="tile double bg-amber">
+                            <div class="tile-content">
+                                <div class="padding10">
+                                    <p class="fg-white" data-bind="text: title"></p>
+                                </div>
+                            </div>
+                            <div class="brand">
+                                <div class="label"><span class="no-margin fg-white icon-calendar"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="board-column-footer">
+                        <div class="padding10">
+                            <p class="fg-grayLight fg-gray"><span data-bind="cardCreator: newCardTitle, create: addCard ">Add a card...</span> </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="board-column border bg-gray bg-hover-grayDarker fg-hover-white" style="min-height:50px;cursor:pointer">
+            <div class="board-column-header ntm ntp ">
+                <span class="fg-white" data-bind="inlineEditor:newColumn, fontSize: '14pt', save:addColumn">Add a Column...</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="ColumnEditForm" style="display:none">
+    <h4 class="ntp ntm"><i class="icon-undo revert"  style="cursor:pointer"></i> Edit </h4>
+    <label>Name</label>
+    <div class="input-control text">
+        <input data-bind="val: name" />
+    </div>
+    <button class="primary" data-role="save-btn">Save</button>
+</div>
+
+<div id="AddCardDialog" style="display:none;height:500px">
+    <div class="" style="">
+        <div class="padding10" >
+            <label>Enter Title</label>
+            <div class="input-control text" >
+                <input type="text" data-bind="value: name"  />
+            </div>
+            
+        </div>
+    </div>
+    <div class="padding10 place-bottom-left">
+        <button class="bg-darker fg-white" data-bind="click: create">Create</button>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    var model = @Html.Raw(JsonConvert.SerializeObject(Model));
+</script>

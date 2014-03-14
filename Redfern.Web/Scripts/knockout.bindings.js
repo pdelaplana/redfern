@@ -223,22 +223,31 @@ ko.bindingHandlers.clientAutocomplete = {
 
 ko.bindingHandlers.inlineEditor = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var bindings = allBindings();
-
-        var observable = valueAccessor(),
+        var originalText = '',
+            bindings = allBindings(),
+            observable = valueAccessor(),
+            fontSize = (bindings.fontSize != undefined) ? bindings.fontSize : "23pt",
             div = $('<div/>').addClass('input-control text').attr('style', 'margin:0;padding:0;height:100%;line-height:23pt;vertical-align:top'),
-            input = $('<input/>').attr('type', 'text').attr('style', 'width:100%;font-size:23pt;line-height:23pt;vertical-align:top'),
-            btn = $('<button class="btn-save"></button>').attr('style', 'font-size:24pt');
+            input = $('<input/>').attr('type', 'text').attr('style', 'width:100%;font-size:'+fontSize+';line-height:'+fontSize+';vertical-align:top'),
+            btn = $('<button class="btn-save"></button>').attr('style', 'font-size:'+fontSize);
+
+        var onSave = function () {
+            var deferred = $.Deferred();
+            bindings.save(viewModel);
+            deferred.resolve();
+            return deferred.promise();
+        }
 
         var preventBlurEvent;
         btn.mousedown(function () {
             preventBlurEvent = true;
         }).click(function (event) {
             observable($(input).val());
-            bindings.save(viewModel).done(function () {
-                $(element).text(observable());
+            onSave(viewModel).done(function () {
+                $(element).text(originalText);
                 $(div).hide();
                 $(element).show();
+                observable('');
             });
             event.stopPropagation();
         });
@@ -246,8 +255,10 @@ ko.bindingHandlers.inlineEditor = {
         $(element).after(div);
 
         $(element).on('click', function () {
+            originalText = $(this).text();
             $(div).show();
-            $(input).val($(this).text()).focus();
+            //$(input).val().focus();
+            $(input).val(observable()).focus();
             $(this).hide();
             return false;
         });
@@ -265,10 +276,6 @@ ko.bindingHandlers.inlineEditor = {
             
         })
 
-
-        
-
-        
     }
 };
 

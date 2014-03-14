@@ -1,0 +1,5 @@
+﻿@using Newtonsoft.Json;
+
+@helper Serialize(object source) { 
+    @Html.Raw(JsonConvert.SerializeObject(source));
+}

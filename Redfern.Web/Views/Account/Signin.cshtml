@@ -1,0 +1,45 @@
+﻿@model Redfern.Web.Models.LoginViewModel
+
+@{
+    
+    ViewBag.Title = "Log in";
+}
+
+<div class="page-region">
+    <div class="page-region-content">
+        <div class="padding20 border center bd-red" style="margin-top:50px">
+            <h2>@ViewBag.Title</h2>
+            <div class="grid fluid">
+                <div class="row ">
+                    <div class="span7">
+                        <section id="loginForm">
+                            @using (Html.BeginForm("signin", "account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <h4>Use a local account to log in.</h4>
+                                <hr />
+                                @Html.ValidationSummary(true)
+                                @Html.EditorFor(m => m.UserName, "textbox")
+                                @Html.EditorFor(m => m.Password, "password")
+                                @Html.EditorFor(m => m.RememberMe, "checkbox")
+                                <p>
+                                    <button type="submit" class="large primary">Log In <i class="icon-arrow-right-3"></i></button>
+                                </p>
+                                <p>
+                                    New here? 
+                                    @Html.ActionLink("Register to create an account.", "register")
+                                </p>
+                            }
+                        </section>
+
+                    </div>
+                    <div class="span5">
+                        <section id="socialLoginForm">
+                            @Html.Partial("_ExternalLoginsListPartial", new { Action = "ExternalLogin", ReturnUrl = ViewBag.ReturnUrl })
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

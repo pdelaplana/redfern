@@ -27,7 +27,7 @@ namespace Redfern.Core.Models
         [ForeignKey("ColumnId")]
         public virtual BoardColumn Column { get; set; }
 
-        public int ColumnPosition { get; set; }
+        public int Sequence { get; set; }
 
         [MaxLength(20)]
         public string AssignedToUser { get; set; }

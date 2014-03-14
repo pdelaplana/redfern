@@ -7,8 +7,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Redfern.Core;
 using Redfern.Core.Models.Configuration;
 using Redfern.Core.Security;
@@ -19,8 +17,6 @@ namespace Redfern.Core.Models
     public class RedfernDb : DbContext
     {
         private RedfernContext _context;
-
-        private UserManager<RedfernUser> _userManager = RedfernSecurityContext.CreateUserManager();
 
         public static string CreateConnectionString(RedfernContext context)
         {
@@ -84,10 +80,13 @@ namespace Redfern.Core.Models
 
         public RedfernContext Context { get { return _context; } }
 
-        public UserManager<RedfernUser> UserManager { get { return _userManager;  }}
+        
+        public DbSet<Activity> Activities { get; set; }
 
         public DbSet<Board> Boards { get; set; }
-        
+
+        public DbSet<BoardColumn> BoardColumns { get; set; }
+
         public DbSet<Card> Cards { get; set; }
 
         public DbSet<Tag> Tags { get; set; }

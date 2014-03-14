@@ -45,6 +45,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,13 +54,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache\IUserCache.cs" />
     <Compile Include="Migrations\201403042012504_InitialMigration.cs" />
     <Compile Include="Migrations\201403042012504_InitialMigration.Designer.cs">
       <DependentUpon>201403042012504_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201403061122100_AddActivityTable.cs" />
+    <Compile Include="Migrations\201403061122100_AddActivityTable.Designer.cs">
+      <DependentUpon>201403061122100_AddActivityTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201403111055408_ChangeColumnPositionToSequence.cs" />
+    <Compile Include="Migrations\201403111055408_ChangeColumnPositionToSequence.Designer.cs">
+      <DependentUpon>201403111055408_ChangeColumnPositionToSequence.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ActivityConstructor.cs" />
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
     <Compile Include="Models\Configuration\CardConfiguration.cs" />
     <Compile Include="Models\Configuration\BoardColumnConfiguration.cs" />
+    <Compile Include="Repository\Commands\CreateCardCommand.cs" />
+    <Compile Include="Repository\Commands\ResequenceCardsCommand.cs" />
+    <Compile Include="Repository\Commands\ResequenceBoardColumnsCommand.cs" />
+    <Compile Include="Repository\Commands\CreateBoardColumnCommand.cs" />
+    <Compile Include="Repository\Commands\CreateBoardCommand.cs" />
     <Compile Include="Repository\IRedfernRepository.cs" />
     <Compile Include="Repository\IRepositoryCommand.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -76,8 +93,6 @@
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\RedfernRepository.cs" />
-    <Compile Include="Security\RedfernSecurityContext.cs" />
-    <Compile Include="Security\RedfernUser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -90,13 +105,21 @@
       <Project>{9845066a-3c9e-4f51-8f5f-8f513e8d03c1}</Project>
       <Name>Livefrog.Commons</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Redfern.Core.Security\Redfern.Core.Security.csproj">
+      <Project>{cd226807-d568-4286-98b4-77b46a6c86f7}</Project>
+      <Name>Redfern.Core.Security</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repository\Commands\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201403042012504_InitialMigration.resx">
       <DependentUpon>201403042012504_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201403061122100_AddActivityTable.resx">
+      <DependentUpon>201403061122100_AddActivityTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201403111055408_ChangeColumnPositionToSequence.resx">
+      <DependentUpon>201403111055408_ChangeColumnPositionToSequence.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

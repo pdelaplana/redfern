@@ -9,7 +9,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Redfern.Core.Security;
-//using Redfern.Web.Application.Identity;
 using Redfern.Web.Models;
 
 namespace Redfern.Web.Controllers
@@ -17,14 +16,16 @@ namespace Redfern.Web.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        /*
         public AccountController()
             : this(new UserManager<RedfernUser>(new UserStore<RedfernUser>(new RedfernSecurityContext())))
         {
         }
+         * */
 
-        public AccountController(UserManager<RedfernUser> userManager)
+        public AccountController()
         {
-            UserManager = userManager;
+            UserManager = new UserManager<RedfernUser>(new UserStore<RedfernUser>(new RedfernSecurityContext()));
         }
 
         public UserManager<RedfernUser> UserManager { get; private set; }
@@ -32,7 +33,7 @@ namespace Redfern.Web.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Signin(string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -42,9 +43,7 @@ namespace Redfern.Web.Controllers
             {
                 ViewBag.ReturnUrl = returnUrl;
                 return View(new LoginViewModel());
-            }
-
-            
+            }            
         }
 
         //
@@ -52,7 +51,7 @@ namespace Redfern.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Signin(LoginViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -298,7 +297,7 @@ namespace Redfern.Web.Controllers
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        public ActionResult SignOut()
         {
             AuthenticationManager.SignOut();
             return RedirectToAction("Index", "Home");

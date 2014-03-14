@@ -1,0 +1,69 @@
+﻿@model Redfern.Web.Models.BoardListViewModel
+
+<div class="page-region">
+    <div class="page-region-content">
+
+        <div class="tile-area" style="width:1777px">
+            <h2>My Boards</h2>
+            <div id="MyBoards" class="tile-group"  style="min-height:300px">   
+            @foreach (var board in Model.Boards)
+            {
+                <a href="#/board/@board.BoardId" class="tile double bg-darkCobalt">
+                    <div class="tile-content">
+                        <div class="padding10 ">
+                            <h2 class="fg-white no-margin">@board.Name</h2>
+                        </div>
+                    </div>
+                    <div class="brand">
+                        <div class="label"><h3 class="no-margin fg-white"><span class="icon-grid"></span></h3></div>
+                        <div class="badge">102</div>
+                    </div>
+                </a>
+            }
+                <div id="CreateBoardTile" data-bind="editortile: name, save: create" class="tile double bg-crimson">
+                    <div class="tile-content">
+                        <div class="padding10 ">
+                            <p class="fg-white">Add New Board</p>
+                            <h3 class="no-margin fg-white"><span class="icon-plus"></span></h3>
+                        </div>
+                    </div>
+                    <div class="brand">
+                        <div class="label"><h3 class="no-margin fg-white">Create Board</h3></div>
+                    </div>
+                </div>
+                
+                <div id="" class="bg-darker" style="position:fixed; left:10px;top:60px; display:none">
+                    <div class="" style="">
+                        <div class="padding5">
+                            <h4 class="fg-white">Create Board</h4>
+                            <div class="input-control text">
+                                @Html.TextBox("Name")
+                            </div>
+                            <p class="">A board is a collection of cards.  Use it to manage a project, track a collection, or organize anything. </p>
+                            <p class="">This board will be <strong>private</strong>.</p>
+                            
+                        </div>
+                    </div>
+                    <div class="padding10">
+                        <button class="bd-blue bg-darkBlue fg-blue">Create</button>
+                        
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="tile-group">
+               
+
+            </div>
+
+        </div>
+
+        
+    </div>
+</div>
+
+<div id="NewBoardDialog" style="display:none">
+    This is a test board
+</div>

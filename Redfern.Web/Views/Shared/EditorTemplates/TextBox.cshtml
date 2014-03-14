@@ -15,6 +15,13 @@
         htmlAttributes.Add("data-bind", databind);
     }
 
+    
+    
+    var label = (string)ViewData["label"];
+    if (!String.IsNullOrEmpty(label)) {
+        ViewData.ModelMetadata.DisplayName = label;
+    }
+
 }
 
 @Html.LabelFor(m=>m)  @Html.ValidationMessageFor(m=>m)

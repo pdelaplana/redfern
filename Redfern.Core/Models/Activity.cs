@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Livefrog.Commons.Extensions;
 
 namespace Redfern.Core.Models
 {
@@ -82,5 +84,53 @@ namespace Redfern.Core.Models
 
         [MaxLength(500)]
         public string AdditionalData { get; set; }
+
+        
+        public void SetVerb(string verb)
+        {
+            this.Verb = verb;
+        }
+
+
+        public void SetActor(string userName, string fullName)
+        {
+            // actor
+            this.ActorType = "user";
+            this.ActorId = userName;
+            this.ActorDisplayName = fullName;
+            this.ActorUrl = String.Format(@"/app/profile/{0}", this.ActorId);
+            this.ActorImageUrl = String.Format(@"/app/profile/{0}/photo", this.ActorId);
+        }
+
+        public void SetObject(string objectType, string objectId, string displayName, string url)
+        {
+            // object
+            this.ObjectType = objectType;
+            this.ObjectId = objectId;
+            this.ObjectDisplayName = displayName.TruncateWithElipses(45);
+            this.ObjectUrl = url;
+        }
+
+        public void SetTarget(string targetType, string targetId, string displayName, string url)
+        {
+            this.TargetType = targetType;
+            this.TargetId = targetId;
+            this.TargetDisplayName = displayName.TruncateWithElipses(45);
+            this.TargetUrl = url;
+        }
+
+        public void SetContext(string contextType, string contextId, string displayName, string url)
+        {
+            this.ContextType = contextType;
+            this.ContextId = contextId;
+            this.ContextDisplayName = displayName.TruncateWithElipses(45);
+            this.ContextUrl = url;
+        }
+
+        public void SetDescription(string description)
+        {
+            this.Description = description;
+        }
+
     }
 }

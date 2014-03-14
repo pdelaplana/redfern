@@ -7,16 +7,27 @@
         </a>
 
         <span class="element-divider"></span>
-        <div class="element">
-            
-                <a class="dropdown-toggle" href="#" data-bind="text: selectedMenu">@( !String.IsNullOrEmpty(ViewBag.SelectedMenu) ? ViewBag.SelectedMenu : "My School Tasks")</a>
-                <ul class="dropdown-menu dark" data-role="dropdown" style="z-index:999">
-                    <li><a href="#">Ktchen Project</a></li>
-                    <li><a href="#">Ktchen Project</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#@Url.Action("index", "dashboard", new { area = "" })">Show All</a></li>
-                </ul>
-            
+
+        <div class="element">    
+            <a class="dropdown-toggle" href="#" data-bind="text: selectedMenu">@( !String.IsNullOrEmpty(ViewBag.SelectedMenu) ? ViewBag.SelectedMenu : "My School Tasks")</a>
+            <ul class="dropdown-menu dark" data-role="dropdown" style="z-index:999">
+                <li><a href="#">Ktchen Project</a></li>
+                <li><a href="#">Ktchen Project</a></li>
+                <li class="divider"></li>
+                <li><a href="#@Url.Action("index", "boards")">Show All</a></li>
+
+            </ul>            
+        </div>
+
+        <a class="element brand" href="#" data-bind="click: createBoard"><span class="icon-plus"></span></a>
+
+        <div class="element input-element">
+            <form>
+                <div class="input-control text">
+                    <input type="text" placeholder="Search...">
+                    <button class="btn-search"></button>
+                </div>
+            </form>
         </div>
 
         @if (User.Identity.IsAuthenticated)
@@ -34,7 +45,7 @@
                 <ul class="dropdown-menu dark place-right" data-role="dropdown">
                     <li><a href="#">Profile Settings</a></li>
                     <li class="divider"></li>
-                    <li><a href="">Sign out</a></li>
+                    <li><a href="@Url.Action("signout", "account")">Sign out</a></li>
                 </ul>
             </div>
             
@@ -45,6 +56,24 @@
                 Sign in
             </a>
         }
+
+    </div>
+</div>
+
+<div id="CreateBoardDialog" style="display:none">
+    <div class="" style="">
+        <div class="padding10" style="width:300px">
+            <label>Name</label>
+            <div class="input-control text">
+                <input data-bind="value: name" />
+            </div>
+            <p>A board is a collection of cards.  Use it to manage a project, track a collection, or organize anything. </p>
+            <p>This board will be <strong>private</strong>.</p>
+
+        </div>
+    </div>
+    <div class="padding10 place-bottom-left">
+        <button class="bg-darker fg-white" data-bind="click: create" >Create</button>
 
     </div>
 </div>

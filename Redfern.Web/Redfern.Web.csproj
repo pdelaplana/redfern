@@ -52,8 +52,14 @@
     <Reference Include="Microsoft.Practices.Unity.Configuration">
       <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -106,12 +112,11 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <Private>True</Private>
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Mvc5">
       <HintPath>..\packages\Unity.Mvc5.1.1\lib\net45\Unity.Mvc5.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.WebApi">
+      <HintPath>..\packages\Unity.WebAPI.5.1\lib\net45\Unity.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="WebActivatorEx">
       <HintPath>..\packages\WebActivatorEx.2.0.4\lib\net40\WebActivatorEx.dll</HintPath>
@@ -185,25 +190,35 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\BoardColumnController.cs" />
+    <Compile Include="API\BoardController.cs" />
+    <Compile Include="API\CardController.cs" />
+    <Compile Include="API\DTO\BoardColumnDTO.cs" />
+    <Compile Include="Application\Cache\TenantsCache.cs" />
+    <Compile Include="Application\Cache\UserCache.cs" />
+    <Compile Include="Application\Configuration\Automapper\Profiles\BoardMappingProfile.cs" />
+    <Compile Include="Application\Configuration\Automapper\Profiles\MappingProfileBase.cs" />
+    <Compile Include="Application\RedfernWebContext.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MetroUICSSBundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Areas\Boards\BoardsAreaRegistration.cs" />
-    <Compile Include="Areas\Boards\Controllers\BoardController.cs" />
-    <Compile Include="Areas\Boards\Controllers\CollectionController.cs" />
-    <Compile Include="Areas\Boards\Controllers\CreateController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AppController.cs" />
+    <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\ClientTimeZoneController.cs" />
+    <Compile Include="Controllers\BoardsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BoardViewModel.cs" />
+    <Compile Include="Models\BoardListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -214,6 +229,9 @@
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\bg-scrollbar-thumb-y.png" />
+    <Content Include="Content\images\bg-scrollbar-track-y.png" />
+    <Content Include="Content\images\bg-scrollbar-trackend-y.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\metro-bootstrap-responsive.css" />
     <Content Include="Content\metro-bootstrap.css" />
@@ -224,9 +242,19 @@
     <Content Include="Content\metro-ui\css\metro-bootstrap.min.css" />
     <Content Include="Content\metro-ui\fonts\iconFont.dev.svg" />
     <Content Include="Content\metro-ui\fonts\iconFont.svg" />
+    <Content Include="Content\nanoscroller.css" />
+    <Content Include="Scripts\app\ui.js" />
     <Content Include="Scripts\app\views\board.js" />
+    <Content Include="Scripts\app\views\boardui.js" />
     <Content Include="Scripts\jquery.flip.js" />
     <Content Include="Scripts\jquery.flip.min.js" />
+    <Content Include="Scripts\jquery.flippy.js" />
+    <Content Include="Scripts\jquery.flippy.min.js" />
+    <Content Include="Scripts\jquery.nanoscroller.js" />
+    <Content Include="Scripts\jquery.nanoscroller.min.js" />
+    <Content Include="Scripts\jquery.tinyscrollbar.js" />
+    <Content Include="Scripts\knockout.bindings.redfern.js" />
+    <Content Include="Scripts\knockout.bindings.sortable.js" />
     <Content Include="Scripts\metro-ui\js\metro-accordion.js" />
     <Content Include="Scripts\metro-ui\js\metro-button-set.js" />
     <Content Include="Scripts\metro-ui\js\metro-calendar.js" />
@@ -235,6 +263,7 @@
     <Content Include="Scripts\metro-ui\js\metro-countdown.js" />
     <Content Include="Scripts\metro-ui\js\metro-date-format.js" />
     <Content Include="Scripts\metro-ui\js\metro-datepicker.js" />
+    <Content Include="Scripts\metro-ui\js\metro-dialog-custom.js" />
     <Content Include="Scripts\metro-ui\js\metro-dialog.js" />
     <Content Include="Scripts\metro-ui\js\metro-drag-tile.js" />
     <Content Include="Scripts\metro-ui\js\metro-dropdown.js" />
@@ -353,15 +382,12 @@
     <Content Include="fonts\iconFont.json" />
     <Content Include="fonts\iconFont.ttf" />
     <Content Include="fonts\iconFont.woff" />
-    <Content Include="Areas\Boards\Views\web.config" />
-    <Content Include="Areas\Boards\Views\Collection\_Index.cshtml" />
     <Content Include="Content\metro-ui\fonts\iconFont.woff" />
     <Content Include="Content\metro-ui\fonts\iconFont.ttf" />
     <Content Include="Content\metro-ui\fonts\iconFont.json" />
     <Content Include="Content\metro-ui\fonts\iconFont.eot" />
     <Content Include="Scripts\metro-ui\js\README.md" />
-    <Content Include="Areas\Boards\Views\Board\_Index.cshtml" />
-    <Content Include="Areas\Boards\Views\Board\_BoardNavigationBar.cshtml" />
+    <Content Include="App_Code\Funcs.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\google-code-prettify\lang-apollo.js" />
     <Content Include="Scripts\google-code-prettify\lang-clj.js" />
@@ -434,7 +460,12 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
-    <Content Include="Scripts\viewmodels\boardcolumn.js" />
+    <Content Include="Scripts\viewmodels\boardcolumnrepository.js" />
+    <Content Include="Scripts\viewmodels\boardviewmodel.js" />
+    <Content Include="Scripts\viewmodels\cardrepository.js" />
+    <Content Include="Scripts\widgets\addcarddialog.js" />
+    <Content Include="Scripts\widgets\createboarddialog.js" />
+    <Content Include="Scripts\widgets\createboardtile.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -459,7 +490,7 @@
     <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Signin.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
@@ -483,13 +514,14 @@
     <Content Include="Views\Shared\EditorTemplates\Textarea.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextBox.cshtml" />
     <Content Include="Views\App\Index.cshtml" />
+    <Content Include="Scripts\knockout.bindings.editortile.js" />
+    <Content Include="Views\Board\_BoardNavigationBar.cshtml" />
+    <Content Include="Views\Board\_Index.cshtml" />
+    <Content Include="Views\Boards\_Index.cshtml" />
+    <Content Include="Views\Board\_Index - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Application\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Boards\Models\" />
-    <Folder Include="Areas\Boards\Views\Create\" />
-    <Folder Include="Areas\Boards\Views\Shared\" />
     <Folder Include="Scripts\app\views\board\" />
     <Folder Include="Views\ClientTimeZone\" />
   </ItemGroup>
@@ -504,6 +536,14 @@
     <ProjectReference Include="..\..\Livefrog\Livefrog.Commons\Livefrog.Commons.csproj">
       <Project>{9845066a-3c9e-4f51-8f5f-8f513e8d03c1}</Project>
       <Name>Livefrog.Commons</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Livefrog\Livefrog.Tenants.Db\Livefrog.Tenants.Db.csproj">
+      <Project>{1c3612fa-eed4-4e19-84b6-766ed7da616e}</Project>
+      <Name>Livefrog.Tenants.Db</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Redfern.Core.Security\Redfern.Core.Security.csproj">
+      <Project>{cd226807-d568-4286-98b4-77b46a6c86f7}</Project>
+      <Name>Redfern.Core.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\Redfern.Core\Redfern.Core.csproj">
       <Project>{80b41a2f-181e-49e4-a530-72455e974603}</Project>
