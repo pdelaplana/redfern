@@ -190,14 +190,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\AvatarController.cs" />
+    <Compile Include="API\Binders\FileUploadDTOModelBinder.cs" />
     <Compile Include="API\BoardColumnController.cs" />
     <Compile Include="API\BoardController.cs" />
     <Compile Include="API\CardController.cs" />
     <Compile Include="API\DTO\BoardColumnDTO.cs" />
+    <Compile Include="API\CommentController.cs" />
+    <Compile Include="API\DTO\FileUploadDTO.cs" />
+    <Compile Include="API\ProfileController.cs" />
+    <Compile Include="API\Providers\InMemoryMultipartFormDataStreamProvider.cs" />
+    <Compile Include="API\TagController.cs" />
     <Compile Include="Application\Cache\TenantsCache.cs" />
     <Compile Include="Application\Cache\UserCache.cs" />
+    <Compile Include="Application\Configuration\Automapper\Profiles\UserProfileMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\BoardMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\MappingProfileBase.cs" />
+    <Compile Include="Application\Configuration\Automapper\Resolvers\CacheUserFullNameResolver.cs" />
     <Compile Include="Application\RedfernWebContext.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -213,12 +222,15 @@
     <Compile Include="Controllers\ClientTimeZoneController.cs" />
     <Compile Include="Controllers\BoardsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BoardViewModel.cs" />
     <Compile Include="Models\BoardListViewModel.cs" />
+    <Compile Include="Models\ProfileViewModel.cs" />
+    <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -232,6 +244,7 @@
     <Content Include="Content\images\bg-scrollbar-thumb-y.png" />
     <Content Include="Content\images\bg-scrollbar-track-y.png" />
     <Content Include="Content\images\bg-scrollbar-trackend-y.png" />
+    <Content Include="Content\images\_default-user-avatar.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\metro-bootstrap-responsive.css" />
     <Content Include="Content\metro-bootstrap.css" />
@@ -243,15 +256,18 @@
     <Content Include="Content\metro-ui\fonts\iconFont.dev.svg" />
     <Content Include="Content\metro-ui\fonts\iconFont.svg" />
     <Content Include="Content\nanoscroller.css" />
+    <Content Include="Content\tagit-stylish-yellow.css" />
     <Content Include="Scripts\app\ui.js" />
-    <Content Include="Scripts\app\views\board.js" />
-    <Content Include="Scripts\app\views\boardui.js" />
+    <Content Include="Scripts\viewmodels\userprofilerepository.js" />
+    <Content Include="Scripts\views\board.js" />
+    <Content Include="Scripts\views\boardui.js" />
     <Content Include="Scripts\jquery.flip.js" />
     <Content Include="Scripts\jquery.flip.min.js" />
     <Content Include="Scripts\jquery.flippy.js" />
     <Content Include="Scripts\jquery.flippy.min.js" />
     <Content Include="Scripts\jquery.nanoscroller.js" />
     <Content Include="Scripts\jquery.nanoscroller.min.js" />
+    <Content Include="Scripts\jquery.tagit.js" />
     <Content Include="Scripts\jquery.tinyscrollbar.js" />
     <Content Include="Scripts\knockout.bindings.redfern.js" />
     <Content Include="Scripts\knockout.bindings.sortable.js" />
@@ -375,7 +391,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\app\app.js" />
     <Content Include="Scripts\app\router.js" />
-    <Content Include="Scripts\app\views\boards.js" />
+    <Content Include="Scripts\views\boards.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="fonts\iconFont.eot" />
@@ -456,14 +472,21 @@
     <Content Include="Scripts\metro\metro-touch-handler.js" />
     <Content Include="Scripts\metro\metro-treeview.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment-with-langs.js" />
+    <Content Include="Scripts\moment-with-langs.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
     <Content Include="Scripts\viewmodels\boardcolumnrepository.js" />
     <Content Include="Scripts\viewmodels\boardviewmodel.js" />
+    <Content Include="Scripts\viewmodels\cardcommentrepository.js" />
     <Content Include="Scripts\viewmodels\cardrepository.js" />
-    <Content Include="Scripts\widgets\addcarddialog.js" />
+    <Content Include="Scripts\viewmodels\cardtagrepository.js" />
+    <Content Include="Scripts\views\profile.js" />
+    <Content Include="Scripts\widgets\opencarddialog.js" />
     <Content Include="Scripts\widgets\createboarddialog.js" />
     <Content Include="Scripts\widgets\createboardtile.js" />
     <Content Include="Scripts\_references.js" />
@@ -519,10 +542,12 @@
     <Content Include="Views\Board\_Index.cshtml" />
     <Content Include="Views\Boards\_Index.cshtml" />
     <Content Include="Views\Board\_Index - Copy.cshtml" />
+    <Content Include="Views\Board\_OpenCardDialog.cshtml" />
+    <Content Include="Views\Board\_ColumnPropertiesForm.cshtml" />
+    <Content Include="Views\Profile\_Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Scripts\app\views\board\" />
     <Folder Include="Views\ClientTimeZone\" />
   </ItemGroup>
   <ItemGroup>

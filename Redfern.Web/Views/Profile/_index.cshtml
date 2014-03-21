@@ -1,0 +1,37 @@
+﻿@model Redfern.Web.Models.ProfileViewModel
+
+<div class="page-region">
+    <div class="page-region-content">
+        <div class="grid">
+            <div class="row">
+                <div class="offset1 span10">
+                    <h2>Profile</h2>
+                </div>
+            </div>
+            <div class="row" id="profileForm">
+                <div class="offset1 span5" >
+                    
+                    <form id="profile">
+                        @Html.EditorFor(m => m.UserName, "textbox", new { databind = "value: userName, disable :true" })
+                        @Html.EditorFor(m => m.FullName, "textbox", new { databind = "value: fullName" })
+                        @Html.EditorFor(m => m.Email, "textbox", new { databind = "value: email" })
+                        <button class="primary" data-bind="click: update">Save</button>
+                    </form>
+                </div>
+                <div class="offset1 span5">
+                    <img src="" class="rounded span2" />
+                    <form id="avatar">
+                        @Html.Editor("FileName", "file", new { hidelabel = true, databind = "file: file, fileName: fileName, fileObjectUrl:fileUrl, fileBinaryData: fileContents, fileType: fileContentType" })
+                        <button class="primary" data-bind="click: uploadPhoto">Upload <i class="icon-upload"></i> </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var model = @Html.Raw(JsonConvert.SerializeObject(Model));
+</script>
+
+

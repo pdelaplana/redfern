@@ -1,0 +1,98 @@
+﻿<div id="OpenCardDialog" style="display:none;height:100%">
+    <div class="grid fluid" >
+        <div class="row">
+            <div class="padding10 span12">
+                <label> Title</label>
+                <div class="input-control text">
+                    <input type="text" data-bind="value: cardData.title" />
+                    <button class="btn-save"></button>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="padding10 span5">
+               
+                <div class="row">
+                    <div class="span6">
+                        <label>Assigned To</label>
+                        <div class="input-control select">
+                            <select />
+                        </div>
+                    </div>
+                    <div class="span6">
+                        <label>Due Date</label>
+                        <div class="input-control text" data-role="datepicker" >
+                            <input type="text" data-bind="value: cardData.dueDate" />
+                            <button class="btn-date"></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <label>Tags</label>
+                <div class="">
+                    <ul id="tags-container"></ul> 
+                </div>
+               
+                <div class="">
+                    <button class="bg-darker fg-white" data-bind="click: cardData.update">Save Changes</button>
+                    <button class="bg-red fg-white" data-bind="click: cardData.remove">Delete</button>
+                </div>
+
+            </div>
+
+            <div class="padding10 span7">
+                <div class="tab-control" data-role="tab-control">
+                    <ul class="tabs">
+                        <li class="active"><a data-href="#page_1" href="#page_1">Conversations</a></li>
+                        <li><a data-href="#page_2" href="#page_2">Activities</a></li>
+                        <li><a data-href="#page_3" href="#page_3"><i class="icon-attachment"></i></a></li>
+                        <li class="place-right"><a data-href="#page_4" href="#page_4"><i class="icon-cog"></i></a></li>
+                    </ul>
+
+                    <div class="frames">
+                        <div class="frame" id="page_1" style="height:400px">
+                            <div class="row padding10" style="margin-bottom:10px;width:100%">
+                                <div class="span11">
+                                    <div class="input-control textarea">
+                                        <textarea placeholder="write a comment..." maxlength="250" style="min-height:50px;width:100%" data-bind="value: newComment"></textarea>
+                                    </div>
+                                </div>
+                                <div class="span1">
+                                    <button data-bind="click:addComment" class="bg-darker fg-white place-left" style="height:50px"><i class="icon-comments"></i></button>
+                                </div>
+                                
+                            </div>
+                            <div class="listview padding10"  data-bind="foreach: comments" style="overflow-x:auto;height:280px">
+                                <div class="list" style="width:100%">
+                                    <div class="list-content">
+                                        <i class="icon icon-user" ></i>
+                                        <div class="data">
+                                            <span class="list-title item-title" data-bind="text: commentByUserFullName"></span>
+                                            <span class="list-subtitle" data-bind="text: comment"></span>
+                                            <span class="list-remark fg-grayLight" style="margin-top:10px" data-bind="text: moment(commentDate())"></span>
+
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="frame" id="page_2">...</div>
+                        <div class="frame" id="page_3">...</div>
+                        <div class="frame" id="page_4">...</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    
+
+
+    
+</div>
+

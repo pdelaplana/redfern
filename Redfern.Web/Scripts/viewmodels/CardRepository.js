@@ -3,9 +3,12 @@
 
     self.cardId = ko.observable();
     self.title = ko.observable();
+    self.description = ko.observable();
     self.boardId = ko.observable();
     self.columnId = ko.observable();
     self.sequence = ko.observable();
+    self.assignedToUser = ko.observable();
+    self.dueDate = ko.observable();
 
     self.create = function () {
         return $.ajax({
@@ -19,4 +22,27 @@
             }
         });
     }
+
+    self.update = function () {
+        return $.ajax({
+            url: '/api/card/' + self.cardId(),
+            type: 'put',
+            data: {
+                CardId: self.cardId(),
+                Title: self.title(),
+                Description: self.description(),
+                AssignedToUser: self.assignedToUser(),
+                DueDate : self.dueDate()
+            }
+        });
+    }
+
+    self.remove = function () {
+        return $.ajax({
+            url: '/api/card/' + self.cardId(),
+            type: 'delete'
+        });
+    }
+
+
 }

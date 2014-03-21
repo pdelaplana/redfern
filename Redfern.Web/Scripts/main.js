@@ -34,7 +34,6 @@ $(function () {
         createBoard: function(){
             var dialog = new CreateBoardDialog('#CreateBoardDialog');
             dialog.open();
-            
         }
         
     }).bindTo('#AppNavigationBar');

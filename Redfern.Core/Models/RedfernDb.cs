@@ -91,5 +91,9 @@ namespace Redfern.Core.Models
 
         public DbSet<Tag> Tags { get; set; }
 
+        public DbSet<CardTag> CardTags { get; set; }
+
+        public DbSet<CardComment> CardComments { get; set; }
+
     }
 }

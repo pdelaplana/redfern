@@ -6,15 +6,27 @@ using System.Web;
 namespace Redfern.Web.Models
 {
 
+    public class CardCommentModel
+    {
+        public int CardId { get; set; }
+        public string Comment {get; set;}
+        public string CommentByUser { get; set; }
+        public string CommentByUserFullName { get; set; }
+        public DateTime CommentDate { get; set; }
+    }
+
     public class CardItem
     {
-
         public int CardId { get; set; }
         public string Title { get; set; }
+        public string Description { get; set; }
         public int BoardId { get; set; }
         public int ColumnId { get; set; }
         public int Sequence { get; set; }
         public string AssignedToUser { get; set; }
+        public DateTime? DueDate { get; set; }
+        public string[] Tags { get; set; }
+        public int CommentCount { get; set; }
     }
 
     public class BoardColumnItem

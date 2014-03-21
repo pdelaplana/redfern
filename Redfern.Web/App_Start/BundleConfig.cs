@@ -23,7 +23,10 @@ namespace Redfern.Web
                         "~/Scripts/jquery.blockui.js",
                         "~/Scripts/jquery.flippy.js",
                         "~/Scripts/jquery.nanoscroller.js",
-                        "~/Scripts/jquery.tinyscrollbar.js"
+                        "~/Scripts/jquery.tinyscrollbar.js",
+                        "~/Scripts/jquery.tagit.js",
+                        "~/Scripts/moment.js",
+                        "~/Scripts/moment-with-lang.js"
                         ));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -40,7 +43,6 @@ namespace Redfern.Web
             //          "~/scripts/metro-ui/js", "*.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/metro").Include(
-                        
                         "~/scripts/metro-ui/js/metro-global.js",
                         "~/scripts/metro-ui/js/metro-core.js",
                         "~/scripts/metro-ui/js/metro-locale.js",
@@ -107,13 +109,18 @@ namespace Redfern.Web
             bundles.Add(new ScriptBundle("~/bundles/modules").Include(
                         "~/scripts/viewmodels/boardviewmodel.js",
                         "~/scripts/viewmodels/cardrepository.js",
+                        "~/scripts/viewmodels/cardtagrepository.js",
+                        "~/scripts/viewmodels/cardcommentrepository.js",
                         "~/scripts/viewmodels/boardcolumnrepository.js",
+                        "~/scripts/viewmodels/userprofilerepository.js",
                         "~/scripts/widgets/createboarddialog.js",
-                        "~/scripts/widgets/addcarddialog.js",
+                        "~/scripts/widgets/opencarddialog.js",
                         "~/scripts/widgets/createboardtile.js",
-                        "~/scripts/app/views/boards.js",
-                        "~/scripts/app/views/boardui.js",
-                        "~/scripts/app/views/board.js"));
+                        "~/scripts/views/boards.js",
+                        "~/scripts/views/boardui.js",
+                        "~/scripts/views/board.js",
+                        "~/scripts/views/profile.js"
+                        ));
 
 
 
@@ -125,6 +132,7 @@ namespace Redfern.Web
                       "~/content/metro-custom.css",
                       "~/content/themes/metro/jquery-ui.css",
                       "~/content/nanoscroller.css",
+                      "~/content/tagit-stylish-yellow.css",
                       "~/content/site.css"));
         }
     }

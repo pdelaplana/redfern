@@ -39,14 +39,17 @@ namespace Redfern.Web.API
             return AutoMapper.Mapper.Map<BoardColumn, BoardColumnItem>(column);
         }
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        // PUT api/boardcolumn/5
+        public BoardColumnItem Put(int id, [FromBody]UpdateBoardColumnPropertiesCommand command)
         {
+            var column = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<BoardColumn, BoardColumnItem>(column);
         }
 
-        // DELETE api/<controller>/5
+        // DELETE api/boardcolumn/5
         public void Delete(int id)
         {
+            _repository.ExecuteCommand(new DeleteBoardColumnCommand { ColumnId = id });
         }
 
         [AcceptVerbs("resequence")]

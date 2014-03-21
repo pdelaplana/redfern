@@ -26,4 +26,22 @@
             }
         });
     }
+
+    self.update = function () {
+        return $.ajax({
+            url: apiUrl+'/'+self.columnId(),
+            type: 'put',
+            data: {
+                ColumnId : self.columnId(),
+                Name: self.name()
+            }
+        });
+    }
+
+    self.delete = function () {
+        return $.ajax({
+            url: apiUrl + '/' + self.columnId(),
+            type: 'delete'
+        });
+    }
 }

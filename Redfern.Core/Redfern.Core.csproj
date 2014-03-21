@@ -67,10 +67,21 @@
     <Compile Include="Migrations\201403111055408_ChangeColumnPositionToSequence.Designer.cs">
       <DependentUpon>201403111055408_ChangeColumnPositionToSequence.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201403160156511_AddDueDateFieldInCard.cs" />
+    <Compile Include="Migrations\201403160156511_AddDueDateFieldInCard.Designer.cs">
+      <DependentUpon>201403160156511_AddDueDateFieldInCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ActivityConstructor.cs" />
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
     <Compile Include="Models\Configuration\CardConfiguration.cs" />
     <Compile Include="Models\Configuration\BoardColumnConfiguration.cs" />
+    <Compile Include="Repository\Commands\CreateCardCommentCommand.cs" />
+    <Compile Include="Repository\Commands\CreateCardTagCommand.cs" />
+    <Compile Include="Repository\Commands\DeleteCardTagCommand.cs" />
+    <Compile Include="Repository\Commands\DeleteCardCommand.cs" />
+    <Compile Include="Repository\Commands\UpdateCardCommand.cs" />
+    <Compile Include="Repository\Commands\DeleteBoardColumnCommand.cs" />
+    <Compile Include="Repository\Commands\UpdateBoardColumnPropertiesCommand.cs" />
     <Compile Include="Repository\Commands\CreateCardCommand.cs" />
     <Compile Include="Repository\Commands\ResequenceCardsCommand.cs" />
     <Compile Include="Repository\Commands\ResequenceBoardColumnsCommand.cs" />
@@ -120,6 +131,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201403111055408_ChangeColumnPositionToSequence.resx">
       <DependentUpon>201403111055408_ChangeColumnPositionToSequence.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201403160156511_AddDueDateFieldInCard.resx">
+      <DependentUpon>201403160156511_AddDueDateFieldInCard.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

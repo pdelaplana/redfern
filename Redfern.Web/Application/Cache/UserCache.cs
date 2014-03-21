@@ -51,7 +51,7 @@ namespace Redfern.Web.Application.Cache
         public string GetFullName(string userName)
         {
             var user = this.Get(userName);
-            return user != null ? user.UserName: "unknown";
+            return user != null ? user.FullName: "unknown";
         }
 
         public RedfernUser Get()

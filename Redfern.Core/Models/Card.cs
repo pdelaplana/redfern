@@ -32,6 +32,8 @@ namespace Redfern.Core.Models
         [MaxLength(20)]
         public string AssignedToUser { get; set; }
 
+        public DateTime? DueDate { get; set; } 
+
         public virtual ICollection<CardTag> Tags { get; set; }
 
         public virtual ICollection<CardComment> Comments { get; set; }

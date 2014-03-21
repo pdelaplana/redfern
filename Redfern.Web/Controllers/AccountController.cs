@@ -294,7 +294,7 @@ namespace Redfern.Web.Controllers
         }
 
         //
-        // POST: /Account/LogOff
+        // POST: /Account/SignOut
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult SignOut()

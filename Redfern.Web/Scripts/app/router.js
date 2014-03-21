@@ -31,6 +31,7 @@
             sammy.get(route, found);
         },
 
+        
         run: function (path) {
             sammy.run(path);
         }

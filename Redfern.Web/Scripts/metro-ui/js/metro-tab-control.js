@@ -21,7 +21,7 @@
                 this.options.effect = element.data('effect');
             }
 
-            this.init(tabs, frames);
+            this.init(tabs, frames, element);
 
             tabs.each(function(){
 
@@ -40,13 +40,13 @@
                     tab.parent("li").addClass("active");
 
                     frames.hide();
-                    var current_frame = $(tab.attr("href"));
+                    var current_frame = $(tab.attr("href"), element);
                     switch (that.options.effect) {
                         case 'slide': current_frame.slideDown(); break;
                         case 'fade': current_frame.fadeIn(); break;
                         default: current_frame.show();
                     }
-
+                    
                     that._trigger('change', null, current_frame);
                     that.options.tabchange(this);
 
@@ -57,11 +57,11 @@
             if (this.options.activateStoredTab) this._activateStoredTab(tabs);
         },
 
-        init: function(tabs, frames){
+        init: function(tabs, frames, element){
             var that = this;
             tabs.each(function(){
                 if ($(this).hasClass("active")) {
-                    var current_frame = $($($(this).children("a")).attr("href"));
+                    var current_frame = $($($(this).children("a")).attr("href"), element);
                     frames.hide();
                     current_frame.show();
                     that._trigger('change', null, current_frame);

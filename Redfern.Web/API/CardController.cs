@@ -39,14 +39,17 @@ namespace Redfern.Web.API
             return AutoMapper.Mapper.Map<Card, CardItem>(card);
         }
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        // PUT api/card/5
+        public CardItem Put(int id, [FromBody]UpdateCardCommand command)
         {
+            Card card = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<Card, CardItem>(card);
         }
 
-        // DELETE api/<controller>/5
+        // DELETE api/card/5
         public void Delete(int id)
         {
+            _repository.ExecuteCommand(new DeleteCardCommand { CardId = id });
         }
 
         [AcceptVerbs("resequence")]

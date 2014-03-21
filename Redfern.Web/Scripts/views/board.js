@@ -8,24 +8,17 @@
 
     var initialize = function () {
 
-        //model = ko.mapping.fromJS(model);
-
         var ui = app.ui.extend();
         ui.setWindowTitle(model.Name);
         ui.appNavigationBar.selectedMenu(model.Name);
         ui.addPart('boardUI', new BoardUI(model)).bindTo('#Board');
 
         ui.boardUI.adjustBoardWidth();
-        
-        
-        //$('.nano').nanoScroller();
-        
-        //$('.scrollbar1').tinyscrollbar({ thumbSize: 20 });
-            
+                    
         $('.board-column').resizable({
             handles:'e'
         });
-
+        $('[data-role=tab-control]', $('#OpenCardDialog')).tabcontrol();
         /*
         $('.board-column i.icon-spin').click(function () {
             var column = $(this).parents('.board-column')

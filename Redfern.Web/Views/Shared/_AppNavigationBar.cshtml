@@ -34,18 +34,17 @@
         {
             <div class="element place-right">
                 <a href="#" class="fg-white"><i class="icon-cog"></i></a>
-                
             </div>
 
             <div class="element place-right">
                 <a href="#" class="dropdown-toggle">
                     <i class="icon-user"></i>
-                    @User.Identity.Name
+                    @ViewBag.AuthenticatedUser.FullName
                 </a>
                 <ul class="dropdown-menu dark place-right" data-role="dropdown">
-                    <li><a href="#">Profile Settings</a></li>
+                    <li><a href="#/profile">Profile </a></li>
                     <li class="divider"></li>
-                    <li><a href="@Url.Action("signout", "account")">Sign out</a></li>
+                    <li><a href="javascript:$('form#signout').submit()">Sign out</a></li>
                 </ul>
             </div>
             
@@ -62,7 +61,7 @@
 
 <div id="CreateBoardDialog" style="display:none">
     <div class="" style="">
-        <div class="padding10" style="width:300px">
+        <div class="padding10" style="width:100%">
             <label>Name</label>
             <div class="input-control text">
                 <input data-bind="value: name" />
@@ -77,3 +76,8 @@
 
     </div>
 </div>
+
+@using (Html.BeginForm("signout", "account", FormMethod.Post, new { id = "signout" }))
+{
+    @Html.AntiForgeryToken()
+}

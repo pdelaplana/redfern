@@ -11,14 +11,17 @@
                         <h4 class="ntm ntp"><strong data-bind="text: name"></strong>  <i class="icon-forward place-right"  style="cursor:pointer" data-bind="click:openColumnProperties"></i> </h4>
                     </div>
                     <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', options: { placeholder: CardPlaceHolder, items: '> div:not(.pinned)', scroll: true} }">
-                        <div class="tile double bg-amber">
+                        <div class="tile double bg-amber" data-bind="event: { dblclick: open }">
                             <div class="tile-content">
                                 <div class="padding10">
                                     <p class="fg-white" data-bind="text: title"></p>
                                 </div>
                             </div>
                             <div class="brand">
-                                <div class="label"><span class="no-margin fg-white icon-calendar"></span></div>
+                                <div class="label">
+                                    <span class="no-margin fg-white icon-calendar"></span>
+                                    <span class="no-margin fg-white icon-comments" data-bind="text: commentCount, visible: commentCount()>0"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -40,30 +43,10 @@
 
 </div>
 
-<div id="ColumnEditForm" style="display:none">
-    <h4 class="ntp ntm"><i class="icon-undo revert"  style="cursor:pointer"></i> Edit </h4>
-    <label>Name</label>
-    <div class="input-control text">
-        <input data-bind="val: name" />
-    </div>
-    <button class="primary" data-role="save-btn">Save</button>
-</div>
 
-<div id="AddCardDialog" style="display:none;height:500px">
-    <div class="" style="">
-        <div class="padding10" >
-            <label>Enter Title</label>
-            <div class="input-control text" >
-                <input type="text" data-bind="value: name"  />
-            </div>
-            
-        </div>
-    </div>
-    <div class="padding10 place-bottom-left">
-        <button class="bg-darker fg-white" data-bind="click: create">Create</button>
+@Html.Partial("_ColumnPropertiesForm")
+@Html.Partial("_OpenCardDialog")
 
-    </div>
-</div>
 
 <script type="text/javascript">
     var model = @Html.Raw(JsonConvert.SerializeObject(Model));
