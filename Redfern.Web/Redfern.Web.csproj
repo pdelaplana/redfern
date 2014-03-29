@@ -244,6 +244,7 @@
     <Content Include="Content\images\bg-scrollbar-thumb-y.png" />
     <Content Include="Content\images\bg-scrollbar-track-y.png" />
     <Content Include="Content\images\bg-scrollbar-trackend-y.png" />
+    <Content Include="Content\images\contact_tab.gif" />
     <Content Include="Content\images\_default-user-avatar.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\metro-bootstrap-responsive.css" />
@@ -258,6 +259,9 @@
     <Content Include="Content\nanoscroller.css" />
     <Content Include="Content\tagit-stylish-yellow.css" />
     <Content Include="Scripts\app\ui.js" />
+    <Content Include="Scripts\jquery.tabslideout.js" />
+    <Content Include="Scripts\viewmodels\tagrepository.js" />
+    <Content Include="Scripts\viewmodels\useravatarrepository.js" />
     <Content Include="Scripts\viewmodels\userprofilerepository.js" />
     <Content Include="Scripts\views\board.js" />
     <Content Include="Scripts\views\boardui.js" />
@@ -481,7 +485,7 @@
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
     <Content Include="Scripts\viewmodels\boardcolumnrepository.js" />
-    <Content Include="Scripts\viewmodels\boardviewmodel.js" />
+    <Content Include="Scripts\viewmodels\boardrepository.js" />
     <Content Include="Scripts\viewmodels\cardcommentrepository.js" />
     <Content Include="Scripts\viewmodels\cardrepository.js" />
     <Content Include="Scripts\viewmodels\cardtagrepository.js" />
@@ -545,6 +549,7 @@
     <Content Include="Views\Board\_OpenCardDialog.cshtml" />
     <Content Include="Views\Board\_ColumnPropertiesForm.cshtml" />
     <Content Include="Views\Profile\_Index.cshtml" />
+    <Content Include="Views\Board\_SidebarCharms.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

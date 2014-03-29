@@ -150,3 +150,28 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+/*
+    Slideout Div
+ */
+.slide-out-div {
+    /*
+    padding: 20px;
+    width: 250px;
+    background: #ccc;
+    border: 1px solid #29216d;
+    */
+}   
+
+/*
+    Tagit  Div
+
+    .metro .sidebar > ul ul.tagit{
+    display:block;
+    background-color:rgb(255,255,255);
+
+
+}
+ */
+
+   

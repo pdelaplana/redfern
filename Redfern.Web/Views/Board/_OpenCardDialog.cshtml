@@ -67,7 +67,7 @@
                             <div class="listview padding10"  data-bind="foreach: comments" style="overflow-x:auto;height:280px">
                                 <div class="list" style="width:100%">
                                     <div class="list-content">
-                                        <i class="icon icon-user" ></i>
+                                        <img class="icon" data-bind="attr: { src: '/api/avatar/'+commentByUser() }" />
                                         <div class="data">
                                             <span class="list-title item-title" data-bind="text: commentByUserFullName"></span>
                                             <span class="list-subtitle" data-bind="text: comment"></span>

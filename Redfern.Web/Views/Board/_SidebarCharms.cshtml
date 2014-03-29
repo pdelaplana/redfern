@@ -1,0 +1,46 @@
+﻿<div id="SidebarCharms" class="charms bg-grayDark slide-out-div">
+    <a class="handle bg-grayLight fg-white padding20" style="" href=""><i class="icon-wrench"></i> </a>
+    <nav id="Sidebar" class="sidebar" data-bind="visible: activeOption() == 'main'">
+        <ul>
+            <li class="title">Board Options</li>
+            <li><a href="" data-bind="click: function(){ activeOption('changeboardsettings') }">Change Board Settings</a></li>
+            <li><a href="">Zoom out</a></li>
+            <li><a href="">Members</a></li>
+            <li><a href="" data-bind="click: function(){ activeOption('tags') }">Tags</a></li>
+        </ul>
+    </nav>
+
+    <nav id="Sidebar_ChangeBoardName" class="sidebar" data-bind="visible: activeOption() == 'changeboardsettings'">
+        <ul>
+            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Change Board Settings</li>
+            <li>
+                <div class="padding20">
+                    @Html.Editor("BoardName", "textbox", new { databind = "value: boardName", autofocus="autofocus" })
+                    <button data-bind="click: changeBoardName">Save</button>
+                </div>
+            </li>
+            <li>
+                <div class="padding20">
+                    <p class="fg-white">Archive this board</p>
+                    <button class="bg-red fg-white">Archive</button>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <nav id="Sidebar_Tags" class="sidebar" data-bind="visible: activeOption() == 'tags'">
+        <ul>
+            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Tags</li>
+            <li>
+                <div class="padding20">
+                    <span class="fg-white">Type in one or more tags to filter on</span>
+                    <ul id="tags-container-filter"></ul>
+                                        
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+
+</div>
+

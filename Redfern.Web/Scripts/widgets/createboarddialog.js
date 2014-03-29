@@ -6,9 +6,9 @@
     self.name = ko.observable('');
     self.create = function () {
         
-        var boardVM = new BoardViewModel();
-        boardVM.name(self.name());
-        boardVM.create().done(function (result) {
+        var repository = new BoardRepository();
+        repository.name(self.name());
+        repository.create().done(function (result) {
             $.Dialog.close();
             app.router.go('/#/board/'+result.BoardId);
         });

@@ -16,6 +16,105 @@ var CardPlaceHolder = {
     }
 }
 
+
+function BoardProperties() {
+
+}
+
+function Sidebar(boardModel, columnsArray) {
+    
+    var columns = columnsArray,
+        self = this;
+
+    function loadTags() {
+        var repository = new TagRepository();
+        repository.getTags().done(function (tags) {
+            $.each(tags, function (index, value) {
+                self.tags.push({ tagId: index, tagName: value });
+            })
+        })
+    }
+
+    self.activeOption = ko.observable('main');
+    self.boardId = ko.observable(boardModel.BoardId);
+    self.boardName = ko.observable(boardModel.Name);
+    self.tags = ko.observableArray();
+    self.changeBoardName = function () {
+        var repository = new BoardRepository();
+        repository.boardId(self.boardId());
+        repository.name(self.boardName());
+        repository.update();
+    }
+
+    self.tags.subscribe(function (changes) {
+        if (self.tags().length == 0){
+            ko.utils.arrayForEach(columns(), function (column) {
+                column.sortable(true);
+                ko.utils.arrayForEach(column.cards(), function (card) {
+                    card.show(true);
+                })
+            });
+        } else {
+            ko.utils.arrayForEach(columns(), function (column) {
+                column.sortable(false);
+                ko.utils.arrayForEach(column.cards(), function (card) {
+                    card.show(false);
+                    
+                    ko.utils.arrayForEach(self.tags(), function (tag) {
+                        if ($.inArray(tag, card.tags()) > -1) {
+                            card.show(true);
+                        }
+                    })
+                
+                })
+            });
+        }
+
+    }, null, "arrayChange")
+
+    self.applyFilter = function () {
+        
+        ko.utils.arrayForEach(columns(), function (column) {
+            ko.utils.arrayForEach(column.cards(), function (card) {
+                card.show(false);
+                ko.utils.arrayForEach(self.tags(), function (tag) {
+                    
+                    if ($.inArray(tag, card.tags()) > -1) {
+                        card.show(true);
+                    }
+                })
+                
+            })
+        });
+    }
+
+    $('#tags-container-filter').tagit({
+        allowNewTags: false,
+        triggerKeys: ['enter', 'tab'],
+        tagSource: function (request, response) {
+            $.ajax({
+                url: '/api/tag/',
+                type: 'GET',
+                dataType: 'json',
+                data: { name: request.term },
+                success: function (data) {
+                    response($.map(data, function (name, val) {
+                        return { label: name, value: name, id: val }
+                    }))
+                }
+            })
+        },
+        tagsChanged: function (tagValue, action, element) {
+            if (action == 'added') {
+                self.tags.push(tagValue);
+            } else if (action == 'popped') {
+                self.tags.remove(tagValue);
+            }
+        }
+    })
+
+}
+
 function ColumnProperties(element, data) {
     var data = data,
         element = element,
@@ -48,21 +147,21 @@ function ColumnProperties(element, data) {
     }
 }
 
-
-function Card(card, column) {
+function Card(cardModel, column) {
     var column = column,
         self = this;
 
-    self.cardId = ko.observable(card.CardId);
-    self.title = ko.observable(card.Title);
+    self.cardId = ko.observable(cardModel.CardId);
+    self.title = ko.observable(cardModel.Title);
     self.description = ko.observable();
     self.assignedToUser = ko.observable();
     self.dueDate = ko.observable();
-    self.boardId = ko.observable(card.BoardId);
-    self.columnId = ko.observable(card.ColumnId);
-    self.sequence = ko.observable(card.Sequence);
-    self.tags = ko.observableArray(card.Tags)
-    self.commentCount = ko.observable(card.CommentCount);
+    self.boardId = ko.observable(cardModel.BoardId);
+    self.columnId = ko.observable(cardModel.ColumnId);
+    self.sequence = ko.observable(cardModel.Sequence);
+    self.tags = ko.observableArray(cardModel.Tags)
+    self.commentCount = ko.observable(cardModel.CommentCount);
+    self.show = ko.observable(true);
 
     self.open = function () {
         var dialog = new OpenCardDialog('#OpenCardDialog', self);
@@ -87,8 +186,6 @@ function Card(card, column) {
         });
     }
 
-   
-
 }
 
 function Column(column, board) {
@@ -100,10 +197,14 @@ function Column(column, board) {
     self.columnId = ko.observable(column.ColumnId);
     self.name = ko.observable(column.Name);
     self.boardId = ko.observable(column.BoardId);
+    self.sortable = ko.observable(true);
     self.cards = ko.observableArray();
     $.each(column.Cards, function (index, value) {
         self.cards.push(new Card(value, self));
     });
+    self.cardCount = ko.computed(function () {
+        return self.cards().count;
+    })
 
     self.update = function () {
         var repository = new BoardColumnRepository();
@@ -176,13 +277,13 @@ function Column(column, board) {
     
 }
 
-function BoardUI(model) {
+function BoardUI(boardModel) {
     var board = $('#Board'),
         boardWidth = '1000px',
         columnWidth = 325,
         self = this;
 
-    self.boardId = ko.observable(model.BoardId);
+    self.boardId = ko.observable(boardModel.BoardId);
     self.columns = ko.observableArray();
     self.newColumn = ko.observable();
 
@@ -200,7 +301,7 @@ function BoardUI(model) {
     }, null, "arrayChange")
 
     self.adjustBoardWidth = function () {
-        boardWidth = (self.columns().length * columnWidth)+350;
+        boardWidth = (self.columns().length * columnWidth)+410;
         $(board).width(boardWidth);
     }
 
@@ -226,7 +327,6 @@ function BoardUI(model) {
                 ColumnIds : ids
             }
         });
-
     }
 
 }

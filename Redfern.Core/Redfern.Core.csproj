@@ -75,6 +75,7 @@
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
     <Compile Include="Models\Configuration\CardConfiguration.cs" />
     <Compile Include="Models\Configuration\BoardColumnConfiguration.cs" />
+    <Compile Include="Repository\Commands\ChangeBoardNameCommand.cs" />
     <Compile Include="Repository\Commands\CreateCardCommentCommand.cs" />
     <Compile Include="Repository\Commands\CreateCardTagCommand.cs" />
     <Compile Include="Repository\Commands\DeleteCardTagCommand.cs" />

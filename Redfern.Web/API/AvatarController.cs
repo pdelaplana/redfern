@@ -21,13 +21,31 @@ namespace Redfern.Web.API
         
         private UserManager<RedfernUser> _userManager;
 
+        private void CropImage(WebImage image)
+        {
+            var width = image.Width;
+            var height = image.Height;
+
+            if (width > height)
+            {
+                var leftRightCrop = (width - height) / 2;
+                image.Crop(0, leftRightCrop, 0, leftRightCrop);
+            }
+            else if (height > width)
+            {
+                var topBottomCrop = (height - width) / 2;
+                image.Crop(topBottomCrop, 0, topBottomCrop, 0);
+            }
+
+        }
+        
         public AvatarController()
         {
             _userManager = new UserManager<RedfernUser>(new UserStore<RedfernUser>(new RedfernSecurityContext()));
         }
         
         // GET api/<controller>
-        public HttpResponseMessage Get(string id)
+        public HttpResponseMessage Get(string id, int width = 100, int height = 100)
         {
             string nopic = "~/content/images/_default-user-avatar.png";
             WebImage webimage;
@@ -37,13 +55,15 @@ namespace Redfern.Web.API
             if (avatar != null)
             {
                 webimage = new WebImage(avatar);
-                webimage.Resize(16, 16, true);
+                webimage.Resize(width, height, true);
+                CropImage(webimage);
             }
             else
             {
                 webimage = new WebImage(nopic);
                 contentType = "image/png";
-                webimage.Resize(16, 16, true);
+                webimage.Resize(width, height, true);
+                CropImage(webimage);
             }
             HttpResponseMessage response = new HttpResponseMessage();
             response.Content = new StreamContent(new MemoryStream(webimage.GetBytes())); // this file stream will be closed by lower layers of web api for you once the response is completed.

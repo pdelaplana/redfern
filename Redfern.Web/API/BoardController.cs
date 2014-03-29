@@ -23,5 +23,10 @@ namespace Redfern.Web.API
         {
             return _repository.ExecuteCommand(command);
         }
+
+        public void Put(int id, [FromBody]ChangeBoardNameCommand command)
+        {
+            _repository.ExecuteCommand(command);
+        }
     }
 }

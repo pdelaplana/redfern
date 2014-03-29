@@ -9,15 +9,8 @@
     var initialize = function () {
 
         var ui = app.ui.extend();
-        ui.addPart('createBoardTile', new CreateBoardTile()).bindTo('#CreateBoardTile');
-    
         ui.setWindowTitle('Boards');
 
     }
-
-    return {
-
-    }
-
 
 }());

@@ -10,7 +10,6 @@
     self.fullName = ko.observable();
     self.email = ko.observable();
 
-    
     self.file = ko.observable();
     self.fileName = ko.observable();
     self.fileContentType = ko.observable();
@@ -26,13 +25,10 @@
     }
     
     self.uploadPhoto = function () {
-        var repository = new UserProfileRepository();
+        var repository = new UserAvatarRepository();
         repository.userName(self.userName());
-        //repository.fileContents(self.fileContents());
-        //repository.fileName(self.fileName());
-        //repository.fileContentType(self.fileContentType());
         repository.file(self.file());
-        repository.uploadPhoto();
+        repository.upload();
     }
 
     var initialize = function () {

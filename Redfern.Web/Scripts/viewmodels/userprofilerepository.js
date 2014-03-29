@@ -5,12 +5,6 @@
     self.fullName = ko.observable();
     self.email = ko.observable();
 
-    self.file = ko.observable();
-    self.fileName = ko.observable();
-    self.fileContentType = ko.observable();
-    self.fileUrl = ko.observable();
-    self.fileContents = ko.observable();
-
     self.create = function () {
         return $.ajax({
             url: '/api/profile',
@@ -45,21 +39,6 @@
         });
     }
 
-    self.uploadPhoto = function () {
-        var formData = new FormData();
-        //formData.append('Title', self.fileName());
-        //formData.append('FileName', self.fileName());
-        //formData.append('ContentType', self.fileContentType());
-        //formData.append('Contents', self.fileContents());
-        formData.append('Contents', self.file());
-        return $.ajax({
-            url: '/api/profile/'+self.userName(),
-            type: 'avatar',
-            data: formData,
-            contentType: false,
-            cache: false,
-            processData: false
-        });
-    }
+   
 
 }

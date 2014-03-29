@@ -26,7 +26,8 @@ namespace Redfern.Web
                         "~/Scripts/jquery.tinyscrollbar.js",
                         "~/Scripts/jquery.tagit.js",
                         "~/Scripts/moment.js",
-                        "~/Scripts/moment-with-lang.js"
+                        "~/Scripts/moment-with-lang.js",
+                        "~/scripts/jquery.tabslideout.js"
                         ));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -107,12 +108,14 @@ namespace Redfern.Web
 
 
             bundles.Add(new ScriptBundle("~/bundles/modules").Include(
-                        "~/scripts/viewmodels/boardviewmodel.js",
+                        "~/scripts/viewmodels/tagrepository.js",
+                        "~/scripts/viewmodels/boardrepository.js",
                         "~/scripts/viewmodels/cardrepository.js",
                         "~/scripts/viewmodels/cardtagrepository.js",
                         "~/scripts/viewmodels/cardcommentrepository.js",
                         "~/scripts/viewmodels/boardcolumnrepository.js",
                         "~/scripts/viewmodels/userprofilerepository.js",
+                        "~/scripts/viewmodels/useravatarrepository.js",
                         "~/scripts/widgets/createboarddialog.js",
                         "~/scripts/widgets/opencarddialog.js",
                         "~/scripts/widgets/createboardtile.js",

@@ -1,49 +1,65 @@
-﻿@using Newtonsoft.Json;
-
-@model Redfern.Web.Models.BoardViewModel
+﻿@model Redfern.Web.Models.BoardViewModel
 
 <div class="page-region" style="">
-    <div class="page-region-content" id="Board" style="min-width:100px;width:1500px; margin-top:10px;float:left;display:inline-block">
-        <div class="board" data-bind="sortable: { data: columns, afterMove: resequenceAllColumns, options:{ placeholder: BoardColumnPlaceHolder }  }">
-            <div class="board-column border">
-                <div class="board-column-wrapper">
-                    <div class="board-column-header ntm ntp clearfix">
-                        <h4 class="ntm ntp"><strong data-bind="text: name"></strong>  <i class="icon-forward place-right"  style="cursor:pointer" data-bind="click:openColumnProperties"></i> </h4>
-                    </div>
-                    <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', options: { placeholder: CardPlaceHolder, items: '> div:not(.pinned)', scroll: true} }">
-                        <div class="tile double bg-amber" data-bind="event: { dblclick: open }">
-                            <div class="tile-content">
-                                <div class="padding10">
-                                    <p class="fg-white" data-bind="text: title"></p>
+    <div class="page-region-content " >
+        <div id="Board" class="block clearfix" data-bind="">
+            <div class="board" data-bind="sortable: { data: columns, afterMove: resequenceAllColumns, options:{ placeholder: BoardColumnPlaceHolder }  }">
+                <div class="board-column border">
+                    <div class="board-column-wrapper">
+                        <div class="board-column-header ntm ntp clearfix">
+                            <h4 class="ntm ntp"><strong data-bind="text: name"></strong> <span class="text-muted" >(<span data-bind="text: cards().length"></span> cards)</span>  <i class="icon-forward place-right" style="cursor:pointer" data-bind="click:openColumnProperties"></i> </h4>
+                        </div>
+                        <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
+                            <div class="tile double bg-amber" data-bind="visible: show, event: { dblclick: open }">
+                                <div class="tile-content">
+                                    <div class="padding10">
+                                        <p class="fg-white" data-bind="text: title"></p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="brand">
-                                <div class="label">
-                                    <span class="no-margin fg-white icon-calendar"></span>
-                                    <span class="no-margin fg-white icon-comments" data-bind="text: commentCount, visible: commentCount()>0"></span>
+                                <div class="brand">
+                                    <div class="label">
+                                        <span class="no-margin fg-white icon-calendar"></span>
+                                        <span class="no-margin fg-white icon-comments" data-bind="text: commentCount, visible: commentCount()>0"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="board-column-footer">
-                        <div class="padding10">
-                            <p class="fg-grayLight fg-gray"><span data-bind="cardCreator: newCardTitle, create: addCard ">Add a card...</span> </p>
+                        <div class="board-column-footer">
+                            <div class="padding10">
+                                <p class="fg-grayLight fg-gray"><span data-bind="cardCreator: newCardTitle, create: addCard ">Add a card...</span> </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="board-column border bg-gray bg-hover-grayDarker fg-hover-white" style="min-height:50px;cursor:pointer">
+                <div class="board-column-header ntm ntp ">
+                    <span class="fg-white" data-bind="inlineEditor:newColumn, fontSize: '14pt', save:addColumn">Add a Column...</span>
+                </div>
+            </div>
+
         </div>
-        <div class="board-column border bg-gray bg-hover-grayDarker fg-hover-white" style="min-height:50px;cursor:pointer">
-            <div class="board-column-header ntm ntp ">
-                <span class="fg-white" data-bind="inlineEditor:newColumn, fontSize: '14pt', save:addColumn">Add a Column...</span>
+        
+        <div id="Oversight" data-bind="foreach: columns" class="block margin20">
+            <div class="tile bg-darkBlue" data-bind="">
+                <div class="tile-content">
+                    <div class="padding10">
+                        <p class="fg-white" data-bind="text: name"></p>
+                        <p class="fg-white" data-bind="text: cards().length"></p>
+                    </div>
+                </div>
+                <div class="brand">
+                    <div class="label">
+                        
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
-
 </div>
 
-
+@Html.Partial("_SidebarCharms")
 @Html.Partial("_ColumnPropertiesForm")
 @Html.Partial("_OpenCardDialog")
 
