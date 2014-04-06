@@ -7,6 +7,7 @@ using System.Web.Http;
 using Redfern.Core.Models;
 using Redfern.Core.Repository;
 using Redfern.Core.Repository.Commands;
+using Redfern.Web.Models;
 
 namespace Redfern.Web.API
 {
@@ -18,15 +19,30 @@ namespace Redfern.Web.API
         {
             _repository = repository;
         }
-        
-        public Board Post([FromBody]CreateBoardCommand command)
+
+        public IEnumerable<BoardListItem> Get(string id)
         {
-            return _repository.ExecuteCommand(command);
+
+            var list = _repository.Boards.Where(b => b.Owner == id || b.Members.Where(m => m.UserName == id).Count() > 0).ToList();
+            return AutoMapper.Mapper.Map<IList<Board>, IList<BoardListItem>>(list);
+        }
+
+        public BoardListItem Post([FromBody]CreateBoardCommand command)
+        {
+            return AutoMapper.Mapper.Map<Board, BoardListItem>(_repository.ExecuteCommand(command));
         }
 
         public void Put(int id, [FromBody]ChangeBoardNameCommand command)
         {
             _repository.ExecuteCommand(command);
         }
+
+        public void Delete(int id)
+        {
+            _repository.ExecuteCommand(new DeleteBoardCommand { BoardId = id });
+        }
+
+
+       
     }
 }

@@ -9,6 +9,11 @@
     self.userName = ko.observable();
     self.fullName = ko.observable();
     self.email = ko.observable();
+    self.timestamp = ko.observable((new Date()).getTime());
+    self.photoSrc = ko.computed(function () {
+        var d = new Date();
+        return '/api/avatar/' + self.userName() + '?width=400&height=400&ts=' + self.timestamp();
+    }).extend({ notify: 'always'});
 
     self.file = ko.observable();
     self.fileName = ko.observable();
@@ -28,12 +33,13 @@
         var repository = new UserAvatarRepository();
         repository.userName(self.userName());
         repository.file(self.file());
-        repository.upload();
+        repository.upload().done(function () {
+            self.timestamp((new Date()).getTime());
+        });
     }
 
     var initialize = function () {
 
-        //$('.input-control', 'form#profile').inputControl();
         $.Metro.initInputs('form#avatar');
 
         self.userName(model.UserName);
@@ -45,8 +51,8 @@
         ui.setWindowTitle('Profile');
         ui.addPart('form', self).bindTo('#profileForm');
         
-
-
+        ui.appNavigationBar.selectedMenu('All Boards');
+        ui.setWindowTitle(model.FullName + ' - Profile');
     }
 
 }())

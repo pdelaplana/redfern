@@ -1,42 +1,52 @@
-﻿@model Redfern.Web.Models.BoardListViewModel
+﻿
 
 <div class="page-region">
-    <div class="page-region-content">
-        <div class="tile-area">
-            <h2>My Boards</h2>
-            <div id="MyBoards" class="tile-group"  style="min-height:300px">   
-            @foreach (var board in Model.Boards)
-            {
-                <a href="#/board/@board.BoardId" class="tile double bg-darkCobalt">
-                    <div class="tile-content">
-                        <div class="padding10 ">
-                            <h2 class="fg-white no-margin">@board.Name</h2>
-                        </div>
+    <div class="page-region-content" id="Boards">
+        <div class="grid fluid">
+            <div class="row">
+                <div class="span12">
+                    <h2>My Boards</h2>
+                    <div class="" id="MyBoards" data-bind="foreach: myBoards">
+                        <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
+                            <div class="tile-content">
+                                <div class="padding10 text-left">
+                                    <h4 class="fg-white no-margin" data-bind="text:name"></h4>
+                                    <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                                </div>
+                            </div>
+                            <div class="brand">
+                                <div class="label"><span class="no-margin fg-white"><span class="icon-grid-view"></span></span></div>
+                                <div class="badge"></div>
+                            </div>
+                        </a>
                     </div>
-                    <div class="brand">
-                        <div class="label"><h3 class="no-margin fg-white"><span class="icon-grid"></span></h3></div>
-                        <div class="badge">102</div>
+                    <p class="text-alert" style="height:150px" data-bind="visible: myBoards().length == 0">You have not created any boards.  Click <a href="" data-bind="click: app.ui.appNavigationBar.createBoard">here</a> to create your first board.</p>
+                </div>
+            </div>
+            <div class="row" style="margin-top:50px">
+                <div class="span12">
+                    <h2>Shared Boards</h2>
+                    <div class="" id="SharedBoards" data-bind="foreach: sharedBoards">
+                        <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
+                            <div class="tile-content">
+                                <div class="padding10 text-left">
+                                    <h4 class="fg-white no-margin" data-bind="text:name"></h4>
+                                    <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                                </div>
+                            </div>
+                            <div class="brand">
+                                <div class="label"><span class="no-margin fg-white"><span class="icon-grid-view"></span></span></div>
+                                <div class="badge"></div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            }
-                
-                
-               
-
-
+                    <p class="text-alert" style="height:150px" data-bind="visible: sharedBoards().length == 0">There are no shared boards found.</p>
+                </div>
             </div>
-
-            <div class="tile-group">
-               
-
-            </div>
-
         </div>
+     
+       
 
-        
+
     </div>
-</div>
-
-<div id="NewBoardDialog" style="display:none">
-    This is a test board
 </div>

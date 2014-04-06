@@ -48,23 +48,31 @@ namespace Redfern.Web.API
         public HttpResponseMessage Get(string id, int width = 100, int height = 100)
         {
             string nopic = "~/content/images/_default-user-avatar.png";
-            WebImage webimage;
+            string contentType = "";
+            WebImage webimage = null;
+            
             var user = _userManager.FindByName(id);
-            var avatar = user.Avatar;
-            var contentType = user.AvatarContentType;
-            if (avatar != null)
+            if (user != null)
             {
-                webimage = new WebImage(avatar);
-                webimage.Resize(width, height, true);
-                CropImage(webimage);
+                var avatar = user.Avatar;
+                contentType = user.AvatarContentType;
+                if (avatar != null)
+                {
+                    webimage = new WebImage(avatar);
+                    webimage.Resize(width, height, true);
+                    CropImage(webimage);
+                }
             }
-            else
+
+            if (webimage == null)
             {
                 webimage = new WebImage(nopic);
                 contentType = "image/png";
                 webimage.Resize(width, height, true);
                 CropImage(webimage);
             }
+            
+            
             HttpResponseMessage response = new HttpResponseMessage();
             response.Content = new StreamContent(new MemoryStream(webimage.GetBytes())); // this file stream will be closed by lower layers of web api for you once the response is completed.
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);

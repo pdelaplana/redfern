@@ -15,6 +15,9 @@ namespace Redfern.Core.Models
         [Required, StringLength(50)]
         public string Name { get; set; }
 
+        [Required, StringLength(20)]
+        public string Owner { get; set; }
+
         public DateTime? ArchiveDate { get; set; }
 
         public virtual ICollection<BoardMember> Members { get; set; }
@@ -22,6 +25,7 @@ namespace Redfern.Core.Models
         public virtual ICollection<BoardColumn> Columns { get; set; }
 
         public virtual ICollection<Card> Cards { get; set; }
+
         
     }
 }

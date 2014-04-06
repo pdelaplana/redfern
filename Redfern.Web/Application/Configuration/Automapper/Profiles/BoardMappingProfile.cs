@@ -14,7 +14,11 @@ namespace Redfern.Web.Application.Configuration.Automapper.Profiles
     {
         protected override void Configure()
         {
-            Mapper.CreateMap<Board, BoardListItem>();
+            Mapper.CreateMap<Board, BoardMenuItem>();
+
+            Mapper.CreateMap<Board, BoardListItem>()
+                .ForMember(dest => dest.OwnerFullName, opts => opts.ResolveUsing<CacheUserFullNameResolver>().FromMember(src=> src.Owner))
+                .ForMember(dest => dest.CardCount, opts => opts.MapFrom(src => src.Cards.Count(c=>!c.ArchivedDate.HasValue)));
 
             Mapper.CreateMap<BoardColumn, BoardColumnItem>()
                 .ForMember(dest => dest.Cards, opts => opts.MapFrom(src => src.Cards.OrderBy(c => c.Sequence).ToList()));
@@ -22,10 +26,15 @@ namespace Redfern.Web.Application.Configuration.Automapper.Profiles
             Mapper.CreateMap<BoardColumn, BoardColumnDTO>();
 
             Mapper.CreateMap<Board, BoardViewModel>()
+                .ForMember(dest => dest.OwnerFullName, opts => opts.ResolveUsing<CacheUserFullNameResolver>().FromMember(src => src.Owner))
                 .ForMember(dest => dest.Columns, opts => opts.MapFrom(src => src.Columns.OrderBy(c=>c.Sequence).ToList()));
+
+            Mapper.CreateMap<BoardMember, BoardMemberItem>()
+                .ForMember(dest => dest.FullName, opts => opts.ResolveUsing<CacheUserFullNameResolver>().FromMember(src => src.UserName));
 
             Mapper.CreateMap<Card, CardItem>()
                 .ForMember(dest => dest.CommentCount, opts => opts.MapFrom(src => src.Comments.Count))
+                .ForMember(dest => dest.IsArchived, opts => opts.MapFrom(src => src.ArchivedDate.HasValue))
                 .ForMember(dest => dest.Tags, opts => opts.MapFrom(src => src.Tags.Select(tag => tag.Tag.TagName).ToArray()));
 
             Mapper.CreateMap<CardComment, CardCommentModel>()

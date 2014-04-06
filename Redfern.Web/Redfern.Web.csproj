@@ -194,6 +194,7 @@
     <Compile Include="API\Binders\FileUploadDTOModelBinder.cs" />
     <Compile Include="API\BoardColumnController.cs" />
     <Compile Include="API\BoardController.cs" />
+    <Compile Include="API\BoardMemberController.cs" />
     <Compile Include="API\CardController.cs" />
     <Compile Include="API\DTO\BoardColumnDTO.cs" />
     <Compile Include="API\CommentController.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="API\ProfileController.cs" />
     <Compile Include="API\Providers\InMemoryMultipartFormDataStreamProvider.cs" />
     <Compile Include="API\TagController.cs" />
+    <Compile Include="API\UserController.cs" />
     <Compile Include="Application\Cache\TenantsCache.cs" />
     <Compile Include="Application\Cache\UserCache.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\UserProfileMappingProfile.cs" />
@@ -227,6 +229,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AppNavigationBarViewModel.cs" />
     <Compile Include="Models\BoardViewModel.cs" />
     <Compile Include="Models\BoardListViewModel.cs" />
     <Compile Include="Models\ProfileViewModel.cs" />
@@ -241,6 +244,7 @@
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\fileinput.css" />
     <Content Include="Content\images\bg-scrollbar-thumb-y.png" />
     <Content Include="Content\images\bg-scrollbar-track-y.png" />
     <Content Include="Content\images\bg-scrollbar-trackend-y.png" />
@@ -259,11 +263,15 @@
     <Content Include="Content\nanoscroller.css" />
     <Content Include="Content\tagit-stylish-yellow.css" />
     <Content Include="Scripts\app\ui.js" />
+    <Content Include="Scripts\jquery.fileinput.js" />
     <Content Include="Scripts\jquery.tabslideout.js" />
-    <Content Include="Scripts\viewmodels\tagrepository.js" />
-    <Content Include="Scripts\viewmodels\useravatarrepository.js" />
-    <Content Include="Scripts\viewmodels\userprofilerepository.js" />
+    <Content Include="Scripts\repositories\boardmemberrepository.js" />
+    <Content Include="Scripts\repositories\tagrepository.js" />
+    <Content Include="Scripts\repositories\useravatarrepository.js" />
+    <Content Include="Scripts\repositories\userprofilerepository.js" />
     <Content Include="Scripts\views\board.js" />
+    <Content Include="Scripts\views\boardcontext.js" />
+    <Content Include="Scripts\views\boardsidebar.js" />
     <Content Include="Scripts\views\boardui.js" />
     <Content Include="Scripts\jquery.flip.js" />
     <Content Include="Scripts\jquery.flip.min.js" />
@@ -484,12 +492,13 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
-    <Content Include="Scripts\viewmodels\boardcolumnrepository.js" />
-    <Content Include="Scripts\viewmodels\boardrepository.js" />
-    <Content Include="Scripts\viewmodels\cardcommentrepository.js" />
-    <Content Include="Scripts\viewmodels\cardrepository.js" />
-    <Content Include="Scripts\viewmodels\cardtagrepository.js" />
+    <Content Include="Scripts\repositories\boardcolumnrepository.js" />
+    <Content Include="Scripts\repositories\boardrepository.js" />
+    <Content Include="Scripts\repositories\cardcommentrepository.js" />
+    <Content Include="Scripts\repositories\cardrepository.js" />
+    <Content Include="Scripts\repositories\cardtagrepository.js" />
     <Content Include="Scripts\views\profile.js" />
+    <Content Include="Scripts\widgets\appnavigationbar.js" />
     <Content Include="Scripts\widgets\opencarddialog.js" />
     <Content Include="Scripts\widgets\createboarddialog.js" />
     <Content Include="Scripts\widgets\createboardtile.js" />
@@ -545,11 +554,11 @@
     <Content Include="Views\Board\_BoardNavigationBar.cshtml" />
     <Content Include="Views\Board\_Index.cshtml" />
     <Content Include="Views\Boards\_Index.cshtml" />
-    <Content Include="Views\Board\_Index - Copy.cshtml" />
     <Content Include="Views\Board\_OpenCardDialog.cshtml" />
     <Content Include="Views\Board\_ColumnPropertiesForm.cshtml" />
     <Content Include="Views\Profile\_Index.cshtml" />
     <Content Include="Views\Board\_SidebarCharms.cshtml" />
+    <Content Include="Views\Shared\_Layout_NoHeader.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

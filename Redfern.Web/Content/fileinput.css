@@ -1,0 +1,39 @@
+﻿div.fileinputs {
+    position: relative;
+}
+
+div.overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+}
+
+div.overlay a {
+    font-weight:300;
+}
+div.fileinputs input[type=file] {
+    border:0;
+    padding:0;
+    position: relative;
+    text-align: right;
+    
+    filter:alpha(opacity = 0);
+    -ms-filter: "alpha(opacity=0)";
+    -moz-opacity:0;
+    opacity: 0;
+
+    z-index: 3;
+    line-height:0;
+    width:100px;
+   
+    cursor:pointer;
+} 
+
+p#file_selected
+{
+    width:auto;
+    font-size:smaller;
+    word-wrap:break-word;
+}
+

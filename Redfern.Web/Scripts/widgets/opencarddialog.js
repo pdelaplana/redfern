@@ -12,7 +12,7 @@
         data = data,
         self = this;
 
-    self.cardData = data;
+    self.data = data;
 
     self.newComment = ko.observable();
     self.comments = ko.observableArray();
@@ -37,17 +37,18 @@
 
     self.addComment = function () {
         var repository = new CardCommentRepository();
-        repository.cardId(self.cardData.cardId());
+        repository.cardId(self.data.cardId());
         repository.comment(self.newComment());
         repository.create().done(function (result) {
             self.comments.splice(0, 0, new CommentListItem(result));
             self.newComment('');
+            self.data.commentCount(self.comments().length);
         });
     }
 
     self.loadComments = function () {
         var repository = new CardCommentRepository();
-        repository.cardId(self.cardData.cardId());
+        repository.cardId(self.data.cardId());
         repository.getComments().done(function (result) {
             $.each(result, function (index, value) {
                 self.comments.push(new CommentListItem(value));

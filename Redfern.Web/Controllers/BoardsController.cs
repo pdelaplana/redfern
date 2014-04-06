@@ -21,11 +21,7 @@ namespace Redfern.Web.Controllers
 
         public ActionResult Index()
         {
-            var list = _repository.Boards.ToList();
-            var model = new BoardListViewModel();
-            model.Boards = AutoMapper.Mapper.Map<IList<Board>, IList<BoardListItem>>(list);
-            
-            return PartialView("_index", model);
+            return PartialView("_index");
         }
 	}
 }

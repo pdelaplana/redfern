@@ -4,6 +4,13 @@
     self.boardId = ko.observable();
     self.name = ko.observable();
 
+    self.getBoardsOfUser = function (userName) {
+        return $.ajax({
+            url: '/api/board/'+userName,
+            type: 'get'
+        });
+    }
+
     self.create = function () {
         return $.ajax({
             url: '/api/board',
@@ -20,4 +27,11 @@
         });
     }
     
+    self.remove = function () {
+        return $.ajax({
+            url: '/api/board/' + self.boardId(),
+            type: 'delete'
+        });
+    }
+
 }

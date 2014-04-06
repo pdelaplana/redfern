@@ -25,6 +25,8 @@ namespace Redfern.Web.Models
         public int Sequence { get; set; }
         public string AssignedToUser { get; set; }
         public DateTime? DueDate { get; set; }
+        public DateTime? ArchivedDate { get; set; }
+        public bool IsArchived { get; set; }
         public string[] Tags { get; set; }
         public int CommentCount { get; set; }
     }
@@ -41,11 +43,22 @@ namespace Redfern.Web.Models
         public IList<CardItem> Cards { get; set; }
     }
 
+    public class BoardMemberItem 
+    {
+        public string BoardMemberId { get; set; }
+        public int BoardId { get; set; }
+        public string UserName { get; set; }
+        public string FullName { get; set; }
+    }
+
     public class BoardViewModel
     {
         public int BoardId { get; set; }
         public string Name { get; set; }
+        public string Owner { get; set; }
+        public string OwnerFullName { get; set; }
 
+        public IList<BoardMemberItem> Members { get; set; }
         public IList<BoardColumnItem> Columns { get; set; }
     }
 }

@@ -71,15 +71,32 @@
     <Compile Include="Migrations\201403160156511_AddDueDateFieldInCard.Designer.cs">
       <DependentUpon>201403160156511_AddDueDateFieldInCard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201403290535393_AddOwnerToBoard.cs" />
+    <Compile Include="Migrations\201403290535393_AddOwnerToBoard.Designer.cs">
+      <DependentUpon>201403290535393_AddOwnerToBoard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201403290541053_MakeOwnerRequired.cs" />
+    <Compile Include="Migrations\201403290541053_MakeOwnerRequired.Designer.cs">
+      <DependentUpon>201403290541053_MakeOwnerRequired.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201403300031324_AddArchivedDateToCard.cs" />
+    <Compile Include="Migrations\201403300031324_AddArchivedDateToCard.Designer.cs">
+      <DependentUpon>201403300031324_AddArchivedDateToCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ActivityConstructor.cs" />
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
     <Compile Include="Models\Configuration\CardConfiguration.cs" />
     <Compile Include="Models\Configuration\BoardColumnConfiguration.cs" />
+    <Compile Include="Repository\Commands\DeleteBoardMemberCommand.cs" />
+    <Compile Include="Repository\Commands\AddBoardMemberCommand.cs" />
+    <Compile Include="Repository\Commands\DeleteBoardCommand.cs" />
+    <Compile Include="Repository\Commands\UnarchiveCardCommand.cs" />
     <Compile Include="Repository\Commands\ChangeBoardNameCommand.cs" />
     <Compile Include="Repository\Commands\CreateCardCommentCommand.cs" />
     <Compile Include="Repository\Commands\CreateCardTagCommand.cs" />
     <Compile Include="Repository\Commands\DeleteCardTagCommand.cs" />
     <Compile Include="Repository\Commands\DeleteCardCommand.cs" />
+    <Compile Include="Repository\Commands\ArchiveCardCommand.cs" />
     <Compile Include="Repository\Commands\UpdateCardCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardColumnCommand.cs" />
     <Compile Include="Repository\Commands\UpdateBoardColumnPropertiesCommand.cs" />
@@ -105,6 +122,7 @@
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\RedfernRepository.cs" />
+    <Compile Include="Repository\RedfernRepositoryExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -135,6 +153,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201403160156511_AddDueDateFieldInCard.resx">
       <DependentUpon>201403160156511_AddDueDateFieldInCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201403290535393_AddOwnerToBoard.resx">
+      <DependentUpon>201403290535393_AddOwnerToBoard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201403290541053_MakeOwnerRequired.resx">
+      <DependentUpon>201403290541053_MakeOwnerRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201403300031324_AddArchivedDateToCard.resx">
+      <DependentUpon>201403300031324_AddArchivedDateToCard.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

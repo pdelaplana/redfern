@@ -29,17 +29,17 @@ $(function () {
         }
     });
 
-    app.ui.addPart('appNavigationBar', {
-        selectedMenu: ko.observable('All Boards'),
-        createBoard: function(){
-            var dialog = new CreateBoardDialog('#CreateBoardDialog');
-            dialog.open();
-        }
-        
-    }).bindTo('#AppNavigationBar');
-
+    // get authenticated user details from cookie
+    var authenticatedUser = $.cookie("AuthenticatedUser");
+    if (authenticatedUser != null)
+        authenticatedUser = ko.utils.parseJson(authenticatedUser)
+    app.user.userName = authenticatedUser.UserName;
+    app.user.fullName = authenticatedUser.FullName;
+    
+    app.ui.addPart('appNavigationBar', new AppNavigationBar()).bindTo('#AppNavigationBar');
 
     app.ui.setWindowTitle('Home');
     app.start('app/#/boards');
 
+    
 })

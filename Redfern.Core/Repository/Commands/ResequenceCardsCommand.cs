@@ -18,6 +18,9 @@ namespace Redfern.Core.Repository.Commands
 
         public bool Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
         {
+            // check if column is an archived column
+            BoardColumn archivedColumn = db.BoardColumns.Where(c => c.ColumnId == this.ColumnId && c.Name == "Archived" ).SingleOrDefault();
+
             int counter = 1;
             Card card;
             foreach (var id in this.CardIds)
@@ -25,6 +28,18 @@ namespace Redfern.Core.Repository.Commands
                 card = db.Cards.Find(id);
                 card.ColumnId = this.ColumnId;
                 card.Sequence = counter;
+                if (archivedColumn != null)
+                {
+                    // we're archiving these cards
+                    DateTime archivedDate = DateTime.UtcNow;
+                    if (!card.ArchivedDate.HasValue)
+                        card.ArchivedDate = archivedDate;
+                }
+                else
+                {
+                    // not archiving, so ensure that the archived date is clear for each card
+                    card.ArchivedDate = null;
+                }
                 counter++;
             }
             db.SaveChanges();

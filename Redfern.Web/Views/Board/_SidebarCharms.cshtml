@@ -3,20 +3,29 @@
     <nav id="Sidebar" class="sidebar" data-bind="visible: activeOption() == 'main'">
         <ul>
             <li class="title">Board Options</li>
-            <li><a href="" data-bind="click: function(){ activeOption('changeboardsettings') }">Change Board Settings</a></li>
-            <li><a href="">Zoom out</a></li>
-            <li><a href="">Members</a></li>
-            <li><a href="" data-bind="click: function(){ activeOption('tags') }">Tags</a></li>
+            <li data-bind="visible: canChangeSettings "><a href="" data-bind="click: function(){ activeOption('changeboardsettings') }">Change Board Settings</a></li>
+            <li data-bind="visible: viewMode() =='board'"><a href="" data-bind="click: function(){ viewMode('overview') }">Zoom out</a></li>
+            <li data-bind="visible: viewMode() =='overview'"><a href="" data-bind="click: function(){ viewMode('board') }">Zoom in</a></li>
+            <li><a href="" data-bind="click: function(){ activeOption('members') }">Members</a></li>
+            <li data-bind="visible: viewMode() == 'board'"><a href="" data-bind="click: function(){ activeOption('columns') }">Columns</a></li>
+            <li><a href="" data-bind="click: function(){ activeOption('filter') }">Filter</a></li>
         </ul>
     </nav>
 
-    <nav id="Sidebar_ChangeBoardName" class="sidebar" data-bind="visible: activeOption() == 'changeboardsettings'">
+    <nav id="Sidebar_BoardSettings" class="sidebar" data-bind="visible: activeOption() == 'changeboardsettings'">
         <ul>
             <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Change Board Settings</li>
             <li>
                 <div class="padding20">
-                    @Html.Editor("BoardName", "textbox", new { databind = "value: boardName", autofocus="autofocus" })
+                    @Html.Editor("BoardName", "textbox", new { databind = "value: name", autofocus="autofocus" })
                     <button data-bind="click: changeBoardName">Save</button>
+                </div>
+            </li>
+            <li>
+                <div class="padding20 fg-white">
+                    <p class="fg-white">Delete this board</p>
+                    <button class="bg-red fg-white" data-bind="click: remove">Delete</button>
+                    
                 </div>
             </li>
             <li>
@@ -28,12 +37,54 @@
         </ul>
     </nav>
 
-    <nav id="Sidebar_Tags" class="sidebar" data-bind="visible: activeOption() == 'tags'">
+    <nav id="Sidebar_Members" class="sidebar" data-bind="visible: activeOption() == 'members'">
         <ul>
-            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Tags</li>
+            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Members</li>
             <li>
                 <div class="padding20">
-                    <span class="fg-white">Type in one or more tags to filter on</span>
+                    <div class="input-control text">
+                        <input type="text" placeholder="enter name or email to add" data-bind="autocomplete: newMember.userName, settings: { source: newMember.lookupUser }" />
+                        <button class="btn-add" data-bind="click: newMember.add"></button>
+                    </div>
+                </div>
+                <div class="padding20 inline-block ntp">
+                    <div class="tile half">
+                        <img class="icon " src="" data-bind="attr: { src : '/api/avatar/'+owner(), title : ownerFullName()+ ' (The Owner)' }" />
+                    </div>
+                    <!-- ko foreach: members -->
+                    <div class="tile half" data-bind="click: $parent.selectMember, css: { selected: selected }">
+                        <img class="icon " src='/api/avatar/patrick' data-bind="attr: { src: '/api/avatar/'+userName(), title: fullName() }" />
+                    </div>
+                    <!-- /ko -->
+                </div>
+            </li>
+            <li data-bind="if: selectedMember.boardMemberId() > 0">
+                <div class="padding10 grid fluid">
+                    <div class="row">
+                        <div class="span4">
+                            <img class="icon " data-bind="attr: { src: '/api/avatar/'+selectedMember.userName(), title: selectedMember.fullName() }" />
+
+                        </div>
+                        <div class="span6">
+                            <p data-bind="text:selectedMember.fullName" class="fg-white"></p>
+                            <button class="danger" data-bind="visible: canRemoveMember, click: removeMember">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <nav id="Sidebar_Filter" class="sidebar" data-bind="visible: activeOption() == 'filter'">
+        <ul>
+            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Filter</li>
+            <li>
+                <div class="padding20">
+                    <div class="input-control text">
+                        <input type="text" placeholder="Search..." data-bind="value: filters.title">
+                        <button class="btn-search" data-bind="click: filters.applyFilter"></button>
+                    </div>
+                    <span class="fg-grayLight ">Type in one or more tags to filter on</span>
                     <ul id="tags-container-filter"></ul>
                                         
                 </div>
@@ -41,6 +92,27 @@
         </ul>
     </nav>
 
+    <nav id="Sidebar_columns" class="sidebar" data-bind="visible: activeOption() == 'columns'">
+        <ul>
+            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Columns</li>
+            <li>
+                <div class="padding20">
+                    <p class="text-muted">Select columns to show or hide.</p>
+                    <div class="listview small" data-bind="foreach: columns">
+                        <div class="list" style="width:100%" data-bind="click:function(){ show(!show()) }">
+                            <div class="list-content">
+                                <span class="icon icon-checkbox fg-white" data-bind="css:{ 'icon-checkbox-unchecked': show() != true }"></span>
+                                <div class="data fg-white">
+                                    <span data-bind="text:name"></span>
+                                    (<span data-bind="text:visibleCardCount"></span>)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
 
 </div>
 

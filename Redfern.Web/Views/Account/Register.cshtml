@@ -1,27 +1,38 @@
 ﻿@model Redfern.Web.Models.RegisterViewModel
 @{
+    Layout = "~/Views/Shared/_Layout_NoHeader.cshtml";
     ViewBag.Title = "Register";
 }
 
 <div class="page-region">
     <div class="page-region-content">
-        <div class="center padding20 border bd-red" style="margin-top:50px">
+        <div class="center padding20 border shadow" style="margin-top: 0px; width: 800px">
             <h2>@ViewBag.Title</h2>
-
-            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Create a new account</h4>
-                <hr />
-                @Html.ValidationSummary()
-                @Html.EditorFor(m => m.UserName, "textbox")
-                @Html.EditorFor(m => m.Password, "password")
-                @Html.EditorFor(m => m.ConfirmPassword, "password")
-                <p>
-                    <button type="submit" class="primary">Register Me</button>
-                </p>
-            }
-
+            <div class="grid fluid">
+                <div class="row">
+                    <div class="span6">
+                        <hr/>
+                        @using (Html.BeginForm("register", "account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            
+                            @Html.EditorFor(m => m.FullName, "textbox")
+                            @Html.EditorFor(m => m.Email, "textbox")
+                            @Html.EditorFor(m => m.UserName, "textbox")
+                            @Html.EditorFor(m => m.Password, "password")
+                            @Html.EditorFor(m => m.ConfirmPassword, "password")
+                            <p>
+                                <button type="submit" class="primary large">Register Me</button>
+                            </p>
+                            <p>
+                                Already have an account?
+                                @Html.ActionLink("Sign in here.", "signin")
+                            </p>
+                        }
+                    </div>
+                </div>
+                
+            </div>
         </div>
     </div>
 </div>

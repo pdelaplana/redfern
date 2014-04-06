@@ -57,5 +57,17 @@ namespace Redfern.Web.API
         {
             _repository.ExecuteCommand(command);
         }
+
+        [AcceptVerbs("archive")]
+        public void Archive(int id)
+        {
+            _repository.ExecuteCommand(new ArchiveCardCommand { CardId = id });
+        }
+
+        [AcceptVerbs("unarchive")]
+        public void Unarchive(int id)
+        {
+            _repository.ExecuteCommand(new UnarchiveCardCommand { CardId = id });
+        }
     }
 }

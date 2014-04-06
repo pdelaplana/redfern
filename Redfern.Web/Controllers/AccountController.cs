@@ -16,12 +16,6 @@ namespace Redfern.Web.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        /*
-        public AccountController()
-            : this(new UserManager<RedfernUser>(new UserStore<RedfernUser>(new RedfernSecurityContext())))
-        {
-        }
-         * */
 
         public AccountController()
         {
@@ -88,7 +82,12 @@ namespace Redfern.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new RedfernUser() { UserName = model.UserName };
+                var user = new RedfernUser() 
+                { 
+                    UserName = model.UserName, 
+                    FullName = model.FullName, 
+                    Email = model.Email 
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -300,7 +299,7 @@ namespace Redfern.Web.Controllers
         public ActionResult SignOut()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("signin", "account");
         }
 
         //

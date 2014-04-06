@@ -19,13 +19,20 @@ namespace Redfern.Core.Repository.Commands
 
         public BoardColumn Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
         {
+            Board board = db.Boards.Find(this.BoardId);
+
+            BoardColumn archiveColumn = board.Columns.Where(c => c.Name == "Archived").SingleOrDefault();
+            
             BoardColumn column = db.BoardColumns.Create();
             column.BoardId = this.BoardId;
             column.Name = this.Name;
-            column.Sequence = this.Sequence;
+            column.Sequence = archiveColumn != null ? archiveColumn.Sequence : board.Columns.Count-1;
             column.Hidden = false;
             column.Expanded = true;
             column = db.BoardColumns.Add(column);
+
+            archiveColumn.Sequence++;
+
             db.SaveChanges();
 
             return column;

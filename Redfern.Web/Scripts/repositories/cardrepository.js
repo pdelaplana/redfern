@@ -44,5 +44,19 @@
         });
     }
 
+    self.archive = function () {
+        return $.ajax({
+            url: '/api/card/' + self.cardId(),
+            type: 'archive'
+        });
+    }
+
+    self.unarchive = function () {
+        return $.ajax({
+            url: '/api/card/' + self.cardId(),
+            type: 'unarchive'
+        });
+    }
+
 
 }

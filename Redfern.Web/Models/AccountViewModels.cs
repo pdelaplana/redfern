@@ -30,6 +30,8 @@ namespace Redfern.Web.Models
 
     public class LoginViewModel
     {
+
+       
         [Required]
         [Display(Name = "User name")]
         public string UserName { get; set; }
@@ -45,6 +47,13 @@ namespace Redfern.Web.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [Display(Name = "Full name")]
+        public string FullName { get; set; }
+
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
         [Required]
         [Display(Name = "User name")]
         public string UserName { get; set; }

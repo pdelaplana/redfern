@@ -145,42 +145,109 @@ ko.bindingHandlers.autocomplete = {
                 observable(ui.item ? ui.item.id : 0);
             }
         });
+    },
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings();
+        var settings = bindings.settings;
+        var observable = valueAccessor();
+        $(element).val(observable());
     }
 };
 
+ko.bindingHandlers.uploadButton = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        var bindings = allBindingsAccessor();
+        var settings = bindings.settings;
+        var inputFile = $('<input/>').attr('type', 'file').insertAfter($(element)).hide();
+        inputFile.change(function () {
+            var file = this.files[0];
+            if (ko.isObservable(valueAccessor())) {
+                valueAccessor()(file);
+            }
+            settings.upload();
+        });
+        $(element).click(function () {
+            inputFile.click();
+        })
+    },
+    update: function (element, valueAccessor, allBindingsAccessor) {
+        var file = ko.utils.unwrapObservable(valueAccessor());
+        var bindings = allBindingsAccessor();
+        var settings = bindings.settings;
+        if (settings.fileObjectURL && ko.isObservable(settings.fileObjectURL)) {
+            var oldUrl = settings.fileObjectURL();
+            if (oldUrl) {
+                windowURL.revokeObjectURL(oldUrl);
+            }
+            settings.fileObjectURL(file && windowURL.createObjectURL(file));
+        }
+
+        if (settings.fileBinaryData && ko.isObservable(settings.fileBinaryData)) {
+            if (!file) {
+                settings.fileBinaryData(null);
+            } else {
+                settings.fileName(file.name);
+                settings.fileType(file.type);
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    settings.fileBinaryData(e.target.result);
+
+                    /*
+                    var result = e.target.result || {};
+                    var resultParts = result.split(',');
+                    if (resultParts.length === 2) {
+                        bindings.fileBinaryData(resultParts[1]);
+                        //bindings.fileType(resultParts[0]);
+
+                    }
+                    */
+
+                };
+                reader.readAsArrayBuffer(file);
+                //reader.readAsText(file);
+                //reader.readAsDataURL(file);
+            }
+        }
+    }
+
+}
 
 ko.bindingHandlers.file = {
-    init: function (element, valueAccessor) {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        var bindings = allBindingsAccessor();
+        var settings = bindings.settings;
         $(element).change(function () {
             var file = this.files[0];
             if (ko.isObservable(valueAccessor())) {
                 valueAccessor()(file);
             }
+            settings.upload();
         });
     },
 
     update: function (element, valueAccessor, allBindingsAccessor) {
         var file = ko.utils.unwrapObservable(valueAccessor());
         var bindings = allBindingsAccessor();
-
-        if (bindings.fileObjectURL && ko.isObservable(bindings.fileObjectURL)) {
-            var oldUrl = bindings.fileObjectURL();
+        var settings = bindings.settings;
+        if (settings.fileObjectURL && ko.isObservable(settings.fileObjectURL)) {
+            var oldUrl = settings.fileObjectURL();
             if (oldUrl) {
                 windowURL.revokeObjectURL(oldUrl);
             }
-            bindings.fileObjectURL(file && windowURL.createObjectURL(file));
+            settings.fileObjectURL(file && windowURL.createObjectURL(file));
         }
 
-        if (bindings.fileBinaryData && ko.isObservable(bindings.fileBinaryData)) {
+        if (settings.fileBinaryData && ko.isObservable(settings.fileBinaryData)) {
             if (!file) {
-                bindings.fileBinaryData(null);
+                settings.fileBinaryData(null);
             } else {
-                bindings.fileName(file.name);
-                bindings.fileType(file.type);
+                settings.fileName(file.name);
+                settings.fileType(file.type);
 
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    bindings.fileBinaryData(e.target.result);
+                    settings.fileBinaryData(e.target.result);
                     
                     /*
                     var result = e.target.result || {};

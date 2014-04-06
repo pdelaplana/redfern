@@ -24,7 +24,12 @@
 
 }
 
-@Html.LabelFor(m=>m)  @Html.ValidationMessageFor(m=>m)
+<div style="margin-bottom:5px">
+    @Html.LabelFor(m => m)
+    @Html.ValidationMessageFor(m => m)
+</div>
+  
 <div @id class="input-control text" @style >    
     @Html.TextBoxFor(m => m,  htmlAttributes)
+    
 </div>

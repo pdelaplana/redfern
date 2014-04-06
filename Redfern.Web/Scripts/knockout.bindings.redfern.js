@@ -106,3 +106,29 @@ ko.bindingHandlers.editColumn = {
     }
 };
 
+
+ko.bindingHandlers.maximizeColumn = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        
+    },
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        $(element).width($(window).width()-120);
+        $(window).resize(function () {
+            $(element).width($(window).width() - 120);
+        });
+        
+        
+    }
+}
+
+ko.bindingHandlers.adjustBoardWidth = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+
+    },
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        var observable = valueAccessor();
+        var boardWidth = (observable.settings.columnCount * observable.settings.columnWidth) + 410;
+        $(element).width(boardWidth);
+
+    }
+}

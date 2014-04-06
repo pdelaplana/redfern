@@ -11,8 +11,9 @@
         <div class="element">
             <a class="dropdown-toggle" href="#" data-bind="text: selectedMenu">@( !String.IsNullOrEmpty(ViewBag.SelectedMenu) ? ViewBag.SelectedMenu : "My School Tasks")</a>
             <ul class="dropdown-menu dark" data-role="dropdown" style="z-index:999">
-                <li><a href="#">Ktchen Project</a></li>
-                <li><a href="#">Ktchen Project</a></li>
+                <!-- ko foreach: boardsList -->
+                <li><a href="" data-bind="attr: { href: '#/board/'+boardId }, text: name"></a></li>
+                <!-- /ko -->
                 <li class="divider"></li>
                 <li><a href="#@Url.Action("index", "boards")">Show All</a></li>
 
@@ -20,7 +21,7 @@
         </div>
 
         <a class="element brand" href="#" data-bind="click: createBoard"><span class="icon-plus"></span></a>
-
+        @*
         <div class="element input-element">
             <form>
                 <div class="input-control text">
@@ -29,13 +30,10 @@
                 </div>
             </form>
         </div>
-
+        *@
         @if (User.Identity.IsAuthenticated)
         {
-            <div class="element place-right">
-                <a href="#" class="fg-white"><i class="icon-cog"></i></a>
-            </div>
-
+           
             <div class="element place-right">
                 <a href="#" class="dropdown-toggle">
                     <i class="icon-user"></i>

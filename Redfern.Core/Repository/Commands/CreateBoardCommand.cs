@@ -19,7 +19,16 @@ namespace Redfern.Core.Repository.Commands
         {
             Board board = db.Boards.Create();
             board.Name = this.Name;
+            board.Owner = db.Context.ClientUserName;
             board = db.Boards.Add(board);
+            db.SaveChanges();
+
+            BoardColumn archivedColumn = db.BoardColumns.Create();
+            archivedColumn.BoardId = board.BoardId;
+            archivedColumn.Name = "Archived";
+            archivedColumn.Sequence = 1;
+            archivedColumn.Hidden = true;
+            archivedColumn = db.BoardColumns.Add(archivedColumn);
             db.SaveChanges();
 
             Activity activity = db.Activities.Create();

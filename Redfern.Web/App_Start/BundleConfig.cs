@@ -25,6 +25,7 @@ namespace Redfern.Web
                         "~/Scripts/jquery.nanoscroller.js",
                         "~/Scripts/jquery.tinyscrollbar.js",
                         "~/Scripts/jquery.tagit.js",
+                        "~/Scripts/jquery.fileinput.js",
                         "~/Scripts/moment.js",
                         "~/Scripts/moment-with-lang.js",
                         "~/scripts/jquery.tabslideout.js"
@@ -108,18 +109,21 @@ namespace Redfern.Web
 
 
             bundles.Add(new ScriptBundle("~/bundles/modules").Include(
-                        "~/scripts/viewmodels/tagrepository.js",
-                        "~/scripts/viewmodels/boardrepository.js",
-                        "~/scripts/viewmodels/cardrepository.js",
-                        "~/scripts/viewmodels/cardtagrepository.js",
-                        "~/scripts/viewmodels/cardcommentrepository.js",
-                        "~/scripts/viewmodels/boardcolumnrepository.js",
-                        "~/scripts/viewmodels/userprofilerepository.js",
-                        "~/scripts/viewmodels/useravatarrepository.js",
+                        "~/scripts/repositories/tagrepository.js",
+                        "~/scripts/repositories/boardrepository.js",
+                        "~/scripts/repositories/cardrepository.js",
+                        "~/scripts/repositories/cardtagrepository.js",
+                        "~/scripts/repositories/cardcommentrepository.js",
+                        "~/scripts/repositories/boardcolumnrepository.js",
+                        "~/scripts/repositories/boardmemberrepository.js",
+                        "~/scripts/repositories/userprofilerepository.js",
+                        "~/scripts/repositories/useravatarrepository.js",
+                        "~/scripts/widgets/appnavigationbar.js",
                         "~/scripts/widgets/createboarddialog.js",
                         "~/scripts/widgets/opencarddialog.js",
                         "~/scripts/widgets/createboardtile.js",
                         "~/scripts/views/boards.js",
+                        "~/scripts/views/boardsidebar.js",
                         "~/scripts/views/boardui.js",
                         "~/scripts/views/board.js",
                         "~/scripts/views/profile.js"
@@ -136,6 +140,7 @@ namespace Redfern.Web
                       "~/content/themes/metro/jquery-ui.css",
                       "~/content/nanoscroller.css",
                       "~/content/tagit-stylish-yellow.css",
+                      "~/content/fileinput.css",
                       "~/content/site.css"));
         }
     }

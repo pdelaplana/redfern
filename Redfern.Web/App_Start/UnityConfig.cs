@@ -1,6 +1,5 @@
 using System.Web.Http;
 using System.Web.Mvc;
-using System.Web.Http;
 using Microsoft.Practices.Unity;
 using Unity.Mvc5;
 using Livefrog.Commons.Services;

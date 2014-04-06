@@ -14,11 +14,16 @@
     
     var ui = new UI(),
         router = new Router(config.appContainer),
-        modules = new ModulesArray()
+        modules = new ModulesArray();
 
     ui.appTitle(config.appTitle);
 
     return {
+
+        user: {
+            userName: '',
+            fullName: ''
+        },
 
         ui: ui,
 

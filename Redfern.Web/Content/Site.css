@@ -60,9 +60,13 @@ div.center{
 
 }
 
-.board .tile {
+.board-column .tile {
     height:90px;
-  
+}
+
+.board-column .tile:last-child {
+    height:90px;
+    margin-bottom:20px;
 }
 
 .metro .board .pinned.tile.no-outline:hover {
@@ -71,13 +75,13 @@ div.center{
 }
 
 
-.board .tile p {
+.board-column .tile p {
     font-size:10pt!important;
 }
 
 .board-column {
     float:left;
-    display:inline-block;
+    /*display:inline-block;*/
     padding:15px; 
     /*padding-right:0px;*/
     width:315px;
@@ -127,7 +131,14 @@ textarea {
 }
 
 /* styles for validation helpers */
+div label {
+    width:auto;
+    display:inline!important;
+}
+
 .field-validation-error {
+    display:inline;
+    width:auto;
     color: #b94a48;
 }
 

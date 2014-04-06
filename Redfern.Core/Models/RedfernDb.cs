@@ -87,6 +87,8 @@ namespace Redfern.Core.Models
 
         public DbSet<BoardColumn> BoardColumns { get; set; }
 
+        public DbSet<BoardMember> BoardMembers { get; set; }
+
         public DbSet<Card> Cards { get; set; }
 
         public DbSet<Tag> Tags { get; set; }

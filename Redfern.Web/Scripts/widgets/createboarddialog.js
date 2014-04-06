@@ -5,12 +5,12 @@
 
     self.name = ko.observable('');
     self.create = function () {
-        
         var repository = new BoardRepository();
         repository.name(self.name());
         repository.create().done(function (result) {
             $.Dialog.close();
-            app.router.go('/#/board/'+result.BoardId);
+            app.router.go('/#/board/' + result.BoardId);
+            app.ui.appNavigationBar.boardsList.push({ boardId: result.BoardId, name: result.Name });
         });
     }
 

@@ -5,6 +5,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
+using Redfern.Core;
 using Redfern.Core.Security;
 using Redfern.Web.Models;
 
@@ -15,18 +17,23 @@ namespace Redfern.Web.Controllers
     {
 
         private UserManager<RedfernUser> _userManager;
-
-        public AppController()
+        
+        public AppController(RedfernContext context)
         {
             _userManager = new UserManager<RedfernUser>(new UserStore<RedfernUser>(new RedfernSecurityContext()));
         }
 
 
         //
-        // GET: /Boards/
+        // GET: /app
         public ActionResult Index()
         {
+            
             ViewBag.AuthenticatedUser = AutoMapper.Mapper.Map<RedfernUser, ProfileViewModel>(_userManager.FindByName(User.Identity.GetUserName()));
+            HttpCookie cookie = new HttpCookie("AuthenticatedUser");
+            cookie.Value = JsonConvert.SerializeObject(ViewBag.AuthenticatedUser);
+            this.ControllerContext.HttpContext.Response.Cookies.Add(cookie);
+
             return View();
         }
 	}
