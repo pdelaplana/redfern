@@ -17,7 +17,7 @@ namespace Redfern.Web.Application.Configuration.Automapper.Profiles
             Mapper.CreateMap<Board, BoardMenuItem>();
 
             Mapper.CreateMap<Board, BoardListItem>()
-                .ForMember(dest => dest.OwnerFullName, opts => opts.ResolveUsing<CacheUserFullNameResolver>().FromMember(src=> src.Owner))
+                //.ForMember(dest => dest.OwnerFullName, opts => opts.ResolveUsing<CacheUserFullNameResolver>().FromMember(src=> src.Owner))
                 .ForMember(dest => dest.CardCount, opts => opts.MapFrom(src => src.Cards.Count(c=>!c.ArchivedDate.HasValue)));
 
             Mapper.CreateMap<BoardColumn, BoardColumnItem>()

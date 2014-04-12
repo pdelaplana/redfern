@@ -11,6 +11,7 @@ using Redfern.Web.Models;
 
 namespace Redfern.Web.API
 {
+    [Authorize]
     public class BoardColumnController : ApiController
     {
         private IRedfernRepository _repository;

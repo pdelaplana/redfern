@@ -1,39 +1,49 @@
 ﻿@model Redfern.Web.Models.RegisterViewModel
 @{
-    Layout = "~/Views/Shared/_Layout_NoHeader.cshtml";
-    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout_Public.cshtml";
+    ViewBag.Title = "Register - Redfern";
 }
 
-<div class="page-region">
-    <div class="page-region-content">
-        <div class="center padding20 border shadow" style="margin-top: 0px; width: 800px">
-            <h2>@ViewBag.Title</h2>
-            <div class="grid fluid">
-                <div class="row">
-                    <div class="span6">
-                        <hr/>
-                        @using (Html.BeginForm("register", "account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            
-                            @Html.EditorFor(m => m.FullName, "textbox")
-                            @Html.EditorFor(m => m.Email, "textbox")
-                            @Html.EditorFor(m => m.UserName, "textbox")
-                            @Html.EditorFor(m => m.Password, "password")
-                            @Html.EditorFor(m => m.ConfirmPassword, "password")
-                            <p>
-                                <button type="submit" class="primary large">Register Me</button>
-                            </p>
-                            <p>
-                                Already have an account?
-                                @Html.ActionLink("Sign in here.", "signin")
-                            </p>
-                        }
-                    </div>
+<div class="bg-grayLight" style="margin-top:-5px">
+    <div class="container padding20">
+        <h2 class="fg-white">Redfern is a kanban-style project management tool.  You can have it free for the rest of your life.</h2>
+        <h3 class="fg-red">We are currently in very early beta.</h3>
+    </div>
+</div>
+<div class="">
+    <div class="container padding20">
+        <div class="grid fluid">
+            <div class="row">
+                <div class="span5">
+                    
+                    @using (Html.BeginForm("register", "account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <h3>Fill in some basic information</h3>
+                        @Html.EditorFor(m => m.FullName, "textbox")
+                        @Html.EditorFor(m => m.Email, "textbox")
+                        @Html.EditorFor(m => m.UserName, "textbox")
+                        <h3>Choose a password</h3>
+                        @Html.EditorFor(m => m.Password, "password")
+                        @Html.EditorFor(m => m.ConfirmPassword, "password")
+                        <p>
+                            <button type="submit" class="primary large">Register Me</button>
+                        </p>
+                        <p>
+                            Already have an account?
+                            @Html.ActionLink("Sign in here.", "signin")
+                        </p>
+                    }
                 </div>
-                
             </div>
+
         </div>
+    </div>
+</div>
+
+<div class="bg-dark">
+    <div class="container padding20" style="min-height:100px" >
+
     </div>
 </div>
 

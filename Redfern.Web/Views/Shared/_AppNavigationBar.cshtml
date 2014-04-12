@@ -1,15 +1,12 @@
 ﻿
 <div class="navigation-bar fixed-top opacity shadow dark ntm ntp"  id="AppNavigationBar">
     <div class="navigation-bar-content ">
-        <a href="/" class="element">
-            @*<span class="icon-cloud"></span> <img alt="Logo" src="~/images/bank-alt-2-white-64.png" style="height:15px;padding:0;margin:0" class="place-left" /> &nbsp;*@
-            <span style="font-size:18px; font-weight:600;padding:0;margin:0">Redfern</span>
-        </a>
+        @Html.Partial("_NavBarLogo")
 
         <span class="element-divider"></span>
 
         <div class="element">
-            <a class="dropdown-toggle" href="#" data-bind="text: selectedMenu">@( !String.IsNullOrEmpty(ViewBag.SelectedMenu) ? ViewBag.SelectedMenu : "My School Tasks")</a>
+            <a class="dropdown-toggle" href="#" data-bind="text: selectedMenu">@( !String.IsNullOrEmpty(ViewBag.SelectedMenu) ? ViewBag.SelectedMenu : "All Boards")</a>
             <ul class="dropdown-menu dark" data-role="dropdown" style="z-index:999">
                 <!-- ko foreach: boardsList -->
                 <li><a href="" data-bind="attr: { href: '#/board/'+boardId }, text: name"></a></li>

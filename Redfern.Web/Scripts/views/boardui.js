@@ -1,6 +1,8 @@
 ﻿var BoardColumnPlaceHolder = {
     element: function (currentItem) {
-        return $('<div class="board-column bg-steel"></div>')[0];
+        var viewportHeight = $(window).height();
+        var div = $('<div class="board-column bg-steel" />').height(viewportHeight - 125);
+        return div[0];
     },
     update: function (container, p) {
         return;
@@ -54,6 +56,7 @@ function Card(cardModel, column) {
     var column = column,
         self = this;
 
+    self.parent = column;
     self.cardId = ko.observable(cardModel.CardId);
     self.title = ko.observable(cardModel.Title);
     self.description = ko.observable();
@@ -90,7 +93,7 @@ function Card(cardModel, column) {
         var repository = new CardRepository();
         repository.cardId(self.cardId());
         repository.remove().done(function () {
-            column.cards.remove(self);
+            self.parent.cards.remove(self);
             $.Dialog.close();
         });
     }
@@ -100,6 +103,12 @@ function Card(cardModel, column) {
         repository.cardId(self.cardId());
         repository.archive().done(function () {
             self.isArchived(true);
+            var archive = column.board.getArchiveColumn();
+            var clonedCard = self.parent.cards.remove(self)[0];
+            clonedCard.sequence(archive.cards().length);
+            clonedCard.show(true);
+            archive.cards.push(clonedCard);
+            $.Dialog.close();
         });
     }
 
@@ -109,6 +118,9 @@ function Column(columnModel, board) {
     var properties,
         board = board,
         self = this;
+
+    //
+    self.board = board;
 
     // column properties
     self.columnId = ko.observable(columnModel.ColumnId);
@@ -170,8 +182,6 @@ function Column(columnModel, board) {
         self.mazimized(!self.mazimized());
     }
     
-    
-
     // handle new cards
     self.newCard = {
         title: ko.observable(),
@@ -181,7 +191,7 @@ function Column(columnModel, board) {
             card.boardId(self.boardId());
             card.columnId(self.columnId());
             card.sequence(self.cards().length);
-            card.create().done(function (item) {
+            return card.create().done(function (item) {
                 self.cards.push(new Card(item, self));
                 var height = node[0].scrollHeight;
                 node.scrollTop(height);
@@ -190,6 +200,8 @@ function Column(columnModel, board) {
     }
     
     self.resequenceAllCards = function (arg, event, ui) {
+        arg.item.parent = self;
+
         var columnContent = this;
         var card = ui.item;
         var ids = new Array();
@@ -217,6 +229,9 @@ function Column(columnModel, board) {
         properties = new ColumnProperties(event.target, data);
         properties.open();
     }
+
+    self.columnHeight = ko.observable($(window).height());
+    
 
 }
 
@@ -261,6 +276,7 @@ function BoardUI(boardModel) {
 
     });
 
+    
     // add sidebar UI
     self.sidebar = new BoardSidebar(self);
 
@@ -308,6 +324,13 @@ function BoardUI(boardModel) {
                 ColumnIds : ids
             }
         });
+    }
+
+    self.getArchiveColumn = function () {
+        return ko.utils.arrayFirst(self.columns(), function(column){
+            return column.name() == "Archived";
+        })
+        
     }
 
   

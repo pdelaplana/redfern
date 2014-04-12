@@ -3,7 +3,6 @@
     var boardUI = boardUI,
         self = this;
 
-    //self.showingArchivedCards = ko.observable(false);
     self.activeOption = ko.observable('main');
     self.boardId = boardUI.boardId;
     self.name = boardUI.name;
@@ -35,25 +34,6 @@
         repository.name(self.name());
         repository.update();
     }
-
-    /*
-    self.showArchivedCards = function () {
-        ko.utils.arrayForEach(self.columns(), function (column) {
-            ko.utils.arrayForEach(column.cards(), function (card) {
-                if (card.isArchived()) card.show(true);
-            });
-        });
-    }
-
-    self.hideArchivedCards = function () {
-        ko.utils.arrayForEach(self.columns(), function (column) {
-            ko.utils.arrayForEach(column.cards(), function (card) {
-                if (card.isArchived()) card.show(false);
-            });
-        });
-    }
-
-    */
 
     self.filters = {
         title: ko.observable(),
@@ -87,19 +67,6 @@
                         })
                     })
 
-
-                    /*
-                    if (self.filters.title().length > 0) {
-                        ko.utils.arrayForEach(column.cards(), function (card) {
-                            if (card.show()) {
-                                if (card.title().toLowerCase().indexOf(self.filters.title()) !== -1)
-                                    card.show(true);
-                                else
-                                    card.show(false);
-                            }
-                        })
-                    }
-                    */
                 });
             }
             
@@ -116,16 +83,7 @@
         self.filters.applyFilter();
 
     }, null, "arrayChange")
-    /*
-    self.showingArchivedCards.subscribe(function (newValue) {
-        ko.utils.arrayForEach(self.columns(), function (column) {
-            ko.utils.arrayForEach(column.cards(), function (card) {
-                if (card.isArchived())
-                    card.show(newValue);
-            });
-        });
-    })
-    */
+   
     
 
     // members

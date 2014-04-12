@@ -1,12 +1,7 @@
 ﻿
-<div class="navigation-bar fixed-top opacity shadow dark" id="PubNavigationBar">
+<div class="navigation-bar fixed-top opacity  dark" id="PubNavigationBar">
     <div class="navigation-bar-content ">
-        <a href="/" class="element">
-            @*<span class="icon-cloud"></span> <img alt="Logo" src="~/images/bank-alt-2-white-64.png" style="height:15px;padding:0;margin:0" class="place-left" /> &nbsp;*@
-
-            <span style="font-size:18px; font-weight:600;padding:0;margin:0">Redfern</span>
-        </a>
-        
+        @Html.Partial("_NavBarLogo")
         <a href="@Url.Action("signin", "account")" class="element place-right">
             Sign in
         </a>

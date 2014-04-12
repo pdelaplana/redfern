@@ -22,6 +22,9 @@
                     
         
         $('.board-column-content').append('<div class="pinned" style="float:left;display:block; min-height:10px;height:10px;"/>');
+
+
+        
  
     }
 

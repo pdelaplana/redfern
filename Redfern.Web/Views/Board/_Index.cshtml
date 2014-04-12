@@ -4,7 +4,7 @@
     <div class="page-region-content " >
         <div id="Board" class="inline" data-bind="visible:viewMode() == 'board', adjustBoardWidth: { settings:{ columnCount: visibleColumnCount(), columnWidth: columnWidth()   }  } ">
             <div class="board" data-bind="sortable: { data: columns, afterMove: resequenceAllColumns, options:{ placeholder: BoardColumnPlaceHolder }  }">
-                <div class="board-column border" data-bind="visible: show">
+                <div class="board-column border" data-bind="visible: show, adjustColumnHeight:columnHeight">
                     <div class="board-column-wrapper">
                         <div class="board-column-header ntm ntp clearfix">
                             <h4 class="ntm ntp">
@@ -36,14 +36,14 @@
                         </div>
                         <div class="board-column-footer">
                             <div class="padding10">
-                                <p class="fg-grayLight fg-gray"><span data-bind="cardCreator: newCard.title, create: newCard.save">Add a card...</span> </p>
+                                <p class="fg-grayLight fg-gray fg-hover-grayDarker"><span data-bind="cardCreator: newCard.title, create: newCard.save"><i class="icon-plus"></i> Add a card...</span> </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="board-column border bg-gray bg-hover-grayDarker fg-hover-white" style="min-height:50px;cursor:pointer">
+            <div class="board-column border bg-gray bg-hover-grayDarker fg-hover-white inline-editor" style="min-height:50px;cursor:pointer">
                 <div class="board-column-header ntm ntp ">
                     <span class="fg-white" data-bind="inlineEditor:newColumn.name, fontSize: '14pt', save:newColumn.save">Add a Column...</span>
                 </div>
@@ -71,7 +71,7 @@
 
         <div id="ExpandedColumn" data-bind="if: viewMode() == 'columnview'">
             <div data-bind="with: selectedColumn">
-                <div class="board-column border" data-bind="maximizeColumn: maximixed">
+                <div class="board-column border" data-bind="maximizeColumn: maximixed, adjustColumnHeight:columnHeight">
                     <div class="board-column-wrapper">
                         <div class="board-column-header ntm ntp clearfix">
                             <h4 class="ntm ntp">
@@ -103,7 +103,7 @@
                         </div>
                         <div class="board-column-footer">
                             <div class="padding10">
-                                <p class="fg-grayLight fg-gray"><span data-bind="cardCreator: newCard.title, create: newCard.save">Add a card...</span> </p>
+                                <p class="fg-grayLight fg-gray fg-hover-grayDarker"><span data-bind="cardCreator: newCard.title, create: newCard.save"><i class="icon-plus"></i> Add a card...</span> </p>
                             </div>
                         </div>
                     </div>

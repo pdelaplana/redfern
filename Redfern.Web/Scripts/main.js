@@ -15,7 +15,14 @@ $(function () {
         // Disable caching of AJAX responses
         cache: false,
         error: function (err, type, httpStatus) {
-            alert(err.status + " - " + err.responseText + " - " + httpStatus);
+            if ((err.status == '403') || (err.status == '401')) {
+                //document.location = '/account/signin';
+                window.location.reload();
+            } else {
+                alert(err.status + " - " + err.responseText + " - " + httpStatus);
+                console.log(err.status + " - " + err.responseText + " - " + httpStatus);
+            }
+            
             //errorDialog.open(err.statusText, err.responseText);
             /*
             if (err.status == '403') {
@@ -29,6 +36,7 @@ $(function () {
         }
     });
 
+    
     // get authenticated user details from cookie
     var authenticatedUser = $.cookie("AuthenticatedUser");
     if (authenticatedUser != null)
@@ -41,5 +49,24 @@ $(function () {
     app.ui.setWindowTitle('Home');
     app.start('app/#/boards');
 
-    
+    // keepalive
+    KeepAlive();
 })
+
+function KeepAlive() {
+
+    // send the hello message 
+    var sentHello = $.cookie('hello') != null ? $.cookie('hello') : false;
+    if (!sentHello) {
+        $.ajax({
+            url: '/session/keepalive',
+            success: function () {
+                $.cookie('hello', true);
+            }
+        })
+    }
+
+    setInterval(function () {
+        $.get('/session/keepalive');
+    }, 840000); // 14 mins * 60 * 1000
+}

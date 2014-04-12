@@ -11,6 +11,7 @@ using Redfern.Web.Models;
 
 namespace Redfern.Web.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
         private UserManager<RedfernUser> _userManager;

@@ -13,6 +13,7 @@ using Redfern.Web.Models;
 
 namespace Redfern.Web.API
 {
+    [Authorize]
     public class ProfileController : ApiController
     {
         private UserManager<RedfernUser> _userManager;

@@ -4,6 +4,7 @@
             bindings = allBindings();
 
         var observable = valueAccessor(),
+            loader = $('<div/>').addClass('pinned double tile no-outline').attr('style', 'height:20px;text-align:center').append($('<img/>').attr('src','/content/images/ajax-loader-bar-1.gif')).hide(),
             container = $('<div/>').addClass('pinned double tile no-outline'),//.attr('style', 'min-height:50px;margin-top:10px;padding:10px'),
             div = $('<div/>').addClass('input-control textarea'),
             textarea = $('<textarea/>').attr('style', 'min-height:50px'),
@@ -11,10 +12,10 @@
             cancel = $('<button class="link">Cancel</button>').attr('style', 'margin-top:10px');
 
         var onAdd = function () {
-            var deferred = $.Deferred();
-            bindings.create(viewModel, $('.board-column-content', column));
-            deferred.resolve();
-            return deferred.promise();
+            //var deferred = $.Deferred();
+            return bindings.create(viewModel, $('.board-column-content', column));
+            //deferred.resolve();
+            //return deferred.promise();
         }
 
         var preventBlurEvent;
@@ -22,21 +23,25 @@
             preventBlurEvent = true;
         }).click(function (event) {
             observable($(textarea).val());
+            loader.show();
+            $(textarea).val('')
             onAdd().done(function () {
-                $(textarea).val('').focus();
+                $(textarea).focus();
+                loader.hide();
                 //$(container).detach();
             });
             event.stopPropagation();
         });
 
         cancel.click(function () {
+            loader.detach();
             container.detach();
         });
 
 		
 		$(element).on('click', function () {
-		    $('.board-column-content', column).append(container);
-
+		    $('.board-column-content', column).append(loader).append(container);
+		    loader.hide();
 		    container.show();
 		    $(textarea).focus();
 
@@ -116,8 +121,6 @@ ko.bindingHandlers.maximizeColumn = {
         $(window).resize(function () {
             $(element).width($(window).width() - 120);
         });
-        
-        
     }
 }
 
@@ -130,5 +133,26 @@ ko.bindingHandlers.adjustBoardWidth = {
         var boardWidth = (observable.settings.columnCount * observable.settings.columnWidth) + 410;
         $(element).width(boardWidth);
 
+    }
+}
+
+ko.bindingHandlers.adjustColumnHeight = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        var columnHeight = valueAccessor(),
+            column = element;
+
+        $(column).height(columnHeight()-140);
+        $('.board-column-content', column).height(columnHeight() - 210);
+
+        $(window).resize(function () {
+            columnHeight($(window).height());
+            $(column).height(columnHeight() - 140);
+            $('.board-column-content', column).height(columnHeight() - 210);
+
+        })
+        
+    },
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        
     }
 }

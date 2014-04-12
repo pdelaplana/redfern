@@ -29,6 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabases>false</PublishDatabases>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -225,6 +226,7 @@
     <Compile Include="Controllers\BoardsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -245,10 +247,14 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fileinput.css" />
+    <Content Include="Content\images\ajax-loader-bar-1.gif" />
+    <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\bg-scrollbar-thumb-y.png" />
     <Content Include="Content\images\bg-scrollbar-track-y.png" />
     <Content Include="Content\images\bg-scrollbar-trackend-y.png" />
-    <Content Include="Content\images\contact_tab.gif" />
+    <Content Include="Content\images\redfern-icon-35.png" />
+    <Content Include="Content\images\redfern-icon.png" />
+    <Content Include="Content\images\standup.jpg" />
     <Content Include="Content\images\_default-user-avatar.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\metro-bootstrap-responsive.css" />
@@ -416,6 +422,7 @@
     <Content Include="Content\metro-ui\fonts\iconFont.eot" />
     <Content Include="Scripts\metro-ui\js\README.md" />
     <Content Include="App_Code\Funcs.cshtml" />
+    <None Include="Properties\PublishProfiles\redfernapp.com - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\google-code-prettify\lang-apollo.js" />
     <Content Include="Scripts\google-code-prettify\lang-clj.js" />
@@ -559,10 +566,13 @@
     <Content Include="Views\Profile\_Index.cshtml" />
     <Content Include="Views\Board\_SidebarCharms.cshtml" />
     <Content Include="Views\Shared\_Layout_NoHeader.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\Shared\_NavBarLogo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\ClientTimeZone\" />
+    <Folder Include="Views\Session\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

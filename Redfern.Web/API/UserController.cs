@@ -12,6 +12,7 @@ using Redfern.Core.Security;
 
 namespace Redfern.Web.API
 {
+    [Authorize]
     public class UserController : ApiController
     {
 

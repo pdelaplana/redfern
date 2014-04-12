@@ -31,7 +31,8 @@ namespace Redfern.Core.Repository.Commands
             column.Expanded = true;
             column = db.BoardColumns.Add(column);
 
-            archiveColumn.Sequence++;
+            if (archiveColumn != null)
+                archiveColumn.Sequence++;
 
             db.SaveChanges();
 

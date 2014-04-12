@@ -1,0 +1,6 @@
+﻿<p class="padding10 ntp nbp text-muted">
+    <small>
+        @Html.Raw(ViewData["application-copyright"].ToString()) | Version @ViewData["application-version"] | Server Execution Time: @( ViewData["action-execution-time"] != null ? ((TimeSpan)ViewData["action-execution-time"]).ToString(@"ss\.fff") : "") seconds
+        | Styled with <a href="http://metroui.org.ua" style="font-size:smaller">Metro UI CSS</a>
+    </small>
+</p>

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Mvc;
 using Redfern.Core.Models;
 using Redfern.Core.Repository;
 using Redfern.Core.Repository.Commands;
@@ -12,6 +11,7 @@ using Redfern.Web.Models;
 
 namespace Redfern.Web.API
 {
+    [Authorize]
     public class CommentController : ApiController
     {
         private IRedfernRepository _repository;

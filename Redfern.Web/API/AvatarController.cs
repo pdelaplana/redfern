@@ -16,6 +16,7 @@ using Redfern.Web.API.DTO;
 
 namespace Redfern.Web.API
 {
+    [Authorize]
     public class AvatarController : ApiController
     {
         

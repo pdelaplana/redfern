@@ -11,6 +11,7 @@ using Redfern.Web.Models;
 
 namespace Redfern.Web.API
 {
+    [Authorize]
     public class CardController : ApiController
     {
         private IRedfernRepository _repository;

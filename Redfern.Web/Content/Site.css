@@ -4,18 +4,18 @@
 
 #wrapper{
     width: 100% ;
-    min-height: 92%;
+    min-height: 99%;
     position:relative;
 }
 
 #wrapper section {
-    padding-bottom: 40px;    /* height of footer */
+    padding-bottom: 8px;    /* height of footer */
 }
 
 
 #wrapper footer, footer.page {
     height: 20px!important; 
-    min-height: 20px!important; 
+    min-height: 5px!important; 
     left: 0;
     bottom: 0;
 }
@@ -34,6 +34,7 @@ body {
 .page-region-content {
     padding-left: 15px;
     padding-right: 15px;
+    min-height:0!important;
 }
 
 
@@ -87,15 +88,20 @@ div.center{
     width:315px;
     margin-right:10px;
     background-color:#ccc;
-    min-height:510px;
-    /*height:100%;*/
+    
+    /*
+    height:100%;
+    min-height:510px;    
+    */
 }
 
 .board-column-content{
     
     background-color:#eee;
+    /*
     min-height:510px;
     height:510px;
+    */
     padding:10px;
     overflow:auto;
        
@@ -185,4 +191,15 @@ input[type="checkbox"].input-validation-error {
 }
  */
 
+/*
+    Landing page
+*/
+.container{
+    width:1140px;
+}
    
+div + div
+{
+    margin-top:0px;
+    margin-bottom:0px;
+}
