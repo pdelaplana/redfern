@@ -16,25 +16,24 @@ $(function () {
         cache: false,
         error: function (err, type, httpStatus) {
             if ((err.status == '403') || (err.status == '401')) {
-                //document.location = '/account/signin';
                 window.location.reload();
             } else {
-                alert(err.status + " - " + err.responseText + " - " + httpStatus);
+                var dialog = new ErrorDialog(err);
+                dialog.open();
+
+                
                 console.log(err.status + " - " + err.responseText + " - " + httpStatus);
             }
             
-            //errorDialog.open(err.statusText, err.responseText);
-            /*
-            if (err.status == '403') {
-                document.location = '/signIn';
-            } else {
-                document.open();
-                document.write(err.responseText);
-                document.close();
-            }
-            */
+            
         }
     });
+
+    // 
+    // block ui defaults
+    // 
+    $.blockUI.defaults.overlayCSS.opacity = .80;
+    $.blockUI.defaults.overlayCSS.backgroundColor = '#eeeeee';
 
     
     // get authenticated user details from cookie

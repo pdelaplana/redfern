@@ -121,12 +121,14 @@ namespace Redfern.Web
                         "~/scripts/widgets/appnavigationbar.js",
                         "~/scripts/widgets/createboarddialog.js",
                         "~/scripts/widgets/opencarddialog.js",
+                        "~/scripts/widgets/errordialog.js",
                         "~/scripts/widgets/createboardtile.js",
                         "~/scripts/views/boards.js",
                         "~/scripts/views/boardsidebar.js",
                         "~/scripts/views/boardui.js",
                         "~/scripts/views/board.js",
-                        "~/scripts/views/profile.js"
+                        "~/scripts/views/profile.js",
+                        "~/scripts/views/changepassword.js"
                         ));
 
 

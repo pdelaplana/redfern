@@ -5,7 +5,6 @@
                 <label> Title</label>
                 <div class="input-control text">
                     <input type="text" data-bind="value: data.title" />
-                    <button class="btn-save" data-bind="click: data.update"></button>
                 </div>
 
             </div>
@@ -14,6 +13,7 @@
         <div class="row">
             <div class="padding10 span5">
                
+                @*
                 <div class="row">
                     <div class="span6">
                         <label>Assigned To</label>
@@ -29,7 +29,13 @@
                         </div>
                     </div>
                 </div>
-                
+                *@
+                <div class="inline-block" style="width:100%">
+                    <!-- ko foreach: cardTypes -->
+                    <div class="tile quarter" data-bind="setTileColor: color, css: { selected : color() == $parent.data.color()  }, changeTileColor: $parent.data.color, color: color" >
+                    </div>
+                    <!-- /ko -->
+                </div>
                 <label>Tags</label>
                 <div class="">
                     <ul id="tags-container"></ul> 
@@ -59,30 +65,21 @@
                                     <button data-bind="click:addComment" class="bg-darker fg-white place-left" style="height:50px"><i class="icon-comments"></i></button>
                                 </div>
                             </div>
-                            <div class="listview padding10"  data-bind="foreach: comments" style="overflow-x:auto;height:280px">
-                                <div class="list" style="width:100%">
-                                    <div class="list-content">
-                                        <img class="icon" data-bind="attr: { src: '/api/avatar/'+commentByUser() }" />
-                                        <div class="data">
-                                            <span class="list-title item-title" data-bind="text: commentByUserFullName"></span>
-                                            <span class="list-subtitle" data-bind="text: comment"></span>
-                                            <span class="list-remark fg-grayLight" style="margin-top:10px" data-bind="text: moment(commentDate())"></span>
-
-                                        </div>
-                                    </div>
-                                    
-                                </div>
+                            <div style="text-align:center" data-bind="visible:loadingComments">
+                                <img src="/content/images/ajax-loader.gif" />
                             </div>
-                            
+                            <div class="listview padding10" id="commentslist" data-bind="template:'commentsListTemplate'"  style="overflow-x:auto;height:280px;width:100%">
+                                
+                            </div>
                         </div>
                         <div class="frame" id="page_2">...</div>
                         <div class="frame" id="page_3">...</div>
                         <div class="frame" id="page_4" style="height:400px">
-                            <p>Archive this card and remove it from the default view?</p>
-                            <button class="bg-red fg-white" data-bind="click: data.archive">Archive</button>
+                            <p>Archive this card and remove it from view?</p>
+                            <button class="bg-red fg-white" data-bind="click: archive">Archive</button>
                             <hr />
                             <p>Delete this card permanently? </p>
-                            <button class="bg-red fg-white" data-bind="click: data.remove">Delete</button>
+                            <button class="bg-red fg-white" data-bind="click: remove">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -91,9 +88,20 @@
 
         </div>
     </div>
-    
-
-
-    
 </div>
+
+<script id="commentsListTemplate" type="text/html">
+    <!-- ko foreach:comments-->
+    <div class="list" style="width:100%">
+        <div class="list-content">
+            <img class="icon" data-bind="attr: { src: '/api/avatar/'+commentByUser() }" />
+            <div class="data">
+                <span class="list-title item-title" data-bind="text: commentByUserFullName"></span>
+                <span class="list-subtitle" data-bind="text: comment"></span>
+                <span class="list-remark fg-grayLight" style="margin-top:10px" data-bind="text: moment(commentDate())"></span>
+            </div>
+        </div>
+    </div>
+    <!--/ko-->
+</script>
 

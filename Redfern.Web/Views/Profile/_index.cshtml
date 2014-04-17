@@ -3,24 +3,31 @@
 <div class="page-region">
     <div class="page-region-content">
         <div class="grid">
+            @ViewBag.PasswordChangedStatus
             <div class="row" id="profileForm">
-                <div class="offset1 span5" >
-                    <h2>Profile</h2>
-                    <form id="profile">
-                        @Html.EditorFor(m => m.UserName, "textbox", new { databind = "value: userName, disable :true" })
-                        @Html.EditorFor(m => m.FullName, "textbox", new { databind = "value: fullName" })
-                        @Html.EditorFor(m => m.Email, "textbox", new { databind = "value: email" })
-                        <button class="primary" data-bind="click: update">Save</button>
-                    </form>
-                </div>
-                <div class="offset1 span5">
-                    <h2>Picture</h2>
+                <div class="offset1 span3" >
+                    <h2>Photo</h2>
                     <div class="image-container shadow">
                         <img data-bind="attr: {src: photoSrc}" />
                         <div class="text-center padding5">
                             <button class="bg-dark fg-white" data-bind="uploadButton: file, settings: { fileName: fileName, fileObjectUrl:fileUrl, fileBinaryData: fileContents, fileType: fileContentType, upload: uploadPhoto }">Change <i class="icon-upload"></i> </button>
                         </div>
                     </div>
+                    
+                </div>
+                <div class="offset1 span4" >
+                    <h2>Credentials</h2>
+                    <form id="profile">
+                        @Html.EditorFor(m => m.UserName, "textbox", new { databind = "value: userName, disable :true" })
+                        @Html.EditorFor(m => m.FullName, "textbox", new { databind = "value: fullName" })
+                        @Html.EditorFor(m => m.Email, "textbox", new { databind = "value: email" })
+                        <button class="primary" data-bind="click: update">Save Changes</button>
+                    </form>
+                    <h2 class="push-down-40" >Security</h2>
+                    <a href="#/profile/changepassword">Change Password</a>
+                </div>
+                <div class="offset1 span3">
+                    
                 </div>
             </div>
         </div>

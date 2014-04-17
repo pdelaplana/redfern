@@ -248,6 +248,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fileinput.css" />
     <Content Include="Content\images\ajax-loader-bar-1.gif" />
+    <Content Include="Content\images\ajax-loader-circle-1.gif" />
     <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\bg-scrollbar-thumb-y.png" />
     <Content Include="Content\images\bg-scrollbar-track-y.png" />
@@ -504,8 +505,10 @@
     <Content Include="Scripts\repositories\cardcommentrepository.js" />
     <Content Include="Scripts\repositories\cardrepository.js" />
     <Content Include="Scripts\repositories\cardtagrepository.js" />
+    <Content Include="Scripts\views\changepassword.js" />
     <Content Include="Scripts\views\profile.js" />
     <Content Include="Scripts\widgets\appnavigationbar.js" />
+    <Content Include="Scripts\widgets\errordialog.js" />
     <Content Include="Scripts\widgets\opencarddialog.js" />
     <Content Include="Scripts\widgets\createboarddialog.js" />
     <Content Include="Scripts\widgets\createboardtile.js" />
@@ -568,6 +571,7 @@
     <Content Include="Views\Shared\_Layout_NoHeader.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\Shared\_NavBarLogo.cshtml" />
+    <Content Include="Views\Profile\_ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

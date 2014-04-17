@@ -19,7 +19,6 @@ var CardPlaceHolder = {
 }
 
 
-
 function ColumnProperties(element, data) {
     var data = data,
         element = element,
@@ -60,6 +59,8 @@ function Card(cardModel, column) {
     self.cardId = ko.observable(cardModel.CardId);
     self.title = ko.observable(cardModel.Title);
     self.description = ko.observable();
+    self.cardTypeId = ko.observable(cardModel.CardTypeId);
+    self.color = ko.observable(cardModel.Color);
     self.assignedToUser = ko.observable();
     self.dueDate = ko.observable();
     self.archivedDate = ko.observable(cardModel.ArchivedDate);
@@ -84,31 +85,38 @@ function Card(cardModel, column) {
         var repository = new CardRepository();
         repository.cardId(self.cardId());
         repository.title(self.title());
+        repository.cardTypeId(self.cardTypeId())
         repository.assignedToUser(self.assignedToUser());
         repository.dueDate(self.dueDate());
-        repository.update();
+        return repository.update();
     }
 
     self.remove = function () {
-        var repository = new CardRepository();
-        repository.cardId(self.cardId());
-        repository.remove().done(function () {
-            self.parent.cards.remove(self);
-            $.Dialog.close();
-        });
+        if (confirm('You will not be able to undo this delete if you continue.')) {
+            var repository = new CardRepository();
+            repository.cardId(self.cardId());
+            app.ui.block({ message: 'Please wait, deleting this card...' })
+            return repository.remove().then(function () {
+                self.parent.cards.remove(self);
+                app.ui.unblock();
+            });
+        }
+
     }
 
     self.archive = function () {
         var repository = new CardRepository();
         repository.cardId(self.cardId());
-        repository.archive().done(function () {
+        app.ui.block({ message: 'Please wait, archiving this card...' });
+        return repository.archive().then(function () {
             self.isArchived(true);
             var archive = column.board.getArchiveColumn();
             var clonedCard = self.parent.cards.remove(self)[0];
             clonedCard.sequence(archive.cards().length);
             clonedCard.show(true);
             archive.cards.push(clonedCard);
-            $.Dialog.close();
+            
+            app.ui.unblock();
         });
     }
 
@@ -235,7 +243,6 @@ function Column(columnModel, board) {
 
 }
 
-
 function BoardMember(memberModel, boardUI) {
     var boardUI = boardUI,
         self = this;
@@ -250,6 +257,16 @@ function BoardMember(memberModel, boardUI) {
         return repository.remove();
     }
 }
+
+function CardType(data, board) {
+    var board = board,
+        self = this;
+
+    self.cardTypeId = ko.observable(data.CardTypeId);
+    self.name = ko.observable(data.Name);
+    self.color = ko.observable(data.Color)
+}
+
 
 function BoardUI(boardModel) {
     var board = $('#Board'),
@@ -267,6 +284,7 @@ function BoardUI(boardModel) {
     self.ownerFullName = ko.observable(boardModel.OwnerFullName);
     self.columns = ko.observableArray();
     self.members = ko.observableArray();
+    self.cardTypes = ko.observableArray();
     self.viewMode = ko.observable('board');
 
     self.visibleColumnCount = ko.computed(function () {
@@ -283,6 +301,11 @@ function BoardUI(boardModel) {
     // load members from viewmodel
     $.each(model.Members, function (index, value) {
         self.members.push(new BoardMember(value, self));
+    });
+
+    // load card types from viewmodel
+    $.each(model.CardTypes, function (index, value) {
+        self.cardTypes.push(new CardType(value, self));
     });
 
     // load columns from viewmodel

@@ -21,10 +21,13 @@ namespace Redfern.Core.Models
         public DateTime? ArchiveDate { get; set; }
 
         public virtual ICollection<BoardMember> Members { get; set; }
-
+        
         public virtual ICollection<BoardColumn> Columns { get; set; }
 
         public virtual ICollection<Card> Cards { get; set; }
+
+        public virtual ICollection<CardType> CardTypes { get; set; }
+
 
         
     }

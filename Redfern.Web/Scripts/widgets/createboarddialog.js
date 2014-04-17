@@ -27,6 +27,7 @@
                 width: '25%',
                 height: '50%',
                 position: { top: 50, left: 10 },
+                recenter: false,
                 onShow: function (dialog) {
                     ko.applyBindings(self, $(dialog).get(0));
                 }

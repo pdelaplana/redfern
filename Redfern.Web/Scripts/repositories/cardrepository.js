@@ -7,6 +7,8 @@
     self.boardId = ko.observable();
     self.columnId = ko.observable();
     self.sequence = ko.observable();
+    self.color = ko.observable();
+    self.cardTypeId = ko.observable();
     self.assignedToUser = ko.observable();
     self.dueDate = ko.observable();
 
@@ -31,6 +33,7 @@
                 CardId: self.cardId(),
                 Title: self.title(),
                 Description: self.description(),
+                CardTypeId: self.cardTypeId(),
                 AssignedToUser: self.assignedToUser(),
                 DueDate : self.dueDate()
             }

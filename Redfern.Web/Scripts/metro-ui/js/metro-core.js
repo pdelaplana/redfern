@@ -29,11 +29,20 @@ $(function(){
 $(function(){
     $(window).on('resize', function(){
         if (METRO_DIALOG) {
-            var top = ($(window).height() - METRO_DIALOG.outerHeight()) / 2;
-            var left = ($(window).width() - METRO_DIALOG.outerWidth()) / 2;
+            var top = 0, left = 0;
+            if ($.Dialog.settings.recenter) {
+                top = ($(window).height() - METRO_DIALOG.outerHeight()) / 2;
+                left = ($(window).width() - METRO_DIALOG.outerWidth()) / 2;
+            } else {
+                top = $(METRO_DIALOG).position().top;
+                left = $(METRO_DIALOG).position().left;
+            }
+            
             METRO_DIALOG.css({
                 top: top, left: left
             });
+
+            
         }
     });
 });

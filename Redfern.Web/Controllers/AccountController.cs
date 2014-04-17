@@ -25,7 +25,7 @@ namespace Redfern.Web.Controllers
         public UserManager<RedfernUser> UserManager { get; private set; }
 
         //
-        // GET: /Account/Login
+        // GET: /account/signin
         [AllowAnonymous]
         public ActionResult Signin(string returnUrl)
         {
@@ -41,7 +41,7 @@ namespace Redfern.Web.Controllers
         }
 
         //
-        // POST: /Account/Login
+        // POST: /account/signin
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -66,7 +66,7 @@ namespace Redfern.Web.Controllers
         }
 
         //
-        // GET: /Account/Register
+        // GET: /account/register
         [AllowAnonymous]
         public ActionResult Register()
         {
@@ -74,7 +74,7 @@ namespace Redfern.Web.Controllers
         }
 
         //
-        // POST: /Account/Register
+        // POST: /account/register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]

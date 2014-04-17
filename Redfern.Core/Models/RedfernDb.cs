@@ -40,7 +40,13 @@ namespace Redfern.Core.Models
 
         }
 
-        public RedfernDb() : base("Name=RedfernDbConnection") { }
+        public RedfernDb() : base("Name=RedfernDbConnection") 
+        {
+            // create a mock context
+            this._context = new RedfernContext();
+            this._context.TenantID = 4;
+            this._context.ClientUserName = "migrations";
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -88,6 +94,8 @@ namespace Redfern.Core.Models
         public DbSet<BoardColumn> BoardColumns { get; set; }
 
         public DbSet<BoardMember> BoardMembers { get; set; }
+
+        public DbSet<CardType> CardTypes { get; set; }
 
         public DbSet<Card> Cards { get; set; }
 

@@ -36,7 +36,7 @@ namespace Redfern.Web.Controllers
         {
             if (String.IsNullOrEmpty(userName))
                 userName = User.Identity.Name;
-            
+            ViewBag.PasswordChangedStatus = TempData["PasswordChangedStatus"];
             try
             {
                 if (photo != null)
@@ -58,7 +58,6 @@ namespace Redfern.Web.Controllers
             }
         }
 
-
         public ActionResult Avatar(string user = "anon", int x = 16, int y = 16, string nopic = "~/Assets/Images/default-user-avatar.png")
         {
             WebImage webImage;
@@ -78,5 +77,37 @@ namespace Redfern.Web.Controllers
             webImage.Resize(x, y);
             return File(webImage.GetBytes(), "image/png");
         }
+
+        public ActionResult ChangePassword()
+        {
+            return PartialView("_ChangePassword", new ManageUserViewModel { UserName = User.Identity.Name });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(ManageUserViewModel model)
+        {
+            IdentityResult result =_userManager.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                TempData["PasswordChangedStatus"] = "Your password has been changed";
+                return RedirectToAction("index");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
+
+
+                return PartialView("_ChangePassword");
+            }
+
+            
+            
+            
+        }
+
 	}
 }

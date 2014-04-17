@@ -3,13 +3,12 @@
     var sammy = Sammy(contentContainer, function () {
         this.helpers({
             loadLocation: function (url, initialize) {
-                $(this.element_selector).block({ message: '<div class="fg-color-darken"><h2>Loading page...</h2><img src="/content/images/ajax-loader.gif" alt="" /></div>' });
-                $(this.element_selector).html('');
+                $.blockUI({ message: '<div class="fg-darken"><h2>Loading...</h2><img src="/content/images/ajax-loader-bar-1.gif" alt="" /></div>' });
                 this
                  .load(url, { cache: false })
                  .swap(function () {
                      initialize(this.element_selector);
-                     $(this.element_selector).unblock();
+                     $.unblockUI();
                  });
             }
         });
@@ -69,6 +68,11 @@
         registerRoute: function (route, found) {
             sammy.get(route, found);
         },
+
+        registerPostRoute: function (route, found) {
+            sammy.post(route, found);
+        },
+
 
         
         run: function (path) {

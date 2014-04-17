@@ -36,6 +36,10 @@ namespace Redfern.Core.Models
 
         public DateTime? ArchivedDate { get; set; }
 
+        public int? CardTypeId { get; set; }
+        [ForeignKey("CardTypeId")]
+        public virtual CardType CardType { get; set; }
+
         public virtual ICollection<CardTag> Tags { get; set; }
 
         public virtual ICollection<CardComment> Comments { get; set; }

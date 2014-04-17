@@ -72,7 +72,6 @@
 	}
 };
 
-
 ko.bindingHandlers.editColumn = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var column = $(element).parents('div.board-column'),
@@ -153,6 +152,34 @@ ko.bindingHandlers.adjustColumnHeight = {
         
     },
     update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        
+    }
+}
+
+ko.bindingHandlers.setTileColor = {
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        var color = valueAccessor(),
+            bindings = allBindingsAccessor(),
+            isArchived = bindings.archived,
+            colorClass = isArchived ? 'bg-gray' : 'bg-'+color();
+        
+        $(element)
+            .removeClass(function (index, css) {
+                return (css.match(/\bbg-\S+/g) || []).join(' ');
+            })
+            .addClass(colorClass);
+    }
+}
+
+ko.bindingHandlers.changeTileColor = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        var observable = valueAccessor(),
+            bindings = allBindingsAccessor();
+        $(element).click(function () {
+            $(this).siblings('.tile').removeClass('selected');
+            $(this).addClass('selected');
+            observable(bindings.color());
+        })
         
     }
 }

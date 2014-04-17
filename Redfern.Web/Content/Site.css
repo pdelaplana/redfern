@@ -203,3 +203,25 @@ div + div
     margin-top:0px;
     margin-bottom:0px;
 }
+
+
+/* 
+ *    block ui styles
+ ****************************************/
+.blockMsg
+{
+    border:0!important;
+    /*height:250px;*/
+    width:500px!important;
+    
+    font-family: 'Segoe UI Light', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
+    font-weight: 200;
+    font-size: 20pt;
+    letter-spacing: 0.01em;
+    line-height: 24pt;
+    font-size: 12pt;
+    
+    background-color: transparent!important;
+    color:#fff!important;
+    text-align:inherit;
+}

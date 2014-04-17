@@ -18,7 +18,7 @@
                             </h4>
                         </div>
                         <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
-                            <div class="tile double bg-amber" data-bind="visible: show, event: { dblclick: open }, css: { 'bg-gray': $parent.isArchiveColumn }">
+                            <div class="tile double" data-bind="visible: show, event: { dblclick: open }, setTileColor: color, archived : $parent.isArchiveColumn() ">
                                 <div class="tile-content">
                                     <div class="padding10">
                                         <p class="fg-white" data-bind="text: title"></p>
@@ -85,7 +85,7 @@
                             </h4>
                         </div>
                         <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
-                            <div class="tile double bg-amber" data-bind="visible: show, event: { dblclick: open }, css: { 'bg-gray': $parent.isArchiveColumn }">
+                            <div class="tile double bg-amber" data-bind="visible: show, event: { dblclick: open }, setTileColor: color, archived : $parent.isArchiveColumn() ">
                                 <div class="tile-content">
                                     <div class="padding10">
                                         <p class="fg-white" data-bind="text: title"></p>

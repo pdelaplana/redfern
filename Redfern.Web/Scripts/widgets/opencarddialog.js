@@ -12,7 +12,21 @@
         data = data,
         self = this;
 
+    self.changed = false;
     self.data = data;
+
+    self.data.title.subscribe(function (newValue) {
+        self.changed = true;
+    })
+    self.data.color.subscribe(function (newValue) {
+        var cardType = ko.utils.arrayFirst(self.cardTypes(), function (cardType) {
+            return cardType.color() == newValue;
+        });
+        self.data.cardTypeId(cardType.cardTypeId());
+        self.changed = true;
+    })
+    
+    self.cardTypes = data.parent.board.cardTypes;
 
     self.newComment = ko.observable();
     self.comments = ko.observableArray();
@@ -36,16 +50,19 @@
     }
 
     self.addComment = function () {
-        var repository = new CardCommentRepository();
-        repository.cardId(self.data.cardId());
-        repository.comment(self.newComment());
-        repository.create().done(function (result) {
-            self.comments.splice(0, 0, new CommentListItem(result));
-            self.newComment('');
-            self.data.commentCount(self.comments().length);
-        });
+        if (self.newComment()!=null) {
+            var repository = new CardCommentRepository();
+            repository.cardId(self.data.cardId());
+            repository.comment(self.newComment());
+            repository.create().done(function (result) {
+                self.comments.splice(0, 0, new CommentListItem(result));
+                self.newComment('');
+                self.data.commentCount(self.comments().length);
+            });
+        }
     }
 
+    self.loadingComments = ko.observable(true);
     self.loadComments = function () {
         var repository = new CardCommentRepository();
         repository.cardId(self.data.cardId());
@@ -53,6 +70,21 @@
             $.each(result, function (index, value) {
                 self.comments.push(new CommentListItem(value));
             })
+            self.loadingComments(false);
+        });
+    }
+
+    self.remove = function () {
+        self.data.remove().done(function () {
+            self.changed = false;
+            $.Dialog.close();
+        })
+    }
+
+    self.archive = function () {
+        self.data.archive().done(function () {
+            self.changed = false;
+            $.Dialog.close();
         });
     }
     
@@ -98,6 +130,10 @@
                     })
                     self.loadComments();
                     ko.applyBindings(self, $(dialog).get(0));
+                },
+                onClose: function () {
+                    if (self.changed)
+                        self.data.update();
                 }
             });
         }

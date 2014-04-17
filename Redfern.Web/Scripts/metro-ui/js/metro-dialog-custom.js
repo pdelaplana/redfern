@@ -10,8 +10,7 @@
             return METRO_DIALOG;
         }
 
-        $.Dialog.settings = params;
-
+        
         params = $.extend({
             icon: false,
             title: '',
@@ -23,16 +22,21 @@
             width: 'auto',
             height: 'auto',
             position: 'default',
+            recenter: true,
             padding: false,
             overlayClickClose: true,
             sysButtons: {
                 btnClose: true
             },
-            onShow: function(_dialog){},
+            onShow: function (_dialog) {},
+            onClose: function(){},
             sysBtnCloseClick: function(event){},
             sysBtnMinClick: function(event){},
             sysBtnMaxClick: function(event){}
         }, params);
+
+        $.Dialog.settings = params;
+
 
         var _overlay, _window, _caption, _content;
 
@@ -104,7 +108,7 @@
 
 
         _window
-            .css("position", "fixed")
+            .css("position", "relative")
             .css("z-index", parseInt(_overlay.css('z-index'))+1)   
         ;
 
@@ -116,6 +120,7 @@
             _window
                 .css("top", ($(window).height() - METRO_DIALOG.outerHeight()) / 2)
                 .css("left", ($(window).width() - _window.outerWidth()) / 2)
+            ;
         }
 
         addTouchEvents(_window[0]);
@@ -163,8 +168,6 @@
             });
         }
 
-
-
         params.onShow(METRO_DIALOG);
 
         $.Dialog.autoResize();
@@ -211,15 +214,17 @@
 
         //var top = ($(window).height() - METRO_DIALOG.outerHeight()) / 2;
         //var left = ($(window).width() - METRO_DIALOG.outerWidth()) / 2;
-        var top = $(METRO_DIALOG).position().top;
-        var left = $(METRO_DIALOG).position().left;
+        if ($.Dialog.settings.recenter) {
+            var top = $(METRO_DIALOG).position().top;
+            var left = $(METRO_DIALOG).position().left;
 
-        METRO_DIALOG.css({
-            //width: _content.outerWidth(),
-            //height: _content.outerHeight(),
-            top: top,
-            left: left
-        });
+            METRO_DIALOG.css({
+                //width: _content.outerWidth(),
+                //height: _content.outerHeight(),
+                top: top,
+                left: left
+            });
+        }
 
         return true;
     }
@@ -229,13 +234,14 @@
         if (!$.Dialog.opened || METRO_DIALOG == undefined) {
             return false;
         }
-
+        
         $.Dialog.opened = false;
         var _overlay = METRO_DIALOG.parent(".window-overlay");
         _overlay.fadeOut(function(){
             $(this).remove();
         });
 
+        $.Dialog.settings.onClose();
         return false;
         
      

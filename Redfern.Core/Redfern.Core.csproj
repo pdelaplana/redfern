@@ -83,7 +83,12 @@
     <Compile Include="Migrations\201403300031324_AddArchivedDateToCard.Designer.cs">
       <DependentUpon>201403300031324_AddArchivedDateToCard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201404131227552_AddCardType.cs" />
+    <Compile Include="Migrations\201404131227552_AddCardType.Designer.cs">
+      <DependentUpon>201404131227552_AddCardType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ActivityConstructor.cs" />
+    <Compile Include="Models\CardType.cs" />
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
     <Compile Include="Models\Configuration\CardConfiguration.cs" />
     <Compile Include="Models\Configuration\BoardColumnConfiguration.cs" />
@@ -162,6 +167,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201403300031324_AddArchivedDateToCard.resx">
       <DependentUpon>201403300031324_AddArchivedDateToCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201404131227552_AddCardType.resx">
+      <DependentUpon>201404131227552_AddCardType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

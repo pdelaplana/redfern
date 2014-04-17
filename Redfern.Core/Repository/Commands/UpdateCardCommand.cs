@@ -23,6 +23,9 @@ namespace Redfern.Core.Repository.Commands
         private bool _titleChanged;
         private string _title;
 
+        private bool _cardTypeIdChanged;
+        private int  _cardTypeId;
+
         private bool _descriptionChanged;
         private string _description;
 
@@ -53,6 +56,11 @@ namespace Redfern.Core.Repository.Commands
             get { return _title; }
             set { _titleChanged = true; _title = value; }
         }
+        public int CardTypeId
+        {
+            get { return _cardTypeId; }
+            set { _cardTypeIdChanged = true; _cardTypeId= value; }
+        }
         public string Description
         {
             get { return _description; }
@@ -81,6 +89,8 @@ namespace Redfern.Core.Repository.Commands
                 card.Title= this.Title;
             if (_descriptionChanged)
                 card.Description = this.Description;
+            if (_cardTypeIdChanged)
+                card.CardTypeId = this.CardTypeId;
             if (_assignedToUserChanged)
                 card.AssignedToUser = this.AssignedToUser;
             if (_dueDateChanged)

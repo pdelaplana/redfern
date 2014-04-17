@@ -23,6 +23,7 @@ namespace Redfern.Core.Repository.Commands
             board = db.Boards.Add(board);
             db.SaveChanges();
 
+            // create archived column
             BoardColumn archivedColumn = db.BoardColumns.Create();
             archivedColumn.BoardId = board.BoardId;
             archivedColumn.Name = "Archived";
@@ -30,6 +31,18 @@ namespace Redfern.Core.Repository.Commands
             archivedColumn.Hidden = true;
             archivedColumn = db.BoardColumns.Add(archivedColumn);
             db.SaveChanges();
+
+            // create CardTypes
+            db.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Amber", ColorCode = "amber" });
+            db.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Yellow", ColorCode = "yellow" });
+            db.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Red", ColorCode = "red" });
+            db.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Blue", ColorCode = "blue" });
+            db.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Magenta", ColorCode = "magenta" });
+            db.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Cobalt", ColorCode = "darkCobalt" });
+            db.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Emerald", ColorCode = "emerald" });
+            db.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Mauve", ColorCode = "mauve" });
+            db.SaveChanges();
+
 
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;

@@ -23,6 +23,8 @@ namespace Redfern.Web.Models
         public int BoardId { get; set; }
         public int ColumnId { get; set; }
         public int Sequence { get; set; }
+        public int CardTypeId { get; set; }
+        public string Color { get; set; }
         public string AssignedToUser { get; set; }
         public DateTime? DueDate { get; set; }
         public DateTime? ArchivedDate { get; set; }
@@ -43,6 +45,13 @@ namespace Redfern.Web.Models
         public IList<CardItem> Cards { get; set; }
     }
 
+    public class CardTypeItem
+    {
+        public int CardTypeId { get; set; }
+        public string Name { get; set; }
+        public string Color { get; set; }
+    }
+
     public class BoardMemberItem 
     {
         public string BoardMemberId { get; set; }
@@ -59,6 +68,7 @@ namespace Redfern.Web.Models
         public string OwnerFullName { get; set; }
 
         public IList<BoardMemberItem> Members { get; set; }
+        public IList<CardTypeItem> CardTypes { get; set; }
         public IList<BoardColumnItem> Columns { get; set; }
     }
 }

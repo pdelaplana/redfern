@@ -132,4 +132,6 @@
 /// <reference path="repositories/tagrepository.js" />
 /// <reference path="repositories/useravatarrepository.js" />
 /// <reference path="repositories/userprofilerepository.js" />
+/// <reference path="views/changepassword.js" />
 /// <reference path="metro-ui/metro.js" />
+/// <reference path="widgets/errordialog.js" />

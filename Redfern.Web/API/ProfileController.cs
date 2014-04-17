@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Helpers;
@@ -51,7 +52,15 @@ namespace Redfern.Web.API
             _userManager.Update(user);
         }
 
-     
+        [AcceptVerbs("changepassword")]
+        public IdentityResult ChangePassword(string id, [FromBody]ManageUserViewModel model) 
+        {
+
+            var user = _userManager.FindByName(id);
+            
+            return _userManager.ChangePassword(User.Identity.GetUserId(), model.OldPassword, model.NewPassword); 
+
+        }
 
        
         // DELETE api/<controller>/5

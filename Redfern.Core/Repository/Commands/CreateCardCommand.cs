@@ -20,12 +20,16 @@ namespace Redfern.Core.Repository.Commands
 
         public Card Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
         {
+            Board board = db.Boards.Find(this.BoardId);
+
             Card card = db.Cards.Create();
             card.BoardId = this.BoardId;
             card.ColumnId = this.ColumnId;
             card.Title= this.Title;
             card.Sequence = this.Sequence;
+            card.CardTypeId = board.CardTypes.Where(ct => ct.ColorCode == "amber").SingleOrDefault().CardTypeId;
             card = db.Cards.Add(card);
+            
             db.SaveChanges();
 
             Activity activity = db.Activities.Create();

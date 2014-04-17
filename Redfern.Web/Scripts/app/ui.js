@@ -34,7 +34,28 @@
             if (object == undefined) object = {};
             return $.extend(object, this);
 
+        },
+
+        block: function (options) {
+            options = $.extend({ message: 'Please wait...', element: '' }, options)
+            if (options.element == '') {
+                $.blockUI({ message: '<div class="fg-darker"><h2>' + options.message + '</h2><img src="/content/images/ajax-loader-bar-1.gif" alt="please wait..." /></div>' });
+            } else {
+                $(options.element).block({ message: '<div class="fg-darker"><h2>' + options.message + '</h2><img src="/content/images/ajax-loader-bar-1.gif" alt="please wait..." /></div>' });
+            }
+        },
+
+        unblock: function (options) {
+            options = $.extend({ element: '' }, options)
+
+            if (options.element == '') {
+                $.unblockUI();
+            } else {
+                $(options.elements).unblock();
+            }
+
         }
+
     }
 
 }

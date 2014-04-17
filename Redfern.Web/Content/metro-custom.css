@@ -77,6 +77,43 @@ textarea {
 }
 
 /*********************************** 
+ * Tile Quarter
+ ********************************* */
+
+.metro .tile.quarter{
+  width: 25px;
+  height: 25px;
+}
+
+.metro .tile.quarter.selected {
+  border: 3px #4390df solid;
+}
+.metro .tile.quarter.selected:after {
+  position: absolute;
+  display: block;
+  border-top: 13px solid #4390df;
+  border-left: 13px solid transparent;
+  right: 0;
+  content: "";
+  top: 0;
+  z-index: 101;
+}
+.metro .tile.quarter.selected:before {
+  position: absolute;
+  display: block;
+  content: "\e08a";
+  color: #fff;
+  right: 0;
+  font-family: iconFont;
+  font-size: 4pt;
+  font-weight: normal;
+  z-index: 102;
+  top: 0;
+}
+
+
+
+/*********************************** 
  * Menus
  ********************************* */
 nav.horizontal-menu.header-menu ul li a.back-button i
@@ -160,9 +197,15 @@ nav.horizontal-menu a.big {
  ************************************/
 span.field-validation-error
 {
-    color:#b91d47 !important;
+    color: #e51400 !important;
     font-size:smaller;
 }
+
+input.input-validation-error{
+    border-color: #e51400!important;
+}
+
+
 
 
 /************************************ 
@@ -373,4 +416,43 @@ ul.ui-autocomplete{
   width: 300px;
   z-index:100;
 }
+
+/************************************** 
+ *   Styles for positioning elements
+ *************************************/
+.push-down-5
+{
+    margin-top:5px;
+}
+
+.push-down-10
+{
+    margin-top:10px;
+}
+
+.push-down-15
+{
+    margin-top:15px!important;
+}
+
+.push-down-20
+{
+    margin-top:20px!important;
+}
+
+.push-down-25
+{
+    margin-top:25px!important;
+}
+
+.push-down-30
+{
+    margin-top:20px!important;
+}
+
+.push-down-40
+{
+    margin-top:40px!important;
+}
+
 
