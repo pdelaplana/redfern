@@ -9,6 +9,7 @@
     self.userName = ko.observable();
     self.fullName = ko.observable();
     self.email = ko.observable();
+    self.emailConfirmed = ko.observable();
     self.timestamp = ko.observable((new Date()).getTime());
     self.photoSrc = ko.computed(function () {
         var d = new Date();
@@ -26,7 +27,16 @@
         repository.userName(self.userName());
         repository.fullName(self.fullName());
         repository.email(self.email());
-        repository.update();
+        repository.update().done(function (result) {
+            if (result.Succeeded) {
+                var not = $.Notify.show('Your profile has been updated.')
+            } else {
+                $.each(result.Errors, function (index, value) {
+                    $.Notify.show(value);
+                });
+            
+            }
+        });
     }
     
     self.uploadPhoto = function () {
@@ -38,6 +48,19 @@
         });
     }
 
+    self.confirmEmail = function () {
+        $.ajax({
+            url: '/profile/confirmemail',
+            success: function (result) {
+                if (result.Succeeded)
+                    $.Notify.show('A confirmation email has been sent to ' + self.email() + '.')
+                else
+                    $.Notify.show('An error was encountered')
+            }
+        });
+
+    }
+
     var initialize = function () {
 
         $.Metro.initInputs('form#avatar');
@@ -45,7 +68,7 @@
         self.userName(model.UserName);
         self.fullName(model.FullName);
         self.email(model.Email);
-
+        self.emailConfirmed(model.EmailConfirmed)
 
         var ui = app.ui.extend();
         ui.setWindowTitle('Profile');

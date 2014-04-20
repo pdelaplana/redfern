@@ -8,10 +8,11 @@ namespace Redfern.Core.Security
         [MaxLength(50)]
         public string FullName { get; set; }
 
+        /*
         [MaxLength(100)]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-
+        */
         
         public byte[] Avatar { get; set; }
 

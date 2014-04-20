@@ -87,8 +87,8 @@
 		
 			if(this._notify != undefined) {
         	   	this._notify.hide('slow', function() {
-					this.remove();
-					_notifies.splice(_notifies.indexOf(this._notify), 1);
+        	   	    this.remove();
+        	   	    _notifies.splice(_notifies.indexOf(this._notify), 1);
 				});
 				return this;
 			} else {

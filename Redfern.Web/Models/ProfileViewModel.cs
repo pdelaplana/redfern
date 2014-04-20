@@ -17,5 +17,8 @@ namespace Redfern.Web.Models
         [Display(Name="Email")]
         public string Email { get; set; }
 
+        [Display(Name = "Email Confirmed")]
+        public bool EmailConfirmed { get; set; }
+
     }
 }

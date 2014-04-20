@@ -10,6 +10,11 @@ namespace Redfern.Core.Security
     public class RedfernSecurityContext : IdentityDbContext<RedfernUser>
     {
 
+        public static RedfernSecurityContext Create()
+        {
+            return new RedfernSecurityContext();
+        }
+
         public static UserManager<RedfernUser> CreateUserManager()
         {
             return new UserManager<RedfernUser>(new UserStore<RedfernUser>(new RedfernSecurityContext()));
@@ -20,7 +25,8 @@ namespace Redfern.Core.Security
             return this.Users.ToList();
         }
 
-        public RedfernSecurityContext() : base("MembershipConnection")
+        public RedfernSecurityContext()
+            : base("MembershipConnection", throwIfV1Schema: false)
         {
         }
     }

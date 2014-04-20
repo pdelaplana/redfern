@@ -9,6 +9,7 @@ using System.Web.Http;
 using System.Web.Helpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using Redfern.Core.Security;
 using Redfern.Web.Models;
 
@@ -17,11 +18,18 @@ namespace Redfern.Web.API
     [Authorize]
     public class ProfileController : ApiController
     {
-        private UserManager<RedfernUser> _userManager;
+        private RedfernUserManager UserManager
+        {
+            get
+            {
+                return HttpContext.Current.GetOwinContext().GetUserManager<RedfernUserManager>();
+            }
+        }
 
         public ProfileController()
         {
-            _userManager = new UserManager<RedfernUser>(new UserStore<RedfernUser>(new RedfernSecurityContext()));
+            
+            
         }
         
 
@@ -44,25 +52,22 @@ namespace Redfern.Web.API
         }
 
         // PUT api/profile/5
-        public void Put(string id, [FromBody]ProfileViewModel model)
+        public Task<IdentityResult> Put(string id, [FromBody]ProfileViewModel model)
         {
-            var user = _userManager.FindByName(model.UserName);
+            var user = UserManager.FindByName(model.UserName);
             user.FullName = model.FullName;
             user.Email = model.Email;
-            _userManager.Update(user);
+            return UserManager.UpdateAsync(user);
         }
 
         [AcceptVerbs("changepassword")]
-        public IdentityResult ChangePassword(string id, [FromBody]ManageUserViewModel model) 
+        public Task<IdentityResult> ChangePassword(string id, [FromBody]ManageUserViewModel model) 
         {
-
-            var user = _userManager.FindByName(id);
-            
-            return _userManager.ChangePassword(User.Identity.GetUserId(), model.OldPassword, model.NewPassword); 
+            return UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword); 
 
         }
 
-       
+        
         // DELETE api/<controller>/5
         public void Delete(int id)
         {

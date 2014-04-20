@@ -7,6 +7,11 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Data.Entity;
+using System.IdentityModel;
+using System.IdentityModel.Tokens;
+using System.IdentityModel.Security;
+using System.IdentityModel.Services;
+using System.IdentityModel.Services.Configuration;
 using Redfern.Core.Models;
 using Redfern.Core.Migrations;
 
@@ -18,6 +23,7 @@ namespace Redfern.Web
         protected void Application_Start()
         {
             //Database.SetInitializer(new MigrateDatabaseToLatestVersion<RedfernDb, Configuration>());
+            //FederatedAuthentication.FederationConfigurationCreated += OnFederationConfigurationCreated;
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -27,6 +33,26 @@ namespace Redfern.Web
             AutoMapperConfig.RegisterMaps();
 
             
+            
         }
+
+        /*
+        void OnFederationConfigurationCreated(object sender, FederationConfigurationCreatedEventArgs e)
+        {
+            var sessionTransforms = new List<CookieTransform>(
+             new CookieTransform[]
+                {
+                    new DeflateCookieTransform(),
+                    new RsaEncryptionCookieTransform(e.FederationConfiguration.ServiceCertificate),
+                    new RsaSignatureCookieTransform(e.FederationConfiguration.ServiceCertificate)
+                });
+            var sessionHandler = new SessionSecurityTokenHandler(sessionTransforms.AsReadOnly());
+
+            e.FederationConfiguration
+                .IdentityConfiguration
+                .SecurityTokenHandlers
+                .AddOrReplace(sessionHandler);
+        }
+         * */
     }
 }

@@ -25,6 +25,9 @@ namespace Redfern.Web
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
+            app.CreatePerOwinContext(Redfern.Core.Security.RedfernSecurityContext.Create);
+            app.CreatePerOwinContext<Redfern.Core.Security.RedfernUserManager>(Redfern.Core.Security.RedfernUserManager.Create);
+
             int timeOut = 15;
             Int32.TryParse(ConfigurationManager.AppSettings["AuthenticationTimeout"], out timeOut);
             // Enable the application to use a cookie to store information for the signed in user

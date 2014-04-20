@@ -4,8 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
+using Postal;
 using Redfern.Core.Security;
 using Redfern.Web.Models;
 
@@ -14,18 +17,24 @@ namespace Redfern.Web.Controllers
     [Authorize]
     public class ProfileController : Controller
     {
-        private UserManager<RedfernUser> _userManager;
+        private RedfernUserManager UserManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().GetUserManager<RedfernUserManager>();
+            }
+        }
 
         public ProfileController()
         {
-            _userManager = new UserManager<RedfernUser>(new UserStore<RedfernUser>(new RedfernSecurityContext()));
+            
         }
         
         //
         // GET: /profile/
         public ActionResult Index()
         {
-            var userAccount = _userManager.FindByName(User.Identity.Name);
+            var userAccount = UserManager.FindByName(User.Identity.Name);
             var model = AutoMapper.Mapper.Map<RedfernUser,ProfileViewModel>(userAccount);
             return PartialView("_index",model);
         }
@@ -41,12 +50,12 @@ namespace Redfern.Web.Controllers
             {
                 if (photo != null)
                 {
-                    var userAccount = this._userManager.FindByName(User.Identity.Name);
+                    var userAccount = this.UserManager.FindByName(User.Identity.Name);
                     userAccount.AvatarContentType = photo.ContentType;
                     var tempData = new byte[photo.ContentLength];
                     photo.InputStream.Read(tempData, 0, photo.ContentLength);
                     userAccount.Avatar = tempData;
-                    _userManager.Update(userAccount);
+                    UserManager.Update(userAccount);
                     return RedirectToAction("UploadPhoto");
 
                 }
@@ -62,7 +71,7 @@ namespace Redfern.Web.Controllers
         {
             WebImage webImage;
             if (String.IsNullOrEmpty(user)) user = "anon";
-            var userAccount = this._userManager.FindByName(user);
+            var userAccount = this.UserManager.FindByName(user);
             if (userAccount != null)
             {
                 byte[] photo = userAccount.Avatar;
@@ -80,6 +89,7 @@ namespace Redfern.Web.Controllers
 
         public ActionResult ChangePassword()
         {
+           
             return PartialView("_ChangePassword", new ManageUserViewModel { UserName = User.Identity.Name });
         }
 
@@ -87,7 +97,7 @@ namespace Redfern.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangePassword(ManageUserViewModel model)
         {
-            IdentityResult result =_userManager.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
+            IdentityResult result = UserManager.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
                 TempData["PasswordChangedStatus"] = "Your password has been changed";
@@ -99,14 +109,26 @@ namespace Redfern.Web.Controllers
                 {
                     ModelState.AddModelError("", error);
                 }
-
-
                 return PartialView("_ChangePassword");
             }
+        }
 
-            
-            
-            
+        public async Task<ActionResult> ConfirmEmail()
+        {
+            // send a confirmation email
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+            EmailConfirmationEmail email = new EmailConfirmationEmail();
+            email.To = user.Email;
+            email.UserFullName = user.FullName;
+            email.ConfirmEmailLink = callbackUrl;
+            email.Code = code;
+            await email.SendAsync();
+            if (Request.IsAjaxRequest())
+                return Json(new { Succeeded = true, Errors = new string[] { } }, JsonRequestBehavior.AllowGet);
+            else
+                return View();
         }
 
 	}

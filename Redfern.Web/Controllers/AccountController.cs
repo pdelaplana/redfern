@@ -7,23 +7,32 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Postal;
 using Redfern.Core.Security;
 using Redfern.Web.Models;
+
 
 namespace Redfern.Web.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private RedfernUserManager UserManager 
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().GetUserManager<RedfernUserManager>();
+            }
+        }
 
         public AccountController()
         {
-            UserManager = new UserManager<RedfernUser>(new UserStore<RedfernUser>(new RedfernSecurityContext()));
+            
         }
 
-        public UserManager<RedfernUser> UserManager { get; private set; }
-
+        
         //
         // GET: /account/signin
         [AllowAnonymous]
@@ -91,8 +100,18 @@ namespace Redfern.Web.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    // send a confirmation email
+                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    EmailConfirmationEmail email = new EmailConfirmationEmail();
+                    email.To = user.Email;
+                    email.UserFullName = user.FullName;
+                    email.ConfirmEmailLink = callbackUrl;
+                    email.Code = code;
+                    await email.SendAsync();
+
                     await SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("index", "home");
+                    return RedirectToAction("index", "app");
                 }
                 else
                 {
@@ -103,6 +122,112 @@ namespace Redfern.Web.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+        //
+        // GET: /Account/ForgotPassword
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+
+        //
+        // POST: /Account/ForgotPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByEmailAsync(model.Email);
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                {
+                    // Don't reveal that the user does not exist or is not confirmed
+                    return View("ForgotPasswordConfirmation");
+                }
+
+                var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("resetPassword", "account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+
+                // use Postal to send the email
+                ResetPasswordEmail email = new ResetPasswordEmail();
+                email.To = user.Email;
+                email.UserFullName = user.FullName;
+                email.ResetLink = callbackUrl;
+                await email.SendAsync();
+                //await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
+                //ViewBag.Link = callbackUrl;
+                return View("ForgotPasswordConfirmation");
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+
+        //
+        // GET: /Account/ResetPassword
+        [AllowAnonymous]
+        public ActionResult ResetPassword(string userid, string code)
+        {
+            var user = UserManager.FindById(userid);
+            return code == null ? View("Error") : View(new ResetPasswordViewModel { Code = code, Email = user.Email });
+        }
+
+        //
+        // POST: /Account/ResetPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            }
+            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            }
+            AddErrors(result);
+            return View();
+        }
+
+        //
+        // GET: /Account/ResetPasswordConfirmation
+        [AllowAnonymous]
+        public ActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
+        //
+        // GET: /Account/ConfirmEmail
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return View("Error");
+            }
+            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            if (result.Succeeded)
+            {
+                return View("EmailConfirmation");
+            }
+            AddErrors(result);
+            return View();
+        }
+
 
         //
         // POST: /Account/Disassociate
@@ -322,8 +447,8 @@ namespace Redfern.Web.Controllers
         {
             if (disposing && UserManager != null)
             {
-                UserManager.Dispose();
-                UserManager = null;
+                //UserManager.Dispose();
+                //UserManager = null;
             }
             base.Dispose(disposing);
         }

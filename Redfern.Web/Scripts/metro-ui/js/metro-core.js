@@ -29,6 +29,7 @@ $(function(){
 $(function(){
     $(window).on('resize', function(){
         if (METRO_DIALOG) {
+            /*
             var top = 0, left = 0;
             if ($.Dialog.settings.recenter) {
                 top = ($(window).height() - METRO_DIALOG.outerHeight()) / 2;
@@ -41,8 +42,8 @@ $(function(){
             METRO_DIALOG.css({
                 top: top, left: left
             });
-
-            
+            */
+            $.Dialog.autoResize();
         }
     });
 });

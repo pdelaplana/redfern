@@ -77,7 +77,7 @@ function Card(cardModel, column) {
     })
     
     self.open = function () {
-        var dialog = new OpenCardDialog('#OpenCardDialog', self);
+        var dialog = new CardPropertiesDialog('#CardPropertiesDialog', self);
         dialog.open();
     }
 

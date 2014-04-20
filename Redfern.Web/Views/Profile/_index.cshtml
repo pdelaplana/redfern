@@ -21,7 +21,8 @@
                         @Html.EditorFor(m => m.UserName, "textbox", new { databind = "value: userName, disable :true" })
                         @Html.EditorFor(m => m.FullName, "textbox", new { databind = "value: fullName" })
                         @Html.EditorFor(m => m.Email, "textbox", new { databind = "value: email" })
-                        <button class="primary" data-bind="click: update">Save Changes</button>
+                        <div class="fg-red" data-bind="visible: emailConfirmed() == false">Email not confirmed.  <a href="" data-bind="click: confirmEmail">Confirm now?</a></div>
+                        <button class="primary push-down-15" data-bind="click: update">Save Changes</button>
                     </form>
                     <h2 class="push-down-40" >Security</h2>
                     <a href="#/profile/changepassword">Change Password</a>

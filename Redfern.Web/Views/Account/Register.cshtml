@@ -18,8 +18,9 @@
                     
                     @using (Html.BeginForm("register", "account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                     {
+                        @Html.ValidationSummary(true)
                         @Html.AntiForgeryToken()
-                        <h3>Fill in some basic information</h3>
+                        <h3>Tell us about you</h3>
                         @Html.EditorFor(m => m.FullName, "textbox")
                         @Html.EditorFor(m => m.Email, "textbox")
                         @Html.EditorFor(m => m.UserName, "textbox")

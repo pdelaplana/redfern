@@ -29,7 +29,8 @@
                 btnClose: true
             },
             onShow: function (_dialog) {},
-            onClose: function(){},
+            onClose: function () { },
+            onResize: function() { },
             sysBtnCloseClick: function(event){},
             sysBtnMinClick: function(event){},
             sysBtnMaxClick: function(event){}
@@ -225,7 +226,7 @@
                 left: left
             });
         }
-
+        $.Dialog.settings.onResize(METRO_DIALOG);
         return true;
     }
 

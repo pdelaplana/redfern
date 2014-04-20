@@ -1,0 +1,108 @@
+﻿<div id="CardPropertiesDialog" style="display:none;min-height:100%">
+    <div class="grid fluid" style="min-height:100%">
+        <div class="row">
+            <div class="padding10 span12">
+                <label>Title</label>
+                <div class="input-control text">
+                    <input type="text" data-bind="value: data.title" />
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row" style="height:100%">
+            <div class="padding10 span5">
+
+                @*
+                    <div class="row">
+                        <div class="span6">
+                            <label>Assigned To</label>
+                            <div class="input-control select">
+                                <select />
+                            </div>
+                        </div>
+                        <div class="span6">
+                            <label>Due Date</label>
+                            <div class="input-control text" data-role="datepicker" >
+                                <input type="text" data-bind="value: data.dueDate" />
+                                <button class="btn-date"></button>
+                            </div>
+                        </div>
+                    </div>
+                *@
+                <div class="inline-block" style="width:100%">
+                    <!-- ko foreach: cardTypes -->
+                    <div class="tile quarter" data-bind="setTileColor: color, css: { selected : color() == $parent.data.color()  }, changeTileColor: $parent.data.color, color: color">
+                    </div>
+                    <!-- /ko -->
+                </div>
+                <label>Tags</label>
+                <div class="">
+                    <ul id="tags-container"></ul>
+                </div>
+            </div>
+
+            <div class="padding10 span7">
+                <div class="tab-control" data-role="tab-control">
+                    <ul class="tabs">
+                        <li class="active"><a data-href="#page_1" href="#page_1">Conversations</a></li>
+                        <li><a data-href="#page_2" href="#page_2">Activities</a></li>
+                        <li><a data-href="#page_3" href="#page_3"><i class="icon-attachment"></i></a></li>
+                        <li class="place-right"><a data-href="#page_4" href="#page_4"><i class="icon-cog"></i></a></li>
+                    </ul>
+
+                    <div class="frames">
+                        <div class="frame" id="page_1" style="height:100%">
+                            <div class="row padding10" style="margin-bottom:5px;width:100%">
+                                <div class="span11">
+                                    <div class="input-control textarea">
+                                        <textarea placeholder="write a comment..." maxlength="250" style="min-height:50px;width:100%" data-bind="value: newComment"></textarea>
+                                    </div>
+                                </div>
+                                <div class="span1">
+                                    <button data-bind="click:addComment" class="bg-darker fg-white place-left" style="height:50px"><i class="icon-comments"></i></button>
+                                </div>
+                            </div>
+                            <div style="text-align:center" data-bind="visible:loadingComments">
+                                <img src="/content/images/ajax-loader.gif" />
+                            </div>
+                            <div class="listview padding10" id="commentslist" data-bind="template:'commentsListTemplate'" style="overflow-x:auto;height:80%;width:100%">
+
+                            </div>
+                        </div>
+                        <div class="frame" id="page_2" style="height:100%">
+                            <div class="padding10" style="height:100%"></div>
+
+                        </div>
+                        <div class="frame" id="page_3" style="height:100%">...</div>
+                        <div class="frame" id="page_4" style="height:100%">
+                            <p>Archive this card and remove it from view?</p>
+                            <button class="bg-red fg-white" data-bind="click: archive">Archive</button>
+                            <hr />
+                            <p>Delete this card permanently? </p>
+                            <button class="bg-red fg-white" data-bind="click: remove">Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script id="commentsListTemplate" type="text/html">
+    <!-- ko foreach:comments-->
+    <div class="list" style="width:100%">
+        <div class="list-content">
+            <img class="icon" data-bind="attr: { src: '/api/avatar/'+commentByUser() }" />
+            <div class="data">
+                <span class="list-title item-title" data-bind="text: commentByUserFullName"></span>
+                <span class="list-subtitle" data-bind="text: comment"></span>
+                <span class="list-remark fg-grayLight" style="margin-top:10px" data-bind="text: moment(commentDate())"></span>
+            </div>
+        </div>
+    </div>
+    <!--/ko-->
+</script>
+
