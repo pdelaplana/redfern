@@ -20,18 +20,22 @@
                         <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
                             <div class="tile double" data-bind="visible: show, event: { dblclick: open }, setTileColor: color, archived : $parent.isArchiveColumn() ">
                                 <div class="tile-content">
+                                    
                                     <div class="padding10">
                                         <p class="fg-white" data-bind="text: title"></p>
                                     </div>
                                 </div>
                                 <div class="brand">
                                     <div class="label">
+                                        <span class="no-margin icon-locked fg-white" data-bind="visible: $parent.sortable() == false"></span>
                                         <span class="no-margin fg-white icon-calendar" data-bind="visible:dueDate()!=null"></span>
-                                        <span class="no-margin fg-white icon-cabinet" data-bind="visible:isArchived"></span>
                                         <span class="no-margin fg-white icon-comments-4" data-bind="visible: commentCount()>0"> <small data-bind="text: commentCount"></small></span>
                                         <span class="no-margin fg-white icon-tag" data-bind="visible: tags().length >0"> <small data-bind="text: tags().length"></small></span>
                                     </div>
                                 </div>
+                                @*
+                                <img src="/api/avatar/patrick?height=25" class="padding5 place-bottom-right"  />
+                                *@
                             </div>
                         </div>
                         <div class="board-column-footer">

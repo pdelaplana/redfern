@@ -10,24 +10,25 @@ using Redfern.Core.Security;
 
 namespace Redfern.Core.Repository.Commands
 {
-    public class DeleteCardCommand : IRepositoryCommand<bool>
+    public class DeleteCardCommentCommand : IRepositoryCommand<bool>
     {
-        public int CardId { get; set; }
+        public int CardCommentId { get; set; }
         
         public bool Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
         {
-            Card card = db.Cards.Find(this.CardId);
+            CardComment comment = db.CardComments.Find(this.CardCommentId);
             
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;
-            activity.SetVerb("delete");
+            activity.SetVerb("deleted");
             activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
-            activity.SetObject("card", card.CardId.ToString(), card.Title, String.Format(@"/board/{0}/card/{1}", card.BoardId, card.CardId));
-            activity.SetContext("board", card.BoardId.ToString(), card.Board.Name, String.Format(@"/board/{0}", card.BoardId));
-            activity.SetDescription("<b>{actorlink}</b> deleted <b>{object}</b> from <b>{contextlink}</b>");
+            activity.SetObject("comment", comment.CommentId.ToString(), "", "");
+            activity.SetSource("card", comment.CardId.ToString(), comment.Card.Title, "");
+            activity.SetContext("board", comment.Card.BoardId.ToString(), comment.Card.Board.Name, String.Format(@"/board/{0}", comment.Card.BoardId));
+            activity.SetDescription("<b>{actorlink}</b> deleted <b>{object}</b> from {sourcelink} in {contextlink}");
             activity = db.Activities.Add(activity);
 
-            db.Cards.Remove(card);
+            db.CardComments.Remove(comment);
             db.SaveChanges();
 
             return true;

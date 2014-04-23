@@ -42,14 +42,7 @@ namespace Redfern.Core.Repository.Commands
             activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
             activity.SetObject("card", card.CardId.ToString(), card.Title, String.Format(@"/board/{0}/card/{1}", card.BoardId, card.CardId));
             activity.SetContext("board", card.BoardId.ToString(), card.Board.Name, String.Format(@"/board/{0}", card.BoardId));
-            activity.SetDescription(String.Format(@"<a href=""{0}"">{1}</a> archived card <a href=""{2}"">{3}</a> in board <a href=""{4}"">{5}</a>.",
-                    activity.ActorUrl,
-                    activity.ActorDisplayName,
-                    activity.ObjectUrl,
-                    activity.ObjectDisplayName,
-                    activity.ContextUrl,
-                    activity.ContextDisplayName
-                ));
+            activity.SetDescription("{actorlink} archived card {objectlink} in {contextlink}");
             activity = db.Activities.Add(activity);
             db.SaveChanges();
 

@@ -20,8 +20,6 @@ $(function () {
             } else {
                 var dialog = new ErrorDialog(err);
                 dialog.open();
-
-                
                 console.log(err.status + " - " + err.responseText + " - " + httpStatus);
             }
             

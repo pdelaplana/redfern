@@ -208,7 +208,8 @@ function Column(columnModel, board) {
     }
     
     self.resequenceAllCards = function (arg, event, ui) {
-        arg.item.parent = self;
+        var movedCard = arg.item;
+        movedCard.parent = self;
 
         var columnContent = this;
         var card = ui.item;
@@ -263,8 +264,16 @@ function CardType(data, board) {
         self = this;
 
     self.cardTypeId = ko.observable(data.CardTypeId);
+    
     self.name = ko.observable(data.Name);
-    self.color = ko.observable(data.Color)
+    self.color = ko.observable(data.Color);
+
+    self.update = function () {
+        var repository = new CardTypeRepository();
+        repository.cardTypeId(self.cardTypeId());
+        repository.name(self.name());
+        repository.update();
+    }
 }
 
 

@@ -41,10 +41,10 @@ namespace Redfern.Web.API
         {
         }
 
-        // DELETE api/tag/
-        public void Delete([FromBody]DeleteCardTagCommand command)
+        // DELETE api/comment/5
+        public void Delete(int id)
         {
-            _repository.ExecuteCommand(command);
+            _repository.ExecuteCommand(new DeleteCardCommentCommand { CardCommentId = id });
         }
     }
 }

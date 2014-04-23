@@ -1,6 +1,7 @@
 ﻿function CardCommentRepository() {
     var self = this;
     self.cardId = ko.observable();
+    self.commentId = ko.observable();
     self.comment = ko.observable();
 
     self.getComments = function () {
@@ -20,5 +21,13 @@
             }
         });
     }
+
+    self.remove = function () {
+        return $.ajax({
+            url: '/api/comment/'+self.commentId(),
+            type: 'delete'
+        });
+    }
+
 
 }

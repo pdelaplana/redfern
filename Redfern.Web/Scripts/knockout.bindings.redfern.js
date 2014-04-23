@@ -7,7 +7,7 @@
             loader = $('<div/>').addClass('pinned double tile no-outline').attr('style', 'height:20px;text-align:center').append($('<img/>').attr('src','/content/images/ajax-loader-bar-1.gif')).hide(),
             container = $('<div/>').addClass('pinned double tile no-outline'),//.attr('style', 'min-height:50px;margin-top:10px;padding:10px'),
             div = $('<div/>').addClass('input-control textarea'),
-            textarea = $('<textarea/>').attr('style', 'min-height:50px'),
+            textarea = $('<textarea/>').attr('style', 'min-height:50px').attr('maxlength', '100'),
             add = $('<button class="primary">Add</button>').attr('style', 'margin-top:10px'),
             cancel = $('<button class="link">Cancel</button>').attr('style', 'margin-top:10px');
 

@@ -29,16 +29,16 @@ namespace Redfern.Core.Migrations
             //    );
             //
      
-            SeedCardTypes(context);
+            //SeedCardTypes(context);
             
         }
 
         private void SeedCardTypes(Redfern.Core.Models.RedfernDb context)
         {
             
-
             foreach (var board in context.Boards.ToList())
             {
+                /*
                 context.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Amber", ColorCode = "amber", TenantId = board.TenantId, CreatedByUser = "migration", CreatedDate = DateTime.UtcNow, ModifiedByUser = "migration", ModifiedDate = DateTime.UtcNow });
                 context.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Yellow", ColorCode = "yellow", TenantId = board.TenantId, CreatedByUser = "migration", CreatedDate = DateTime.UtcNow, ModifiedByUser = "migration", ModifiedDate = DateTime.UtcNow });
                 context.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Red", ColorCode = "red", TenantId = board.TenantId, CreatedByUser = "migration", CreatedDate = DateTime.UtcNow, ModifiedByUser = "migration", ModifiedDate = DateTime.UtcNow });
@@ -47,9 +47,11 @@ namespace Redfern.Core.Migrations
                 context.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Cobalt", ColorCode = "darkCobalt", TenantId = board.TenantId, CreatedByUser = "migration", CreatedDate = DateTime.UtcNow, ModifiedByUser = "migration", ModifiedDate = DateTime.UtcNow });
                 context.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Emerald", ColorCode = "emerald", TenantId = board.TenantId, CreatedByUser = "migration", CreatedDate = DateTime.UtcNow, ModifiedByUser = "migration", ModifiedDate = DateTime.UtcNow });
                 context.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Mauve", ColorCode = "mauve", TenantId = board.TenantId, CreatedByUser = "migration", CreatedDate = DateTime.UtcNow, ModifiedByUser = "migration", ModifiedDate = DateTime.UtcNow });
+                **/
+
                 
-                /*
                 context.CardTypes.AddOrUpdate(
+                    ct => ct.ColorCode,
                     new CardType { BoardId = board.BoardId, Name = "Amber", ColorCode = "amber", TenantId = board.TenantId, CreatedByUser = "migration", CreatedDate = DateTime.UtcNow, ModifiedByUser = "migration", ModifiedDate = DateTime.UtcNow  },
                     new CardType { BoardId = board.BoardId, Name = "Yellow", ColorCode = "yellow", TenantId = board.TenantId, CreatedByUser = "migration", CreatedDate = DateTime.UtcNow, ModifiedByUser = "migration", ModifiedDate = DateTime.UtcNow  },
                     new CardType { BoardId = board.BoardId, Name = "Red", ColorCode = "red", TenantId = board.TenantId, CreatedByUser = "migration", CreatedDate = DateTime.UtcNow, ModifiedByUser = "migration", ModifiedDate = DateTime.UtcNow },
@@ -59,7 +61,7 @@ namespace Redfern.Core.Migrations
                     new CardType { BoardId = board.BoardId, Name = "Emerald", ColorCode = "emerald", TenantId = board.TenantId, CreatedByUser = "migration", CreatedDate = DateTime.UtcNow, ModifiedByUser = "migration", ModifiedDate = DateTime.UtcNow },
                     new CardType { BoardId = board.BoardId, Name = "Mauve", ColorCode = "mauve", TenantId = board.TenantId, CreatedByUser = "migration", CreatedDate = DateTime.UtcNow, ModifiedByUser = "migration", ModifiedDate = DateTime.UtcNow }
                     );
-                 */
+                
             }
             context.SaveChanges();
 

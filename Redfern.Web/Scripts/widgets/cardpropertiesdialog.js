@@ -2,10 +2,51 @@
 
     function CommentListItem(data) {
         var self = this;
+        self.commentId = ko.observable(data.CommentId);
         self.comment = ko.observable(data.Comment);
         self.commentByUser = ko.observable(data.CommentByUser);
         self.commentByUserFullName = ko.observable(data.CommentByUserFullName);
         self.commentDate = ko.observable(data.CommentDate);
+        self.commentDateInLocalTimezone = ko.computed(function () {
+            return moment(moment.utc(self.commentDate()).toDate()).format('llll');
+        })
+        self.commentDateFromNow = ko.computed(function () {
+            return moment.utc(self.commentDate()).fromNow();
+        })
+    }
+
+    function ActivityListItem(data) {
+        var self = this;
+        self.activityId = ko.observable(data.ActivityId);
+        self.actorId = ko.observable(data.ActorId);
+        self.actorDisplayName = ko.observable(data.ActorDisplayName);
+        self.activityDate = ko.observable(data.ActivityDate);
+        self.verb = ko.observable(data.Verb);
+        self.objectDisplayName = ko.observable(data.ObjectDisplayName);
+        self.sourceDisplayName = ko.observable(data.SourceDisplayName);
+        self.targetDisplayName = ko.observable(data.TargetDisplayName);
+
+        //self.description = ko.observable(data.Description);
+
+        self.description = ko.computed(function () {
+            var description = "";
+            switch (self.verb()) {
+                case "moved":
+                    description = "<b>" + self.actorDisplayName() + "</b> moved this card from <b>" + self.sourceDisplayName() + "</b> to <b>" + self.targetDisplayName() + "</b>."
+                    break;
+                case "added":
+                    description = "<b>" + self.actorDisplayName() + "</b> added this card to <b>" + self.targetDisplayName() + "</b>."
+                    break;
+                default:
+                    description = "<b>" + self.actorDisplayName() + "</b>  " + self.verb() + " this card.";
+                    break;
+            }
+            return description;
+        });
+
+        self.activityDateInLocalTimezone = ko.computed(function () {
+            return moment(moment.utc(self.activityDate()).toDate()).format('llll');
+        })
     }
 
     var elementId = elementId,
@@ -30,6 +71,8 @@
 
     self.newComment = ko.observable();
     self.comments = ko.observableArray();
+
+    self.activities = ko.observableArray();
 
     self.addTag = function (tagName) {
         var repository = new CardTagRepository();
@@ -62,6 +105,15 @@
         }
     }
 
+    self.removeComment = function (comment) {
+        var repository = new CardCommentRepository();
+        repository.commentId(comment.commentId());
+        repository.remove().done(function () {
+            self.comments.remove(comment);
+            self.data.commentCount(self.comments().length);
+        });
+    }
+
     self.loadingComments = ko.observable(true);
     self.loadComments = function () {
         var repository = new CardCommentRepository();
@@ -74,17 +126,31 @@
         });
     }
 
+    self.loadingActivities = ko.observable(true);
+    self.loadActivities = function () {
+        var repository = new CardActivityRepository();
+        repository.cardId(self.data.cardId());
+        repository.getList().done(function (result) {
+            $.each(result, function (index, value) {
+                self.activities.push(new ActivityListItem(value));
+            })
+            self.loadingActivities(false);
+        })
+    }
+
     self.remove = function () {
+        $.Dialog.close();
         self.data.remove().done(function () {
             self.changed = false;
-            $.Dialog.close();
+            
         })
     }
 
     self.archive = function () {
+        $.Dialog.close();
         self.data.archive().done(function () {
             self.changed = false;
-            $.Dialog.close();
+            
         });
     }
     
@@ -129,6 +195,7 @@
                         }
                     })
                     self.loadComments();
+                    self.loadActivities();
                     ko.applyBindings(self, $(dialog).get(0));
                 },
                 onClose: function () {

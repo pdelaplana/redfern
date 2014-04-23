@@ -8,6 +8,7 @@ namespace Redfern.Web.Models
 
     public class CardCommentModel
     {
+        public int CommentId { get; set; }
         public int CardId { get; set; }
         public string Comment {get; set;}
         public string CommentByUser { get; set; }

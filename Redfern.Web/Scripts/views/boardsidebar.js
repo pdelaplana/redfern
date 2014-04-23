@@ -11,8 +11,7 @@
     self.viewMode = boardUI.viewMode;
     self.columns = boardUI.columns;
     self.members = boardUI.members;
-    
-    
+    self.cardTypes = boardUI.cardTypes
     
     self.canArchiveBoard = ko.computed(function () {
         return self.owner() == app.user.userName;
@@ -32,7 +31,11 @@
         var repository = new BoardRepository();
         repository.boardId(self.boardId());
         repository.name(self.name());
-        repository.update();
+        repository.update().done(function () {
+            $.Notify.show('Board name has been changed.');
+            app.ui.appNavigationBar.updateBoardName(self.boardId(), self.name());
+            app.ui.appNavigationBar.selectedMenu(self.name());
+        });
     }
 
     self.filters = {
@@ -194,6 +197,11 @@
         leftPos: '20px',                          //position from left/ use if tabLocation is bottom or top
         fixedPosition: true                      //options: true makes it stick(fixed position) on scroll
     });
+
+    // resize the hieght of the charms sidebar when window resizes 
+    $(window).resize(function () {
+        $('.slide-out-div').height($(this).outerHeight());
+    })
 
     $('#tags-container-filter').tagit({
         allowNewTags: false,

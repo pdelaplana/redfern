@@ -3,10 +3,11 @@
     <nav id="Sidebar" class="sidebar" data-bind="visible: activeOption() == 'main'">
         <ul>
             <li class="title">Board Options</li>
-            <li data-bind="visible: canChangeSettings "><a href="" data-bind="click: function(){ activeOption('changeboardsettings') }">Change Board Settings</a></li>
+            <li data-bind="visible: canChangeSettings "><a href="" data-bind="click: function(){ activeOption('changeboardsettings') }">Settings</a></li>
             <li data-bind="visible: viewMode() =='board'"><a href="" data-bind="click: function(){ viewMode('overview') }">Zoom out</a></li>
             <li data-bind="visible: viewMode() =='overview'"><a href="" data-bind="click: function(){ viewMode('board') }">Zoom in</a></li>
             <li><a href="" data-bind="click: function(){ activeOption('members') }">Members</a></li>
+            <li><a href="" data-bind="click: function(){ activeOption('colors') }">Colors</a></li>
             <li data-bind="visible: viewMode() == 'board'"><a href="" data-bind="click: function(){ activeOption('columns') }">Columns</a></li>
             <li><a href="" data-bind="click: function(){ activeOption('filter') }">Filter</a></li>
         </ul>
@@ -70,6 +71,28 @@
                             <button class="danger" data-bind="visible: canRemoveMember, click: removeMember">Remove</button>
                         </div>
                     </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <nav id="Sidebar_Colors" class="sidebar" data-bind="visible:activeOption() == 'colors'">
+        <ul>
+            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Card Colors</li>
+            <li>
+                <div class="padding20 grid fluid" >
+                    <!-- ko foreach: cardTypes -->
+                    <div class="row">
+                        <div class="span2" style="padding-top:5px;">
+                            <div class="tile quarter" data-bind="setTileColor: color"></div>
+                        </div>
+                        <div class="span9" >
+                            <div class="input-control text">
+                                <input type="text" data-bind="value: name, event: { change: update }" />                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /ko -->
                 </div>
             </li>
         </ul>

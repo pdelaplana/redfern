@@ -51,4 +51,9 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $('#UserName').keydown(function (key) {
+            if (key.which == 32) return false;
+        })
+    </script>
 }

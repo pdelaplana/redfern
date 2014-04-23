@@ -11,23 +11,14 @@
     
 }
 
-<div id="wrapper">
+<div id="wrapper" >
     <header class="page">
         @Html.Partial("_PubNavigationBar")
     </header>
-    
     <section class="page">
         @RenderBody()    
     </section>
 </div>
-<footer class="page bg-dark" style="margin-top:-10px">
-    <div class="bg-dark fg-grayLight" style="padding: 0 20px 0">
-        <div class="grid fluid">
-            <div class="row">
-                <div class="span6">
-                    Copyright © 2013 - 2014 Livefrog Software 
-                </div>
-            </div>
-        </div>
-    </div>
+<footer class="page bg-dark" style="margin-top:-10px;height:100px">
+    <div class="text-muted text-center text-shadow">Copyright © 2013 - 2014 Livefrog Software</div> 
 </footer>

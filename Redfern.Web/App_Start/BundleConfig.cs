@@ -118,6 +118,8 @@ namespace Redfern.Web
                         "~/scripts/repositories/boardmemberrepository.js",
                         "~/scripts/repositories/userprofilerepository.js",
                         "~/scripts/repositories/useravatarrepository.js",
+                        "~/scripts/repositories/cardactivityrepository.js",
+                        "~/scripts/repositories/cardtyperepository.js",
                         "~/scripts/widgets/appnavigationbar.js",
                         "~/scripts/widgets/createboarddialog.js",
                         "~/scripts/widgets/cardpropertiesdialog.js",

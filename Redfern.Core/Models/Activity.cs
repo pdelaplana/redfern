@@ -9,7 +9,7 @@ using Livefrog.Commons.Extensions;
 
 namespace Redfern.Core.Models
 {
-    public class Activity
+    public class Activity : Auditable
     {
         [Key]
         public int ActivityId { get; set; }
@@ -51,6 +51,21 @@ namespace Redfern.Core.Models
 
         [MaxLength(100)]
         public string ObjectImageUrl { get; set; }
+
+        [MaxLength(20)]
+        public string SourceId { get; set; }
+
+        [MaxLength(50)]
+        public string SourceDisplayName { get; set; }
+
+        [MaxLength(20)]
+        public string SourceType { get; set; }
+
+        [MaxLength(100)]
+        public string SourceUrl { get; set; }
+
+        [MaxLength(100)]
+        public string SourceImageUrl { get; set; }
 
         [MaxLength(20)]
         public string TargetId { get; set; }
@@ -111,6 +126,14 @@ namespace Redfern.Core.Models
             this.ObjectUrl = url;
         }
 
+        public void SetSource(string sourceType, string sourceId, string displayName, string url)
+        {
+            this.SourceType = sourceType;
+            this.SourceId = sourceId;
+            this.SourceDisplayName = displayName.TruncateWithElipses(45);
+            this.SourceUrl = url;
+        }
+
         public void SetTarget(string targetType, string targetId, string displayName, string url)
         {
             this.TargetType = targetType;
@@ -129,7 +152,32 @@ namespace Redfern.Core.Models
 
         public void SetDescription(string description)
         {
+            description = description.Replace("{actorlink}", 
+                String.Format(@"<a href=""{0}"">{1}</a>",this.ActorUrl,this.ActorDisplayName));
+            description = description.Replace("{verb}",
+                String.Format(@"{0}", this.Verb));
+            description = description.Replace("{objectlink}",
+                String.Format(@"<a href=""{0}"">{1}</a>", this.ObjectUrl, this.ObjectDisplayName));
+            description = description.Replace("{sourcelink}",
+                String.Format(@"<a href=""{0}"">{1}</a>", this.SourceUrl, this.SourceDisplayName));
+            description = description.Replace("{targetlink}",
+                String.Format(@"<a href=""{0}"">{1}</a>", this.TargetUrl, this.TargetDisplayName));
+            description = description.Replace("{contextlink}",
+                String.Format(@"<a href=""{0}"">{1}</a>", this.ContextUrl, this.ContextDisplayName));
+
+            description = description.Replace("{actor}", this.ActorDisplayName);
+            description = description.Replace("{verb}", this.Verb);
+            description = description.Replace("{object}", this.ObjectDisplayName);
+            description = description.Replace("{source}",this.SourceDisplayName);
+            description = description.Replace("{target}", this.TargetDisplayName);
+            description = description.Replace("{context}", this.ContextDisplayName);
+
             this.Description = description;
+        }
+
+        public void SetDescription()
+        {
+
         }
 
     }

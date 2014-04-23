@@ -48,9 +48,9 @@ div.center{
 }
 
 
-/* Board */
-
-
+/**************************************** 
+ *    Board styles
+ ****************************************/
 .board {
     min-height: 100%;
 }
@@ -78,6 +78,7 @@ div.center{
 
 .board-column .tile p {
     font-size:10pt!important;
+    line-height:12pt;
 }
 
 .board-column {
@@ -136,7 +137,9 @@ textarea {
   
 }
 
-/* styles for validation helpers */
+/**************************************** 
+ *    JQuery Validation Helpers styles
+ ****************************************/
 div label {
     width:auto;
     display:inline!important;
@@ -191,9 +194,9 @@ input[type="checkbox"].input-validation-error {
 }
  */
 
-/*
-    Landing page
-*/
+/**************************************** 
+ *    Landing Page Styles
+ ****************************************/
 .container{
     width:1140px;
 }
@@ -205,7 +208,7 @@ div + div
 }
 
 
-/* 
+/**************************************** 
  *    block ui styles
  ****************************************/
 .blockMsg

@@ -287,7 +287,6 @@ ko.bindingHandlers.clientAutocomplete = {
     }
 }
 
-
 ko.bindingHandlers.inlineEditor = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var originalText = '',

@@ -16,6 +16,8 @@ namespace Redfern.Core.Repository
         IQueryable<Board> Boards { get; }
         IQueryable<Card> Cards { get; }
         IQueryable<Tag> Tags { get; }
+        IQueryable<Activity> Activities { get; }
+
 
     }
 }

@@ -32,8 +32,6 @@ namespace Redfern.Web.Models
 
     public class LoginViewModel
     {
-
-       
         [Required]
         [Display(Name = "User name")]
         public string UserName { get; set; }
@@ -49,26 +47,28 @@ namespace Redfern.Web.Models
 
     public class RegisterViewModel
     {
-        [Required]
+        [Required(ErrorMessage="Required")]
         [Display(Name = "Full name")]
         public string FullName { get; set; }
 
+        [Required(ErrorMessage="Required")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage="Required")]
+        [StringLength(20, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [Display(Name = "User name")]
         public string UserName { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessage="Required")]
+        [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password must match.")]
         public string ConfirmPassword { get; set; }
     }
 
