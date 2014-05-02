@@ -28,7 +28,8 @@ namespace Redfern.Web
                         "~/Scripts/jquery.fileinput.js",
                         "~/Scripts/moment.js",
                         "~/Scripts/moment-with-lang.js",
-                        "~/scripts/jquery.tabslideout.js"
+                        "~/scripts/jquery.tabslideout.js",
+                        "~/scripts/markdowndeeplib.min.js"
                         ));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -92,6 +93,7 @@ namespace Redfern.Web
                         "~/scripts/knockout-{version}.js",
                         "~/scripts/knockout.mapping-latest.js",
                         "~/scripts/knockout.bindings.js",
+                        "~/scripts/knockout.bindings.markdowndeep.js",
                         "~/scripts/knockout.bindings.sortable.js",
                         "~/scripts/knockout.bindings.redfern.js",
                         "~/scripts/knockout.bindings.editortile.js"));
@@ -145,6 +147,7 @@ namespace Redfern.Web
                       "~/content/nanoscroller.css",
                       "~/content/tagit-stylish-yellow.css",
                       "~/content/fileinput.css",
+                      "~/content/mdd_styles.css",
                       "~/content/site.css"));
         }
     }

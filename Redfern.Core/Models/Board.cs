@@ -28,6 +28,8 @@ namespace Redfern.Core.Models
 
         public virtual ICollection<CardType> CardTypes { get; set; }
 
+        public virtual ICollection<Tag> Tags { get; set; }
+
 
         
     }

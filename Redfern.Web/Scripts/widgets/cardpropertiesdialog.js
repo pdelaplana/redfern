@@ -59,6 +59,11 @@
     self.data.title.subscribe(function (newValue) {
         self.changed = true;
     })
+
+    self.data.assignedToUser.subscribe(function (newValue) {
+        self.data.assign();
+    })
+
     self.data.color.subscribe(function (newValue) {
         var cardType = ko.utils.arrayFirst(self.cardTypes(), function (cardType) {
             return cardType.color() == newValue;
@@ -69,74 +74,106 @@
     
     self.cardTypes = data.parent.board.cardTypes;
 
-    self.newComment = ko.observable();
-    self.comments = ko.observableArray();
-
-    self.activities = ko.observableArray();
-
-    self.addTag = function (tagName) {
-        var repository = new CardTagRepository();
-        repository.cardId(data.cardId());
-        repository.tagName(tagName);
-        repository.create().done(function () {
-            data.tags.push(tagName);
+    self.members = function () {
+        var members = $.map(self.data.parent.board.members(), function (value) {
+            return {
+                label: value.fullName(),
+                value: value.fullName(),
+                id: value.userName()
+            }
         });
+        members.splice(0, 0, {
+            label: self.data.parent.board.ownerFullName(),
+            value: self.data.parent.board.ownerFullName(),
+            id: self.data.parent.board.owner()
+        })
+        return members;
     }
 
-    self.removeTag = function (tagName) {
-        var repository = new CardTagRepository();
-        repository.cardId(data.cardId());
-        repository.tagName(tagName);
-        repository.remove().done(function () {
-            data.tags.pop(tagName)
-        });
-    }
-
-    self.addComment = function () {
-        if (self.newComment()!=null) {
-            var repository = new CardCommentRepository();
+    self.wiki = {
+        editing: ko.observable(false),
+        save: function () {
+            var repository = new CardRepository();
             repository.cardId(self.data.cardId());
-            repository.comment(self.newComment());
-            repository.create().done(function (result) {
-                self.comments.splice(0, 0, new CommentListItem(result));
-                self.newComment('');
-                self.data.commentCount(self.comments().length);
+            repository.description(self.data.description());
+            repository.update().done(function () {
+                self.wiki.editing(false);
+            })
+        }
+    }
+
+    self.tags = {
+        add: function (tagName) {
+            var repository = new CardTagRepository();
+            repository.cardId(data.cardId());
+            repository.tagName(tagName);
+            repository.create().done(function () {
+                data.tags.push(tagName);
+            });
+
+        },
+        remove : function (tagName) {
+            var repository = new CardTagRepository();
+            repository.cardId(data.cardId());
+            repository.tagName(tagName);
+            repository.remove().done(function () {
+                data.tags.pop(tagName)
             });
         }
     }
 
-    self.removeComment = function (comment) {
-        var repository = new CardCommentRepository();
-        repository.commentId(comment.commentId());
-        repository.remove().done(function () {
-            self.comments.remove(comment);
-            self.data.commentCount(self.comments().length);
-        });
+    self.commentThread = {
+        comments: ko.observableArray(),
+        newComment: ko.observable(),
+        add: function () {
+            if (self.commentThread.newComment() != null) {
+                var repository = new CardCommentRepository();
+                repository.cardId(self.data.cardId());
+                repository.comment(self.commentThread.newComment());
+                repository.create().done(function (result) {
+                    self.commentThread.comments.splice(0, 0, new CommentListItem(result));
+                    self.commentThread.newComment('');
+                    self.data.commentCount(self.commentThread.comments().length);
+                });
+            }
+        },
+        remove: function (comment) {
+            var repository = new CardCommentRepository();
+            repository.commentId(comment.commentId());
+            repository.remove().done(function () {
+                self.commentThread.comments.remove(comment);
+                self.data.commentCount(self.commentThread.comments().length);
+            });
+        },
+        loading: ko.observable(true),
+        load: function () {
+            var repository = new CardCommentRepository();
+            repository.cardId(self.data.cardId());
+            repository.getComments().done(function (result) {
+                $.each(result, function (index, value) {
+                    self.commentThread.comments.push(new CommentListItem(value));
+                })
+                self.commentThread.loading(false);
+            });
+        }
     }
 
-    self.loadingComments = ko.observable(true);
-    self.loadComments = function () {
-        var repository = new CardCommentRepository();
-        repository.cardId(self.data.cardId());
-        repository.getComments().done(function (result) {
-            $.each(result, function (index, value) {
-                self.comments.push(new CommentListItem(value));
+
+    self.activityStream = {
+        activities: ko.observableArray(),
+        loading: ko.observable(true),
+        load: function () {
+            var repository = new CardActivityRepository();
+            repository.cardId(self.data.cardId());
+            repository.getList().done(function (result) {
+                $.each(result, function (index, value) {
+                    self.activityStream.activities.push(new ActivityListItem(value));
+                })
+                self.activityStream.loading(false);
             })
-            self.loadingComments(false);
-        });
+        }
     }
 
-    self.loadingActivities = ko.observable(true);
-    self.loadActivities = function () {
-        var repository = new CardActivityRepository();
-        repository.cardId(self.data.cardId());
-        repository.getList().done(function (result) {
-            $.each(result, function (index, value) {
-                self.activities.push(new ActivityListItem(value));
-            })
-            self.loadingActivities(false);
-        })
-    }
 
     self.remove = function () {
         $.Dialog.close();
@@ -153,7 +190,25 @@
             
         });
     }
-    
+
+    self.assign = function () {
+        self.data.assign().done(function () {
+            self.data.assignedToUserFullName();
+
+        });
+    }
+
+    self.userPhotoUrl = function () {
+        var assignedToUser = self.data.assignedToUser();
+        if (assignedToUser != null && assignedToUser.length > 0) {
+            return '/api/avatar/'+assignedToUser+'?height=25'
+        } else {
+            return '/content/images/grey-box.png';
+        }
+        
+    }
+
+
     return {
         open: function () {
             var content = $(elementId).html();
@@ -169,16 +224,17 @@
                 //position: { top: 50, left: 10 },
                 onShow: function (dialog) {
                     $('[data-role=datepicker]', dialog).datepicker();
+                    $('[data-role=dropdown]', dialog).dropdown();
                     $('.tab-control', dialog).tabcontrol();
                     $('#tags-container', dialog).tagit({
                         initialTags: data.tags(),
-                        triggerKeys: ['enter','tab'],
+                        triggerKeys: ['enter', 'tab'],
                         tagSource: function (request, response) {
                             $.ajax({
                                 url: '/api/tag/',
                                 type: 'GET',
                                 dataType: 'json',
-                                data: { name: request.term },
+                                data: { name: request.term, boardId: self.data.boardId() },
                                 success: function (data) {
                                     response($.map(data, function (name, val) {
                                         return { label: name, value: name, id: val }
@@ -188,15 +244,18 @@
                         },
                         tagsChanged: function (tagValue, action, element) {
                             if (action == 'added') {
-                                self.addTag(tagValue);
+                                self.tags.add(tagValue);
                             } else if (action == 'popped') {
-                                self.removeTag(tagValue);
+                                self.tags.remove(tagValue);
                             }
                         }
-                    })
-                    self.loadComments();
-                    self.loadActivities();
+                    });
+
+                    
+                    self.commentThread.load();
+                    self.activityStream.load();
                     ko.applyBindings(self, $(dialog).get(0));
+
                 },
                 onClose: function () {
                     if (self.changed)

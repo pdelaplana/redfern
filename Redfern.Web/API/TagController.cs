@@ -22,12 +22,12 @@ namespace Redfern.Web.API
         }
 
         // GET api/tag
-        public IDictionary<string, string> Get(string name)
+        public IDictionary<string, string> Get(string name, int boardId)
         {
             if (String.IsNullOrEmpty(name))
-                return _repository.Tags.ToDictionary(key => key.TagId.ToString(), value => value.TagName);
+                return _repository.Tags.Where(t=>t.BoardId == boardId).ToDictionary(key => key.TagId.ToString(), value => value.TagName);
             else
-                return _repository.Tags.Where(t => t.TagName.Contains(name)).ToDictionary(key => key.TagId.ToString(), value => value.TagName);
+                return _repository.Tags.Where(t => t.TagName.Contains(name) && t.BoardId == boardId).ToDictionary(key => key.TagId.ToString(), value => value.TagName);
         }
 
         

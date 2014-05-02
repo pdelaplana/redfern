@@ -32,10 +32,8 @@
                                         <span class="no-margin fg-white icon-comments-4" data-bind="visible: commentCount()>0"> <small data-bind="text: commentCount"></small></span>
                                         <span class="no-margin fg-white icon-tag" data-bind="visible: tags().length >0"> <small data-bind="text: tags().length"></small></span>
                                     </div>
-                                </div>
-                                @*
-                                <img src="/api/avatar/patrick?height=25" class="padding5 place-bottom-right"  />
-                                *@
+                                </div>   
+                                <img src="" class="padding5 place-bottom-right" data-bind="visible: assignedToUser() != null && assignedToUser().length > 0, attr: { src: '/api/avatar/'+assignedToUser() +'?height=25', title: assignedToUserFullName() }" />
                             </div>
                         </div>
                         <div class="board-column-footer">
@@ -103,6 +101,7 @@
                                         <span class="no-margin fg-white icon-tag" data-bind="visible: tags().length >0"> <small data-bind="text: tags().length"></small></span>
                                     </div>
                                 </div>
+                                <img src="" class="padding5 place-bottom-right" data-bind="visible: assignedToUser() != null && assignedToUser().length > 0, attr: { src: '/api/avatar/'+assignedToUser() +'?height=25', title: assignedToUserFullName() }" />
                             </div>
                         </div>
                         <div class="board-column-footer">

@@ -156,6 +156,10 @@ ko.bindingHandlers.adjustColumnHeight = {
     }
 }
 
+/**
+ * Set card color based on observable value
+ * 
+ */
 ko.bindingHandlers.setTileColor = {
     update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var color = valueAccessor(),
@@ -171,6 +175,10 @@ ko.bindingHandlers.setTileColor = {
     }
 }
 
+/**
+ * Change card color based on observable value
+ * 
+ */
 ko.bindingHandlers.changeTileColor = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var observable = valueAccessor(),
@@ -183,3 +191,123 @@ ko.bindingHandlers.changeTileColor = {
         
     }
 }
+
+/**
+ * Lookup user with jquery ui autocomplete
+ * 
+ */
+ko.bindingHandlers.userLookup = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            settings = bindings.settings,
+            observable = valueAccessor();
+        
+        $(element).autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/api/user/',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: { name: request.term },
+                    success: function (data) {
+                        response($.map(data, function (name, val) {
+                            return { label: name, value: name, id: val }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            select: function (event, ui) {
+                observable(ui.item ? ui.item.id : "");
+                if (settings != null && settings.displayValue != null) {
+                    settings.displayValue($(element).val());
+                }
+            },
+            focus: function (event, ui) {
+                observable(ui.item ? ui.item.id : "");
+                if (settings != null && settings.displayValue != null) {
+                    settings.displayValue($(element).val());
+                }
+            },
+            change: function (event, ui) {
+                observable(ui.item ? ui.item.id : "");
+                if (settings != null && settings.displayValue != null) {
+                    settings.displayValue($(element).val());
+                }
+            }
+        })
+        .data('ui-autocomplete')._renderItem = function (ul, item) {
+            return $('<li>')
+                .append('<a><img src="/api/avatar/'+item.id+'?height=25" /> ' + item.label + '</a>')
+                .appendTo(ul);
+        };
+
+    }
+}
+
+
+ko.bindingHandlers.assignCard = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            assignCardOptions = bindings.assignCardOptions,
+            observable = valueAccessor();
+
+        if (assignCardOptions != null && assignCardOptions.displayValue != null) {
+            if (assignCardOptions.displayValue() != 'Unknown User')
+                $(element).val(assignCardOptions.displayValue());
+        }
+        var members = assignCardOptions.members ? assignCardOptions.members : [];
+        members.splice(0, 0, { label: '-', value: '', id: '' });
+
+        $(element).autocomplete({
+            source: members,
+            minLength: 0,
+            select: function (event, ui) {
+                observable(ui.item ? ui.item.id : "");
+                if (assignCardOptions != null && assignCardOptions.displayValue != null) {
+                    assignCardOptions.displayValue($(element).val());
+                }
+            },
+            /*
+            focus: function (event, ui) {
+                observable(ui.item ? ui.item.id : "");
+                if (assignCardOptions != null && assignCardOptions.displayValue != null) {
+                    assignCardOptions.displayValue($(element).val());
+                }
+            },
+            */
+            change: function (event, ui) {
+                observable(ui.item ? ui.item.id : "");
+                if (assignCardOptions != null && assignCardOptions.displayValue != null) {
+                    assignCardOptions.displayValue($(element).val());
+                }
+            }
+        })
+        .data('ui-autocomplete')._renderItem = function (ul, item) {
+            if (item.id.length > 0){
+                return $('<li>')
+                    .append('<a><img src="/api/avatar/' + item.id + '?height=25" /> ' + item.label + '</a>')
+                    .appendTo(ul);
+            } else {
+                return $('<li>')
+                    .append('<a><img src="/content/images/grey-box.png" style="height:25px" /> '+ item.label +'</a>')
+                    .appendTo(ul);
+            }
+        };
+        var button = $('<button class="btn-dropdown" />')
+            .click(function () {
+                if ($(element).autocomplete("widget").is(":visible"))
+                    $(element).autocomplete('close');
+                else {
+                    $(element).autocomplete('search', '');
+                    $(element).focus();
+                }
+            })
+        $(element).after(button);
+
+        
+
+
+    }
+}
+

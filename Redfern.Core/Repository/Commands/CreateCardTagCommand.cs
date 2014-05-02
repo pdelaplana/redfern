@@ -18,15 +18,18 @@ namespace Redfern.Core.Repository.Commands
 
         public CardTag Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
         {
+            Card card = db.Cards.Find(this.CardId);
+
             CardTag cardTag = db.CardTags.Where(ct => ct.CardId == this.CardId && ct.Tag.TagName == this.TagName).SingleOrDefault();
 
             if (cardTag != null) return cardTag;
 
-            Tag tag = db.Tags.Where(t=>t.TagName == this.TagName).SingleOrDefault();
+            Tag tag = db.Tags.Where(t=>t.TagName == this.TagName && t.BoardId == card.BoardId).SingleOrDefault();
             if (tag == null)
             {
                 tag = db.Tags.Create();
                 tag.TagName = this.TagName;
+                tag.BoardId = card.BoardId;
                 tag = db.Tags.Add(tag);
                 db.SaveChanges();
             }

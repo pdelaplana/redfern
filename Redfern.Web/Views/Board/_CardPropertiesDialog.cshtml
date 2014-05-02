@@ -10,24 +10,6 @@
         </div>
         <div class="row" style="height:100%">
             <div class="padding10 span4">
-
-                @*
-                    <div class="row">
-                        <div class="span6">
-                            <label>Assigned To</label>
-                            <div class="input-control select">
-                                <select />
-                            </div>
-                        </div>
-                        <div class="span6">
-                            <label>Due Date</label>
-                            <div class="input-control text" data-role="datepicker" >
-                                <input type="text" data-bind="value: data.dueDate" />
-                                <button class="btn-date"></button>
-                            </div>
-                        </div>
-                    </div>
-                *@
                 <div class="inline-block" style="width:100%">
                     <!-- ko foreach: cardTypes -->
                     <div class="tile quarter" data-bind="setTileColor: color, css: { selected : color() == $parent.data.color()  }, changeTileColor: $parent.data.color, color: color, attr: { 'title': name }">
@@ -38,30 +20,57 @@
                 <div class="">
                     <ul id="tags-container"></ul>
                 </div>
+                <label class="">Assignee</label>
+                <div class="inline-block push-down-5" style="width:100%!important">
+                    <img class="span2" data-bind="attr: { src: userPhotoUrl() }" />
+                    <div class="input-control text span10" >
+                        <input type="text" placeholder="Unassigned" data-bind="assignCard: data.assignedToUser, assignCardOptions: { members: members(), displayValue: data.assignedToUserFullName }" />
+                    </div>
+                </div>
+                
             </div>
 
             <div class="padding10 span8">
                 <div class="tab-control" data-role="tab-control">
                     <ul class="tabs">
-                        <li class="active"><a data-href="#page_1" href="#page_1">Conversations</a></li>
+                        <li class="active"><a data-href="#page_0" href="#page_0">Details</a></li>
+                        <li><a data-href="#page_1" href="#page_1">Conversations</a></li>
                         <li><a data-href="#page_2" href="#page_2">History</a></li>
                         <li><a data-href="#page_3" href="#page_3"><i class="icon-attachment"></i></a></li>
                         <li class="place-right"><a data-href="#page_4" href="#page_4"><i class="icon-cog"></i></a></li>
                     </ul>
 
                     <div class="frames">
+                        <div id="page_0" class="frame" style="height:100%">
+                            
+                            <div style="height:100%" data-bind="visible: !wiki.editing()">
+                                <div class="listview"  style="overflow-x: auto;  height: 95%" data-bind="markdown: data.description"></div>
+                                <button class="link place-right" data-bind="click: function(){ wiki.editing(true) }">Edit</button>
+                            </div>
+
+                            <div class="" data-bind="visible: wiki.editing" style="height:100%">
+                                <div class="mdd_preview" style="display:none"></div>
+                                <div class="mdd_toolbar"></div>
+                                <textarea cols=50  class="mdd_editor" style="height:90%" data-bind="value: data.description, markdownEditor: data.description"></textarea>
+                                
+                                <button class="primary push-down-10" data-bind="click: wiki.save">Save</button>
+                                <button class="link push-down-10"  data-bind="click: function(){ wiki.editing(false) }">Cancel</button>
+                            </div>
+
+                            
+                        </div>
                         <div class="frame" id="page_1" style="height:100%">
                             <div class="row padding10" style="margin-bottom:5px;width:100%">
                                 <div class="span11">
                                     <div class="input-control textarea">
-                                        <textarea placeholder="write a comment..." maxlength="250" style="min-height:50px;width:100%" data-bind="value: newComment"></textarea>
+                                        <textarea placeholder="write a comment..." maxlength="250" style="min-height:50px;width:100%" data-bind="value: commentThread.newComment"></textarea>
                                     </div>
                                 </div>
                                 <div class="span1">
-                                    <button data-bind="click:addComment" class="bg-darker fg-white place-left" style="height:50px"><i class="icon-comments"></i></button>
+                                    <button data-bind="click:commentThread.add" class="bg-darker fg-white place-left" style="height:50px"><i class="icon-comments"></i></button>
                                 </div>
                             </div>
-                            <div style="text-align:center" data-bind="visible:loadingComments">
+                            <div style="text-align:center" data-bind="visible:commentThread.loading">
                                 <img src="/content/images/ajax-loader.gif" />
                             </div>
                             <div class="listview padding10" id="commentslist" data-bind="template:'commentsListTemplate'" style="overflow-x:auto;height:80%;width:100%">
@@ -69,7 +78,7 @@
                             </div>
                         </div>
                         <div class="frame" id="page_2" style="height:100%">
-                            <div style="text-align:center" data-bind="visible:loadingActivities">
+                            <div style="text-align:center" data-bind="visible:activityStream.loading">
                                 <img src="/content/images/ajax-loader.gif" />
                             </div>
                             <div class="listview padding10" id="commentslist" data-bind="template:'activitiesListTemplate'" style="overflow-x:auto;height:99%;width:100%">
@@ -93,7 +102,7 @@
 </div>
 
 <script id="commentsListTemplate" type="text/html">
-    <!-- ko foreach:comments-->
+    <!-- ko foreach: commentThread.comments-->
     <div class="list" style="width:100%">
         <div class="list-content">
             <img class="icon" data-bind="attr: { src: '/api/avatar/'+commentByUser() }" />
@@ -101,7 +110,7 @@
                 <span class="list-title item-title" data-bind="text: commentByUserFullName"></span>
                 <span class="list-subtitle" data-bind="text: comment"></span>
                 <span class="list-remark fg-grayLight" style="margin-top:10px" data-bind="text: commentDateFromNow, attr: { title: commentDateInLocalTimezone }"></span>
-                <span class="place-bottom-right" data-bind="visible: commentByUser() == app.user.userName"><a href="" data-bind="click: $parent.removeComment"><i class="icon-remove"></i></a></span>
+                <span class="place-bottom-right" data-bind="visible: commentByUser() == app.user.userName"><a href="" data-bind="click: $parent.commentThread.remove"><i class="icon-remove"></i></a></span>
             </div>
         </div>
     </div>
@@ -109,7 +118,7 @@
 </script>
 
 <script id="activitiesListTemplate" type="text/html">
-    <!-- ko foreach:activities-->
+    <!-- ko foreach: activityStream.activities-->
     <div class="list" style="width:100%">
         <div class="list-content">
             <img class="icon" data-bind="attr: { src: '/api/avatar/'+actorId() }" />
@@ -121,4 +130,3 @@
     </div>
     <!--/ko-->
 </script>
-

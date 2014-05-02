@@ -27,14 +27,17 @@ namespace Redfern.Web.Controllers
         //
         // GET: /app
         public ActionResult Index()
-        {
-            
+        {           
             ViewBag.AuthenticatedUser = AutoMapper.Mapper.Map<RedfernUser, ProfileViewModel>(_userManager.FindByName(User.Identity.GetUserName()));
             HttpCookie cookie = new HttpCookie("AuthenticatedUser");
             cookie.Value = JsonConvert.SerializeObject(ViewBag.AuthenticatedUser);
             this.ControllerContext.HttpContext.Response.Cookies.Add(cookie);
-
             return View();
+        }
+
+        public ActionResult Credits()
+        {
+            return PartialView("_Credits");
         }
 	}
 }

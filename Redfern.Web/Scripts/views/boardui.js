@@ -58,10 +58,11 @@ function Card(cardModel, column) {
     self.parent = column;
     self.cardId = ko.observable(cardModel.CardId);
     self.title = ko.observable(cardModel.Title);
-    self.description = ko.observable();
+    self.description = ko.observable(cardModel.Description);
     self.cardTypeId = ko.observable(cardModel.CardTypeId);
     self.color = ko.observable(cardModel.Color);
-    self.assignedToUser = ko.observable();
+    self.assignedToUser = ko.observable(cardModel.AssignedToUser);
+    self.assignedToUserFullName = ko.observable(cardModel.AssignedToUserFullName);
     self.dueDate = ko.observable();
     self.archivedDate = ko.observable(cardModel.ArchivedDate);
     self.isArchived = ko.observable(cardModel.IsArchived);
@@ -117,6 +118,15 @@ function Card(cardModel, column) {
             archive.cards.push(clonedCard);
             
             app.ui.unblock();
+        });
+    }
+
+    self.assign = function () {
+        var repository = new CardRepository();
+        repository.cardId(self.cardId());
+        repository.assignedToUser(self.assignedToUser());
+        return repository.assign().then(function () {
+           
         });
     }
 

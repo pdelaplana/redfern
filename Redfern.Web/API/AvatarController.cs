@@ -48,6 +48,7 @@ namespace Redfern.Web.API
         // GET api/<controller>
         public HttpResponseMessage Get(string id, int width = 100, int height = 100)
         {
+            string unknown = "~/content/images/default.png";
             string nopic = "~/content/images/_default-user-avatar.png";
             string contentType = "";
             WebImage webimage = null;
@@ -56,18 +57,23 @@ namespace Redfern.Web.API
             if (user != null)
             {
                 var avatar = user.Avatar;
-                contentType = user.AvatarContentType;
                 if (avatar != null)
                 {
                     webimage = new WebImage(avatar);
-                    webimage.Resize(width, height, true);
-                    CropImage(webimage);
+                    contentType = user.AvatarContentType;
                 }
+                else
+                {
+                    webimage = new WebImage(nopic);
+                    contentType = "image/png";
+                }
+                webimage.Resize(width, height, true);
+                CropImage(webimage);
             }
-
+            
             if (webimage == null)
             {
-                webimage = new WebImage(nopic);
+                webimage = new WebImage(unknown);
                 contentType = "image/png";
                 webimage.Resize(width, height, true);
                 CropImage(webimage);

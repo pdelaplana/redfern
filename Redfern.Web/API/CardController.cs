@@ -70,5 +70,13 @@ namespace Redfern.Web.API
         {
             _repository.ExecuteCommand(new UnarchiveCardCommand { CardId = id });
         }
+
+        [AcceptVerbs("assign")]
+        public void Assign(int id, [FromBody]AssignCardCommand command)
+        {
+            _repository.ExecuteCommand(command);
+        }
+
+
     }
 }

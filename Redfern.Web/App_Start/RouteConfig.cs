@@ -14,6 +14,13 @@ namespace Redfern.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Credits",
+                url: "credits",
+                defaults: new { controller = "app", action = "credits" }
+            );
+
+
+            routes.MapRoute(
                 name: "Board",
                 url: "board/{id}/{action}",
                 defaults: new { controller = "board", action = "index" }

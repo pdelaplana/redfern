@@ -22,7 +22,7 @@ namespace Redfern.Web.Application.Configuration.Automapper.Resolvers
             if (!String.IsNullOrEmpty(source))
                 return _cache.GetFullName(source);
             else
-                return "Unkown User";
+                return "Unknown User";
         }
     }
 }

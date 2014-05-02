@@ -1,6 +1,6 @@
-﻿<p class="padding10 ntp nbp text-muted">
+﻿<p class="padding10 ntp nbp text-muted text-center">
     <small>
-        @Html.Raw(ViewData["application-copyright"].ToString()) | Version @ViewData["application-version"] | Server Execution Time: @( ViewData["action-execution-time"] != null ? ((TimeSpan)ViewData["action-execution-time"]).ToString(@"ss\.fff") : "") seconds
-        | Styled with <a href="http://metroui.org.ua" style="font-size:smaller">Metro UI CSS</a>
+        @Html.Raw(ViewData["application-copyright"].ToString()) &middot; Version @ViewData["application-version"] &middot; Server Execution Time: @( ViewData["action-execution-time"] != null ? ((TimeSpan)ViewData["action-execution-time"]).ToString(@"ss\.fff") : "") seconds
+        &middot; <a href="#/credits" class="text-muted">Credits</a>
     </small>
 </p>

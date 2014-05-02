@@ -22,8 +22,6 @@ $(function () {
                 dialog.open();
                 console.log(err.status + " - " + err.responseText + " - " + httpStatus);
             }
-            
-            
         }
     });
 
@@ -42,6 +40,11 @@ $(function () {
     app.user.fullName = authenticatedUser.FullName;
     
     app.ui.addPart('appNavigationBar', new AppNavigationBar()).bindTo('#AppNavigationBar');
+
+    app.router.registerRoute('#/credits', function (context) {
+        context.loadLocation('/credits', function () { });
+    });
+
 
     app.ui.setWindowTitle('Home');
     app.start('app/#/boards');

@@ -95,11 +95,16 @@
     <Compile Include="Migrations\201404210232314_AddSourceAndAuditableToActivity.Designer.cs">
       <DependentUpon>201404210232314_AddSourceAndAuditableToActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201404240957152_AddBoardIdToTags.cs" />
+    <Compile Include="Migrations\201404240957152_AddBoardIdToTags.Designer.cs">
+      <DependentUpon>201404240957152_AddBoardIdToTags.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ActivityConstructor.cs" />
     <Compile Include="Models\CardType.cs" />
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
     <Compile Include="Models\Configuration\CardConfiguration.cs" />
     <Compile Include="Models\Configuration\BoardColumnConfiguration.cs" />
+    <Compile Include="Repository\Commands\AssignCardCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardMemberCommand.cs" />
     <Compile Include="Repository\Commands\AddBoardMemberCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardCommand.cs" />
@@ -111,6 +116,7 @@
     <Compile Include="Repository\Commands\DeleteCardTagCommand.cs" />
     <Compile Include="Repository\Commands\DeleteCardCommand.cs" />
     <Compile Include="Repository\Commands\ArchiveCardCommand.cs" />
+    <Compile Include="Repository\Commands\UpdateCardWikiCommand.cs" />
     <Compile Include="Repository\Commands\UpdateCardCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardColumnCommand.cs" />
     <Compile Include="Repository\Commands\UpdateBoardColumnPropertiesCommand.cs" />
@@ -183,6 +189,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201404210232314_AddSourceAndAuditableToActivity.resx">
       <DependentUpon>201404210232314_AddSourceAndAuditableToActivity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201404240957152_AddBoardIdToTags.resx">
+      <DependentUpon>201404240957152_AddBoardIdToTags.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

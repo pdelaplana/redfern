@@ -325,7 +325,7 @@ ul.ui-autocomplete{
 }
 
 /************************************ 
- *  input-control text button
+ *  input-control text btn save
  ************************************/
 .metro .input-control.text .btn-save {
   /*background-color: #F0F0F0;*/
@@ -374,7 +374,9 @@ ul.ui-autocomplete{
   display: none;
 }
 
-
+/************************************ 
+ *  input-control text btn add
+ ************************************/
 .metro .input-control.text .btn-add {
   /*background-color: #F0F0F0;*/
   background-color: #fff;
@@ -419,6 +421,57 @@ ul.ui-autocomplete{
   display: block;
 }
 .metro .input-control.text input:disabled ~ .btn-add {
+  display: none;
+}
+
+
+/************************************ 
+ *  input-control text btn dropdown
+ ************************************/
+.metro .input-control.text .btn-dropdown {
+  /*background-color: #F0F0F0;*/
+  background-color: #fff;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 2;
+  border: 0;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  min-height: 1px;
+  min-width: 1px;
+  padding: 0;
+  margin: 0;
+  display: none;
+}
+.metro .input-control.text .btn-dropdown:after {
+  font-family: iconFont;
+  font-size: 12pt;
+}
+.metro .input-control.text .btn-dropdown:not(:disabled):active {
+  background-color: #1d1d1d;
+  color: #ffffff;
+}
+.metro .input-control.text .btn-dropdown:active {
+  left: auto;
+}
+.metro .input-control.text .btn-dropdown:focus {
+  outline: 1px #ccc dotted ;
+}
+.metro .input-control.text input:focus ~ .btn-dropdown{
+  display: block;
+}
+.metro .input-control.text input:not(:focus) ~ .btn-dropdown:active {
+  display: block;
+}
+.metro .input-control.text .btn-dropdown:after {
+  content: "\e1ad";
+}
+.metro .input-control.text .btn-dropdown {
+  display: block;
+}
+.metro .input-control.text input:disabled ~ .btn-dropdown{
   display: none;
 }
 

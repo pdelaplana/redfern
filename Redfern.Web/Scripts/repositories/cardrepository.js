@@ -61,5 +61,16 @@
         });
     }
 
+    self.assign = function () {
+        return $.ajax({
+            url: '/api/card/' + self.cardId(),
+            type: 'assign',
+            data: {
+                CardId: self.cardId(),
+                AssignedToUser : self.assignedToUser()
+            }
+        });
+    }
+
 
 }

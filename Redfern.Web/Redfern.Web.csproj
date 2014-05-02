@@ -60,6 +60,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="MarkdownDeep">
+      <HintPath>..\packages\MarkdownDeep.Full.1.5\lib\.NetFramework 3.5\MarkdownDeep.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.0.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -278,9 +281,12 @@
     <Content Include="Content\images\bg-scrollbar-thumb-y.png" />
     <Content Include="Content\images\bg-scrollbar-track-y.png" />
     <Content Include="Content\images\bg-scrollbar-trackend-y.png" />
+    <Content Include="Content\images\Default.png" />
+    <Content Include="Content\images\grey-box.png" />
     <Content Include="Content\images\redfern-icon-35.png" />
     <Content Include="Content\images\redfern-icon.png" />
     <Content Include="Content\images\ScreenShot-1.png" />
+    <Content Include="Content\images\shape-square.png" />
     <Content Include="Content\images\standup.jpg" />
     <Content Include="Content\images\_default-user-avatar.png" />
     <Content Include="Content\jquery-ui.css" />
@@ -296,9 +302,11 @@
     <Content Include="Content\nanoscroller.css" />
     <Content Include="Content\tagit-stylish-yellow.css" />
     <Content Include="Scripts\app\ui.js" />
+    <None Include="Properties\PublishProfiles\redfernapp.com - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
+    <Content Include="Scripts\jquery.ddslick.js" />
     <Content Include="Scripts\jquery.fileinput.js" />
     <Content Include="Scripts\jquery.tabslideout.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -308,6 +316,16 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-3.1.0.debug.js" />
     <Content Include="Scripts\knockout-3.1.0.js" />
+    <Content Include="Scripts\knockout.bindings.markdowndeep.js" />
+    <Content Include="Scripts\MarkdownDeep License.txt" />
+    <Content Include="Scripts\MarkdownDeep Quick Reference.txt" />
+    <Content Include="Scripts\MarkdownDeepLib.min.js" />
+    <Content Include="Content\mdd_ajax_loader.gif" />
+    <Content Include="Content\mdd_gripper.png" />
+    <Content Include="Scripts\mdd_help.htm" />
+    <Content Include="Content\mdd_modal_background.png" />
+    <Content Include="Content\mdd_styles.css" />
+    <Content Include="Content\mdd_toolbar.png" />
     <Content Include="Scripts\metro-ui\js\metro-notify-custom.js" />
     <Content Include="Scripts\modernizr-2.7.2.js" />
     <Content Include="Scripts\repositories\boardmemberrepository.js" />
@@ -467,7 +485,7 @@
     <Content Include="Content\metro-ui\fonts\iconFont.eot" />
     <Content Include="Scripts\metro-ui\js\README.md" />
     <Content Include="App_Code\Funcs.cshtml" />
-    <None Include="Properties\PublishProfiles\redfernapp.com - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\redfernapp.com - Web Deploy %28old%29.pubxml" />
     <Content Include="Scripts\google-code-prettify\lang-apollo.js" />
     <Content Include="Scripts\google-code-prettify\lang-clj.js" />
     <Content Include="Scripts\google-code-prettify\lang-css.js" />
@@ -612,6 +630,7 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Emails\EmailConfirmation.cshtml" />
     <Content Include="Views\Account\EmailConfirmation.cshtml" />
+    <Content Include="Views\Shared\_Credits.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

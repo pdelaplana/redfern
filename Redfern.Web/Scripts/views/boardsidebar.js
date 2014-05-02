@@ -25,8 +25,6 @@
         return self.owner() == app.user.userName;
     });
 
-
-    
     self.changeBoardName = function () {
         var repository = new BoardRepository();
         repository.boardId(self.boardId());
@@ -41,9 +39,38 @@
     self.filters = {
         title: ko.observable(),
         tags: ko.observableArray(),
+        cardTypes: ko.observableArray(),
+        assignees: ko.observableArray(),
+        noSelection: function(){
+            return (self.filters.tags().length == 0) &&
+                    ((self.filters.title() == null) || (self.filters.title().length == 0)) &&
+                    (self.filters.cardTypes().length == 0) &&
+                    (self.filters.assignees().length == 0);
+        },
+        isColorSelected: function(color){
+            return (ko.utils.arrayFirst(self.filters.cardTypes(), function (cardType) {
+                return cardType.color() == color;
+            }) != null);
+        },
+        isAssigneeSelected: function (userName) {
+            return (ko.utils.arrayFirst(self.filters.assignees(), function (assignee) {
+                return assignee == userName;
+            }) != null);
+        },
+        addColorToFilter: function (cardType) {
+            if (self.filters.isColorSelected(cardType.color()))
+                self.filters.cardTypes.remove(cardType);
+            else 
+                self.filters.cardTypes.push(cardType);
+        },
+        addAssigneeToFilter: function (assignee) {
+            if (self.filters.isAssigneeSelected(assignee))
+                self.filters.assignees.remove(assignee);
+            else
+                self.filters.assignees.push(assignee);
+        },
         applyFilter: function () {
-            var cards = [];
-            if ((self.filters.tags().length == 0)  && (self.filters.title().length == 0)) {
+            if (self.filters.noSelection()) {
                 ko.utils.arrayForEach(self.columns(), function (column) {
                     column.sortable(true);
                     ko.utils.arrayForEach(column.cards(), function (card) {
@@ -55,25 +82,42 @@
                     column.sortable(false);
                     ko.utils.arrayForEach(column.cards(), function (card) {
                         card.show(false);
-                        if (self.filters.title() != null) {
+                        if (self.filters.title() != null && self.filters.title().length > 0) {
                             if (card.title().toLowerCase().indexOf(self.filters.title()) !== -1)
-                                cards.push(card);
+                                card.show(true);
                         }
-                    })
-                    if (cards.length == 0) cards = column.cards();
-                    ko.utils.arrayForEach(cards, function (card) {
-                        card.show(true);
-                        ko.utils.arrayForEach(self.filters.tags(), function (tag) {
-                            if ($.inArray(tag, card.tags()) == -1) {
-                                card.show(false);
-                            } 
-                        })
-                    })
-
+                        if (self.filters.tags().length > 0) {
+                            ko.utils.arrayForEach(self.filters.tags(), function (tag) {
+                                if ($.inArray(tag, card.tags()) > -1) {
+                                    card.show(true);
+                                }
+                            })
+                        }
+                        if (self.filters.cardTypes().length > 0) {
+                            ko.utils.arrayForEach(self.filters.cardTypes(), function (cardType) {
+                                if (card.color() == cardType.color()) {
+                                    card.show(true);
+                                }
+                            })
+                        }
+                        if (self.filters.assignees().length > 0) {
+                            ko.utils.arrayForEach(self.filters.assignees(), function (assignee) {
+                                if (card.assignedToUser() == assignee) {
+                                    card.show(true);
+                                }
+                            })
+                        }
+                    });
                 });
             }
             
-           
+        },
+        removeFilter: function () {
+            self.filters.tags.removeAll();
+            self.filters.cardTypes.removeAll();
+            self.filters.assignees.removeAll();
+            self.filters.title(null);
+            $('#tags-container-filter').tagit('reset');
         }
 
     }
@@ -84,10 +128,15 @@
 
     self.filters.tags.subscribe(function (changes) {
         self.filters.applyFilter();
-
     }, null, "arrayChange")
    
-    
+    self.filters.cardTypes.subscribe(function (changes) {
+        self.filters.applyFilter();
+    }, null, "arrayChange")
+
+    self.filters.assignees.subscribe(function (changes) {
+        self.filters.applyFilter();
+    }, null, "arrayChange")
 
     // members
 
@@ -107,15 +156,17 @@
             })
         },
         add: function () {
-            var repository = new BoardMemberRepository();
-            repository.boardId(self.boardId());
-            repository.userName(self.newMember.userName());
-            repository.create().done(function (result) {
-                if (self.getMember(result.BoardMemberId) == null){
-                    self.members.push(new BoardMember(result, boardUI));
-                }
-                self.newMember.userName('');
-            });
+            if (self.newMember.userName() != null && self.newMember.userName() != '') {
+                var repository = new BoardMemberRepository();
+                repository.boardId(self.boardId());
+                repository.userName(self.newMember.userName());
+                repository.create().done(function (result) {
+                    if (self.getMember(result.BoardMemberId) == null) {
+                        self.members.push(new BoardMember(result, boardUI));
+                    }
+                    self.newMember.userName('');
+                });
+            }
         }
     }
 
@@ -211,7 +262,7 @@
                 url: '/api/tag/',
                 type: 'GET',
                 dataType: 'json',
-                data: { name: request.term },
+                data: { name: request.term, boardId: self.boardId() },
                 success: function (data) {
                     response($.map(data, function (name, val) {
                         return { label: name, value: name, id: val }

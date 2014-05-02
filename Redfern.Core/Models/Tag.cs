@@ -15,7 +15,9 @@ namespace Redfern.Core.Models
         [MaxLength(20)]
         public string TagName { get; set; }
 
-        [MaxLength(20)]
-        public string Color { get; set; }
+        [Required]
+        public int BoardId { get; set; }
+        public Board Board { get; set; }
+
     }
 }

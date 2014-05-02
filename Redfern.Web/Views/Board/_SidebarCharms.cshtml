@@ -19,7 +19,7 @@
             <li>
                 <div class="padding20">
                     @Html.Editor("BoardName", "textbox", new { databind = "value: name", autofocus="autofocus" })
-                    <button data-bind="click: changeBoardName">Save</button>
+                    <button data-bind="click: changeBoardName" class="primary">Save</button>
                 </div>
             </li>
             <li>
@@ -44,7 +44,7 @@
             <li>
                 <div class="padding20">
                     <div class="input-control text">
-                        <input type="text" placeholder="enter name or email to add" data-bind="autocomplete: newMember.userName, settings: { source: newMember.lookupUser }" />
+                        <input type="text" placeholder="find user by name" data-bind="userLookup: newMember.userName" />
                         <button class="btn-add" data-bind="click: newMember.add"></button>
                     </div>
                 </div>
@@ -100,16 +100,40 @@
 
     <nav id="Sidebar_Filter" class="sidebar" data-bind="visible: activeOption() == 'filter'">
         <ul>
-            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Filter</li>
+            <li class="title">
+                <i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Filter
+                <button class="bg-red fg-white place-right" data-bind="click: filters.removeFilter">Clear All</button>
+            </li>
             <li>
                 <div class="padding20">
                     <div class="input-control text">
-                        <input type="text" placeholder="Search..." data-bind="value: filters.title">
-                        <button class="btn-search" data-bind="click: filters.applyFilter"></button>
+                        <input type="text" placeholder="Filter by title..." data-bind="value: filters.title">
+                        <button class="btn-search" ></button>
                     </div>
-                    <span class="fg-grayLight ">Type in one or more tags to filter on</span>
+                    
+                    <span class="fg-grayLight ">Filter by entering one or more tags</span>
                     <ul id="tags-container-filter"></ul>
-                                        
+
+                    <span class="fg-grayLight ">Show cards with the following color</span>
+                    <div class="inline-block" style="width:100%;margin-top:5px">
+                        <!-- ko foreach: cardTypes -->
+                        <div class="tile quarter" style="line-height:2!important" data-bind="setTileColor: color, attr: { 'title': name }, click: $parent.filters.addColorToFilter, css: { selected: $parent.filters.isColorSelected(color()) }">
+                        </div>
+                        <!-- /ko -->
+                    </div>
+                   
+                    <span class="fg-grayLight ">Show card assigned to</span>
+                    <div class="inline-block" style="width:100%;margin-top:5px">
+                        <div class="tile half" style="line-height:2!important" data-bind="click: function(){ filters.addAssigneeToFilter(owner()) } , css: { selected:  filters.isAssigneeSelected(owner())}">
+                            <img class="icon " src='/api/avatar/patrick' data-bind="attr: { src: '/api/avatar/'+owner(), title: ownerFullName() }" />
+                        </div>
+                        <!-- ko foreach: members -->
+                        <div class="tile half" style="line-height:2!important" data-bind="css: { selected: selected }, click: function(){ $parent.filters.addAssigneeToFilter(userName()) } , css: { selected:  $parent.filters.isAssigneeSelected(userName())}">
+                            <img class="icon " src='/api/avatar/patrick' data-bind="attr: { src: '/api/avatar/'+userName(), title: fullName() }" />
+                        </div>
+                        <!-- /ko -->
+                    </div>
+                                      
                 </div>
             </li>
         </ul>

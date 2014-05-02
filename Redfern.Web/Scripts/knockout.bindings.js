@@ -138,11 +138,16 @@ ko.bindingHandlers.autocomplete = {
         var observable = valueAccessor();
         $(element).autocomplete({
             source: settings.source,
+            minLength: 0,
             select: function (event, ui) {
-                observable(ui.item ? ui.item.id : 0);
+                observable(ui.item ? ui.item.id : "");
             },
+            focus: function (event, ui) {
+                observable(ui.item ? ui.item.id : "");
+            },
+
             change: function (event, ui) {
-                observable(ui.item ? ui.item.id : 0);
+                observable(ui.item ? ui.item.id : "");
             }
         });
     },
