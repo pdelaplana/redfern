@@ -76,6 +76,8 @@
         
         ui.appNavigationBar.selectedMenu('All Boards');
         ui.setWindowTitle(model.FullName + ' - Profile');
+
+        
     }
 
 }())

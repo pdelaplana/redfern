@@ -29,7 +29,9 @@ namespace Redfern.Web
                         "~/Scripts/moment.js",
                         "~/Scripts/moment-with-lang.js",
                         "~/scripts/jquery.tabslideout.js",
-                        "~/scripts/markdowndeeplib.min.js"
+                        "~/scripts/markdowndeeplib.min.js",
+                        "~/scripts/markdowndeeplib.min.js",
+                        "~/scripts/dropzone/dropzone.js"
                         ));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -122,6 +124,7 @@ namespace Redfern.Web
                         "~/scripts/repositories/useravatarrepository.js",
                         "~/scripts/repositories/cardactivityrepository.js",
                         "~/scripts/repositories/cardtyperepository.js",
+                        "~/scripts/repositories/cardattachmentrepository.js",
                         "~/scripts/widgets/appnavigationbar.js",
                         "~/scripts/widgets/createboarddialog.js",
                         "~/scripts/widgets/cardpropertiesdialog.js",
@@ -148,6 +151,8 @@ namespace Redfern.Web
                       "~/content/tagit-stylish-yellow.css",
                       "~/content/fileinput.css",
                       "~/content/mdd_styles.css",
+                      "~/scripts/dropzone/css/basic.css",
+                      "~/scripts/dropzone/css/dropzone.css",
                       "~/content/site.css"));
         }
     }

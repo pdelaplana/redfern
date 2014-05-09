@@ -71,6 +71,7 @@ function Card(cardModel, column) {
     self.sequence = ko.observable(cardModel.Sequence);
     self.tags = ko.observableArray(cardModel.Tags)
     self.commentCount = ko.observable(cardModel.CommentCount);
+    self.attachmentCount = ko.observable(cardModel.AttachmentCount);
     self.show = ko.observable(true);
 
     self.isArchived.subscribe(function (newValue) {

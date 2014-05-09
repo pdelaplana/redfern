@@ -22,14 +22,18 @@
         add.mousedown(function () {
             preventBlurEvent = true;
         }).click(function (event) {
-            observable($(textarea).val());
-            loader.show();
-            $(textarea).val('')
-            onAdd().done(function () {
-                $(textarea).focus();
-                loader.hide();
-                //$(container).detach();
-            });
+            if ($(textarea).val().length > 0) {
+                observable($(textarea).val());
+                loader.show();
+                $(textarea).val('')
+                onAdd().done(function () {
+                    $(textarea).focus();
+                    loader.hide();
+                    //$(container).detach();
+                });
+            }
+            $(textarea).focus();
+            
             event.stopPropagation();
         });
 

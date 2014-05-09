@@ -33,6 +33,7 @@ namespace Redfern.Web.Models
         public bool IsArchived { get; set; }
         public string[] Tags { get; set; }
         public int CommentCount { get; set; }
+        public int AttachmentCount { get; set; }
     }
 
     public class BoardColumnItem

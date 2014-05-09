@@ -1,6 +1,5 @@
-﻿<p class="padding10 ntp nbp text-muted text-center">
-    <small>
-        @Html.Raw(ViewData["application-copyright"].ToString()) &middot; Version @ViewData["application-version"] &middot; Server Execution Time: @( ViewData["action-execution-time"] != null ? ((TimeSpan)ViewData["action-execution-time"]).ToString(@"ss\.fff") : "") seconds
-        &middot; <a href="#/credits" class="text-muted">Credits</a>
-    </small>
-</p>
+﻿    <ul class="inline no-margin no-padding text-muted text-center" style="font-size:small">
+        <li class="small-size">@Html.Raw(ViewData["application-copyright"].ToString())</li>
+        <li><a href="#/credits">Credits</a></li>
+        <li>Version @ViewData["application-version"] </li>
+    </ul>

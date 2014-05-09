@@ -99,15 +99,26 @@
     <Compile Include="Migrations\201404240957152_AddBoardIdToTags.Designer.cs">
       <DependentUpon>201404240957152_AddBoardIdToTags.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405031315143_AddCardAttachment.cs" />
+    <Compile Include="Migrations\201405031315143_AddCardAttachment.Designer.cs">
+      <DependentUpon>201405031315143_AddCardAttachment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405081314214_IncreaseContentTypeLengthInCardAttachment.cs" />
+    <Compile Include="Migrations\201405081314214_IncreaseContentTypeLengthInCardAttachment.Designer.cs">
+      <DependentUpon>201405081314214_IncreaseContentTypeLengthInCardAttachment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ActivityConstructor.cs" />
+    <Compile Include="Models\CardAttachment.cs" />
     <Compile Include="Models\CardType.cs" />
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
     <Compile Include="Models\Configuration\CardConfiguration.cs" />
     <Compile Include="Models\Configuration\BoardColumnConfiguration.cs" />
+    <Compile Include="Repository\Commands\AddCardAttachmentCommand.cs" />
     <Compile Include="Repository\Commands\AssignCardCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardMemberCommand.cs" />
     <Compile Include="Repository\Commands\AddBoardMemberCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardCommand.cs" />
+    <Compile Include="Repository\Commands\DeleteCardAttachmentCommand.cs" />
     <Compile Include="Repository\Commands\DeleteCardCommentCommand.cs" />
     <Compile Include="Repository\Commands\UnarchiveCardCommand.cs" />
     <Compile Include="Repository\Commands\ChangeBoardNameCommand.cs" />
@@ -192,6 +203,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201404240957152_AddBoardIdToTags.resx">
       <DependentUpon>201404240957152_AddBoardIdToTags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405031315143_AddCardAttachment.resx">
+      <DependentUpon>201405031315143_AddCardAttachment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405081314214_IncreaseContentTypeLengthInCardAttachment.resx">
+      <DependentUpon>201405081314214_IncreaseContentTypeLengthInCardAttachment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

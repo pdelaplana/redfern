@@ -224,6 +224,7 @@
     <Compile Include="API\BoardController.cs" />
     <Compile Include="API\BoardMemberController.cs" />
     <Compile Include="API\CardActivityController.cs" />
+    <Compile Include="API\CardAttachmentController.cs" />
     <Compile Include="API\CardController.cs" />
     <Compile Include="API\CardTypeController.cs" />
     <Compile Include="API\DTO\BoardColumnDTO.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="Application\Cache\TenantsCache.cs" />
     <Compile Include="Application\Cache\UserCache.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\ActivityMappingProfile.cs" />
+    <Compile Include="Application\Configuration\Automapper\Profiles\CardMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\UserProfileMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\BoardMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\MappingProfileBase.cs" />
@@ -265,6 +267,7 @@
     <Compile Include="Models\AppNavigationBarViewModel.cs" />
     <Compile Include="Models\BoardViewModel.cs" />
     <Compile Include="Models\BoardListViewModel.cs" />
+    <Compile Include="Models\CardAttachmentListViewModel.cs" />
     <Compile Include="Models\EmailModels.cs" />
     <Compile Include="Models\ProfileViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
@@ -282,6 +285,7 @@
     <Content Include="Content\images\bg-scrollbar-track-y.png" />
     <Content Include="Content\images\bg-scrollbar-trackend-y.png" />
     <Content Include="Content\images\Default.png" />
+    <Content Include="Content\images\file-upload-greylight.png" />
     <Content Include="Content\images\grey-box.png" />
     <Content Include="Content\images\redfern-icon-35.png" />
     <Content Include="Content\images\redfern-icon.png" />
@@ -303,7 +307,17 @@
     <Content Include="Content\tagit-stylish-yellow.css" />
     <Content Include="Scripts\app\ui.js" />
     <None Include="Properties\PublishProfiles\redfernapp.com - Web Deploy.pubxml" />
+    <Content Include="Scripts\dropzone\css\basic.css" />
+    <Content Include="Scripts\dropzone\css\dropzone.css" />
+    <Content Include="Scripts\dropzone\css\stylus\dropzone.styl" />
+    <Content Include="Scripts\dropzone\css\stylus\basic.styl" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
+    <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />
+    <Content Include="Scripts\dropzone\dropzone.js" />
+    <Content Include="Scripts\dropzone\dropzone.min.js" />
+    <Content Include="Scripts\dropzone\images\spritemap%402x.png" />
+    <Content Include="Scripts\dropzone\images\spritemap.png" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\jquery.ddslick.js" />
@@ -330,6 +344,7 @@
     <Content Include="Scripts\modernizr-2.7.2.js" />
     <Content Include="Scripts\repositories\boardmemberrepository.js" />
     <Content Include="Scripts\repositories\cardactivityrepository.js" />
+    <Content Include="Scripts\repositories\cardattachmentrepository.js" />
     <Content Include="Scripts\repositories\cardtyperepository.js" />
     <Content Include="Scripts\repositories\tagrepository.js" />
     <Content Include="Scripts\repositories\useravatarrepository.js" />

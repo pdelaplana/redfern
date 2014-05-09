@@ -46,6 +46,9 @@ namespace Redfern.Core.Models
 
         public virtual ICollection<CardTask> Tasks { get; set; }
 
+        public virtual ICollection<CardAttachment> Attachments { get; set; }
+
+
     }
 
 }

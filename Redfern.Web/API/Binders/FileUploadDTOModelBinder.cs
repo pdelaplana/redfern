@@ -35,6 +35,7 @@ namespace Redfern.Web.API.Binders
                         foreach (var i in streamProvider.Files)
                         {
                             dto.FileName = Path.GetFileName(i.Headers.ContentDisposition.FileName.Replace("\"", String.Empty));
+                            dto.FileExtension = Path.GetExtension(dto.FileName);
                             if (String.IsNullOrEmpty(dto.Title))
                                 dto.Title = Path.GetFileNameWithoutExtension(dto.FileName);
                             dto.ContentType = HttpUtility.HtmlDecode(i.Headers.ContentType.MediaType);

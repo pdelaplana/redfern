@@ -31,6 +31,7 @@
                                         <span class="no-margin fg-white icon-calendar" data-bind="visible:dueDate()!=null"></span>
                                         <span class="no-margin fg-white icon-comments-4" data-bind="visible: commentCount()>0"> <small data-bind="text: commentCount"></small></span>
                                         <span class="no-margin fg-white icon-tag" data-bind="visible: tags().length >0"> <small data-bind="text: tags().length"></small></span>
+                                        <span class="no-margin fg-white icon-attachment" data-bind="visible: attachmentCount() >0"> <small data-bind="text: attachmentCount"></small></span>
                                     </div>
                                 </div>   
                                 <img src="" class="padding5 place-bottom-right" data-bind="visible: assignedToUser() != null && assignedToUser().length > 0, attr: { src: '/api/avatar/'+assignedToUser() +'?height=25', title: assignedToUserFullName() }" />
@@ -99,6 +100,7 @@
                                         <span class="no-margin fg-white icon-cabinet" data-bind="visible:isArchived"></span>
                                         <span class="no-margin fg-white icon-comments-4" data-bind="visible: commentCount()>0"> <small data-bind="text: commentCount"></small></span>
                                         <span class="no-margin fg-white icon-tag" data-bind="visible: tags().length >0"> <small data-bind="text: tags().length"></small></span>
+                                        <span class="no-margin fg-white icon-attachment" data-bind="visible: attachmentCount() >0"> <small data-bind="text: attachmentCount"></small></span>
                                     </div>
                                 </div>
                                 <img src="" class="padding5 place-bottom-right" data-bind="visible: assignedToUser() != null && assignedToUser().length > 0, attr: { src: '/api/avatar/'+assignedToUser() +'?height=25', title: assignedToUserFullName() }" />

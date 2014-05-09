@@ -49,6 +49,20 @@
         })
     }
 
+    function AttachmentListItem(data) {
+        var self = this;
+        self.cardAttachmentId = ko.observable(data.CardAttachmentId);
+        self.fileName = ko.observable(data.FileName);
+        self.uploadDate = ko.observable(data.UploadDate);
+        self.uploadedByUserFullName = ko.observable(data.uploadedByUserFullName);
+        self.uploadDateInLocalTimezone = ko.computed(function () {
+            return moment(moment.utc(self.uploadDate()).toDate()).format('llll');
+        })
+        self.uploadDateFromNow = ko.computed(function () {
+            return moment.utc(self.uploadDate()).fromNow();
+        })
+    }
+
     var elementId = elementId,
         data = data,
         self = this;
@@ -174,6 +188,27 @@
         }
     }
 
+    self.attachmentsList = {
+        attachments : ko.observableArray(),
+        load: function () {
+            var repository = new CardAttachmentRepository();
+            repository.cardId(self.data.cardId());
+            repository.getAll().done(function (result) {
+                $.each(result, function (index, value) {
+                    self.attachmentsList.attachments.push(new AttachmentListItem(value));
+                })
+            })
+        },
+        remove: function (attachment) {
+            var repository = new CardAttachmentRepository();
+            repository.cardAttachmentId(attachment.cardAttachmentId());
+            repository.remove().done(function () {
+                self.attachmentsList.attachments.remove(attachment);
+                self.data.attachmentCount(self.attachmentsList.attachments().length);
+            });
+        }
+    }
+
 
     self.remove = function () {
         $.Dialog.close();
@@ -250,10 +285,27 @@
                             }
                         }
                     });
+                    $('form#DropZone', dialog).dropzone({
+                        url: '/api/cardattachment/' + self.data.cardId(),
+                        dictResponseError: 'test error',
+                        init: function () {
+                            this.on('addedfile', function (file) {
 
+                            })
+
+                            this.on('complete', function (file) {
+                                this.removeFile(file);
+                            })
+                            this.on('success', function (file, response) {
+                                self.attachmentsList.attachments.splice(0, 0, new AttachmentListItem(response));
+                            })
+
+                        },
+                    });
                     
                     self.commentThread.load();
                     self.activityStream.load();
+                    self.attachmentsList.load();
                     ko.applyBindings(self, $(dialog).get(0));
 
                 },

@@ -39,7 +39,6 @@
                         <li><a data-href="#page_3" href="#page_3"><i class="icon-attachment"></i></a></li>
                         <li class="place-right"><a data-href="#page_4" href="#page_4"><i class="icon-cog"></i></a></li>
                     </ul>
-
                     <div class="frames">
                         <div id="page_0" class="frame" style="height:100%">
                             
@@ -56,8 +55,6 @@
                                 <button class="primary push-down-10" data-bind="click: wiki.save">Save</button>
                                 <button class="link push-down-10"  data-bind="click: function(){ wiki.editing(false) }">Cancel</button>
                             </div>
-
-                            
                         </div>
                         <div class="frame" id="page_1" style="height:100%">
                             <div class="row padding10" style="margin-bottom:5px;width:100%">
@@ -84,7 +81,23 @@
                             <div class="listview padding10" id="commentslist" data-bind="template:'activitiesListTemplate'" style="overflow-x:auto;height:99%;width:100%">
                             </div>
                         </div>
-                        <div class="frame" id="page_3" style="height:100%">...</div>
+                        <div class="frame" id="page_3" style="height:100%">
+                            <div class="padding10">
+                                <form action="/file-upload" class="dropzone" id="DropZone">
+                                    <div class="dz-message ">
+                                        <img src="~/content/images/file-upload-greylight.png" style="height:70px" />
+                                        <div class="place-right text-center">
+                                            <span class="text-muted">Drag and drop a file here to upload</span><br />
+                                            <span class="text-muted">- or -</span> <br />
+                                            <span class="text-muted">Click anywhere to select a file from your computer</span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="listview padding10" id="attachmentslist" data-bind="template:'attachmentsListTemplate'" style="overflow-x:auto;height:60%;width:100%">
+
+                            </div>
+                        </div>
                         <div class="frame" id="page_4" style="height:100%">
                             <p>Archive this card and remove it from view?</p>
                             <button class="bg-red fg-white" data-bind="click: archive">Archive</button>
@@ -100,6 +113,27 @@
         </div>
     </div>
 </div>
+
+<script id="attachmentsListTemplate" type="text/html">
+    <!-- ko foreach: attachmentsList.attachments -->
+    <div class="list" style="width:100%">
+        <div class="list-content">
+            <img class="icon" src="" data-bind="attr: { src: '/api/cardattachment/?thumbid='+cardAttachmentId() }" style="width:80px;height:80px" />
+            <div class="data">
+                <p>
+                    <span class="list-title item-title" data-bind="text: fileName"></span>
+                    <span class="list-remark text-muted" style="margin-top:10px" data-bind="text: uploadDateFromNow, attr: { title: uploadDateInLocalTimezone }">Uploaded 10 days ago</span>
+                </p>
+                <p>
+                    <a href="" class="text-muted span2" data-bind="attr: { href:'/api/cardattachment/'+cardAttachmentId() }"><i class="icon-download"></i> Download</a> <a href="" class="text-muted span2" data-bind="click: $parent.attachmentsList.remove"><i class="icon-remove"></i> Remove</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!--/ko-->
+</script>
+
+
 
 <script id="commentsListTemplate" type="text/html">
     <!-- ko foreach: commentThread.comments-->

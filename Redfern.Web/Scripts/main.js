@@ -40,9 +40,13 @@ $(function () {
     app.user.fullName = authenticatedUser.FullName;
     
     app.ui.addPart('appNavigationBar', new AppNavigationBar()).bindTo('#AppNavigationBar');
-
+   
+    // register routes 
     app.router.registerRoute('#/credits', function (context) {
-        context.loadLocation('/credits', function () { });
+        context.loadLocation('/credits', function () {
+            app.ui.setWindowTitle('Credits');
+            app.ui.appNavigationBar.selectedMenu('All Boards');
+        });
     });
 
 

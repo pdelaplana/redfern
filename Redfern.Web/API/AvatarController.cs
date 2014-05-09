@@ -45,7 +45,7 @@ namespace Redfern.Web.API
             _userManager = new UserManager<RedfernUser>(new UserStore<RedfernUser>(new RedfernSecurityContext()));
         }
         
-        // GET api/<controller>
+        // GET api/avatar
         public HttpResponseMessage Get(string id, int width = 100, int height = 100)
         {
             string unknown = "~/content/images/default.png";
