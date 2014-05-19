@@ -230,5 +230,8 @@ div.mdd_resizer
 
 .mdd_editor_wrap textarea:focus {
     border-color: #919191;
+
+    outline: 0;
+    border-color: #919191;
 }
 

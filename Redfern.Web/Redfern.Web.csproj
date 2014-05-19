@@ -241,8 +241,11 @@
     <Compile Include="Application\Configuration\Automapper\Profiles\UserProfileMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\BoardMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\MappingProfileBase.cs" />
+    <Compile Include="Application\Configuration\Automapper\Resolvers\UserRolesResolver.cs" />
+    <Compile Include="Application\Configuration\Automapper\Resolvers\NumberOfBoardsOwnedResolver.cs" />
     <Compile Include="Application\Configuration\Automapper\Resolvers\CacheUserFullNameResolver.cs" />
     <Compile Include="Application\RedfernWebContext.cs" />
+    <Compile Include="Application\SigninHelper.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MetroUICSSBundleConfig.cs" />
@@ -259,6 +262,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -270,6 +274,7 @@
     <Compile Include="Models\CardAttachmentListViewModel.cs" />
     <Compile Include="Models\EmailModels.cs" />
     <Compile Include="Models\ProfileViewModel.cs" />
+    <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -348,6 +353,7 @@
     <Content Include="Scripts\repositories\cardtyperepository.js" />
     <Content Include="Scripts\repositories\tagrepository.js" />
     <Content Include="Scripts\repositories\useravatarrepository.js" />
+    <Content Include="Scripts\repositories\userrepository.js" />
     <Content Include="Scripts\repositories\userprofilerepository.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
@@ -571,6 +577,7 @@
     <Content Include="Scripts\repositories\cardrepository.js" />
     <Content Include="Scripts\repositories\cardtagrepository.js" />
     <Content Include="Scripts\views\changepassword.js" />
+    <Content Include="Scripts\views\users.js" />
     <Content Include="Scripts\views\profile.js" />
     <Content Include="Scripts\widgets\appnavigationbar.js" />
     <Content Include="Scripts\widgets\errordialog.js" />
@@ -646,6 +653,7 @@
     <Content Include="Views\Emails\EmailConfirmation.cshtml" />
     <Content Include="Views\Account\EmailConfirmation.cshtml" />
     <Content Include="Views\Shared\_Credits.cshtml" />
+    <Content Include="Views\Users\_Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -334,18 +334,24 @@ ko.bindingHandlers.inlineEditor = {
             return false;
         });
 
-        $(input).blur(function (event) {
-            if (preventBlurEvent) {
-                preventBlurEvent = false;
-            }
-            else {
-                $(div).hide();
-                $(element).show();
-                event.stopPropagation();
-                event.stopImmediatePropagation();
-            }
-            
-        })
+        $(input)
+            .blur(function (event) {
+                if (preventBlurEvent) {
+                    preventBlurEvent = false;
+                }
+                else {
+                    $(div).hide();
+                    $(element).show();
+                    event.stopPropagation();
+                    event.stopImmediatePropagation();
+                }
+            })
+            .keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $(btn).trigger('click');
+                }
+
+            })
 
     }
 };

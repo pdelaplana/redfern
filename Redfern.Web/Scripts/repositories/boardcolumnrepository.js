@@ -33,7 +33,8 @@
             type: 'put',
             data: {
                 ColumnId : self.columnId(),
-                Name: self.name()
+                Name: self.name(),
+                Hidden : self.hidden()
             }
         });
     }

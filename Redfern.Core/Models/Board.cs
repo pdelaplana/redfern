@@ -20,6 +20,8 @@ namespace Redfern.Core.Models
 
         public DateTime? ArchiveDate { get; set; }
 
+        public bool IsPublic { get; set; }
+
         public virtual ICollection<BoardMember> Members { get; set; }
         
         public virtual ICollection<BoardColumn> Columns { get; set; }
@@ -30,7 +32,5 @@ namespace Redfern.Core.Models
 
         public virtual ICollection<Tag> Tags { get; set; }
 
-
-        
     }
 }

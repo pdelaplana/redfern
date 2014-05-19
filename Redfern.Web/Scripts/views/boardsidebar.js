@@ -12,6 +12,7 @@
     self.columns = boardUI.columns;
     self.members = boardUI.members;
     self.cardTypes = boardUI.cardTypes
+    self.resequence = boardUI.resequenceAllColumns;
     
     self.canArchiveBoard = ko.computed(function () {
         return self.owner() == app.user.userName;
@@ -25,6 +26,7 @@
         return self.owner() == app.user.userName;
     });
 
+    // operations
     self.changeBoardName = function () {
         var repository = new BoardRepository();
         repository.boardId(self.boardId());
@@ -228,7 +230,9 @@
             var repository = new BoardRepository();
             repository.boardId(self.boardId());
             repository.remove().done(function () {
+                app.ui.appNavigationBar.removeBoardMenuItem(self.boardId());
                 app.router.go('/#/boards');
+                
             });
         }
 

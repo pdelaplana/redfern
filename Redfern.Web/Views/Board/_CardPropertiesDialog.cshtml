@@ -9,28 +9,8 @@
             </div>
         </div>
         <div class="row" style="height:100%">
-            <div class="padding10 span4">
-                <div class="inline-block" style="width:100%">
-                    <!-- ko foreach: cardTypes -->
-                    <div class="tile quarter" data-bind="setTileColor: color, css: { selected : color() == $parent.data.color()  }, changeTileColor: $parent.data.color, color: color, attr: { 'title': name }">
-                    </div>
-                    <!-- /ko -->
-                </div>
-                <label>Tags</label>
-                <div class="">
-                    <ul id="tags-container"></ul>
-                </div>
-                <label class="">Assignee</label>
-                <div class="inline-block push-down-5" style="width:100%!important">
-                    <img class="span2" data-bind="attr: { src: userPhotoUrl() }" />
-                    <div class="input-control text span10" >
-                        <input type="text" placeholder="Unassigned" data-bind="assignCard: data.assignedToUser, assignCardOptions: { members: members(), displayValue: data.assignedToUserFullName }" />
-                    </div>
-                </div>
-                
-            </div>
 
-            <div class="padding10 span8">
+            <div class="padding10 ntp span8">
                 <div class="tab-control" data-role="tab-control">
                     <ul class="tabs">
                         <li class="active"><a data-href="#page_0" href="#page_0">Details</a></li>
@@ -41,19 +21,19 @@
                     </ul>
                     <div class="frames">
                         <div id="page_0" class="frame" style="height:100%">
-                            
+
                             <div style="height:100%" data-bind="visible: !wiki.editing()">
-                                <div class="listview"  style="overflow-x: auto;  height: 95%" data-bind="markdown: data.description"></div>
+                                <div class="listview wiki" style="overflow-x: auto;  height: 95%" data-bind="markdown: data.description"></div>
                                 <button class="link place-right" data-bind="click: function(){ wiki.editing(true) }">Edit</button>
                             </div>
 
                             <div class="" data-bind="visible: wiki.editing" style="height:100%">
                                 <div class="mdd_preview" style="display:none"></div>
                                 <div class="mdd_toolbar"></div>
-                                <textarea cols=50  class="mdd_editor" style="height:90%" data-bind="value: data.description, markdownEditor: data.description"></textarea>
-                                
+                                <textarea cols=50 class="mdd_editor" style="height:90%" data-bind="value: data.description, markdownEditor: data.description"></textarea>
+
                                 <button class="primary push-down-10" data-bind="click: wiki.save">Save</button>
-                                <button class="link push-down-10"  data-bind="click: function(){ wiki.editing(false) }">Cancel</button>
+                                <button class="link push-down-10" data-bind="click: function(){ wiki.editing(false) }">Cancel</button>
                             </div>
                         </div>
                         <div class="frame" id="page_1" style="height:100%">
@@ -110,6 +90,29 @@
 
             </div>
 
+
+            <div class="padding10 ntp span4" >
+                <div class="inline-block" style="width:100%">
+                    <!-- ko foreach: cardTypes -->
+                    <div class="tile quarter" data-bind="setTileColor: color, css: { selected : color() == $parent.data.color()  }, changeTileColor: $parent.data.color, color: color, attr: { 'title': name }">
+                    </div>
+                    <!-- /ko -->
+                </div>
+                <label>Tags</label>
+                <div class="">
+                    <ul id="tags-container"></ul>
+                </div>
+                <label class="">Assignee</label>
+                <div class="inline-block push-down-5" style="width:100%!important">
+                    <img class="span2" data-bind="attr: { src: userPhotoUrl() }" />
+                    <div class="input-control text span10" >
+                        <input type="text" placeholder="Unassigned" data-bind="assignCard: data.assignedToUser, assignCardOptions: { members: members(), displayValue: data.assignedToUserFullName }" />
+                    </div>
+                </div>
+                
+            </div>
+
+            
         </div>
     </div>
 </div>

@@ -27,6 +27,8 @@ namespace Redfern.Web
         {
             app.CreatePerOwinContext(Redfern.Core.Security.RedfernSecurityContext.Create);
             app.CreatePerOwinContext<Redfern.Core.Security.RedfernUserManager>(Redfern.Core.Security.RedfernUserManager.Create);
+            app.CreatePerOwinContext<Redfern.Core.Security.RedfernRoleManager>(Redfern.Core.Security.RedfernRoleManager.Create);
+
 
             int timeOut = 15;
             Int32.TryParse(ConfigurationManager.AppSettings["AuthenticationTimeout"], out timeOut);

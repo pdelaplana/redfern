@@ -130,7 +130,7 @@ ul.tagit {
     color: #333;
     
     width: 100%;
-    height:100px!important;
+    height:70px!important;
 
     /* Added to support tagit containers in a sidebar*/
     display:block;

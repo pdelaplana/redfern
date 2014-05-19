@@ -97,8 +97,21 @@
     <Compile Include="Migrations\201404172337042_AfterUpgradetoAspNetIdentity2.Designer.cs">
       <DependentUpon>201404172337042_AfterUpgradetoAspNetIdentity2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405141126375_AddTenantIdAndLastSignInDateColumn.cs" />
+    <Compile Include="Migrations\201405141126375_AddTenantIdAndLastSignInDateColumn.Designer.cs">
+      <DependentUpon>201405141126375_AddTenantIdAndLastSignInDateColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405141132207_MakeTenantIdColumnMandatory.cs" />
+    <Compile Include="Migrations\201405141132207_MakeTenantIdColumnMandatory.Designer.cs">
+      <DependentUpon>201405141132207_MakeTenantIdColumnMandatory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405170709036_AddSignupDateAndIsEnabledColumn.cs" />
+    <Compile Include="Migrations\201405170709036_AddSignupDateAndIsEnabledColumn.Designer.cs">
+      <DependentUpon>201405170709036_AddSignupDateAndIsEnabledColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RedfernRoleManager.cs" />
     <Compile Include="RedfernSecurityContext.cs" />
     <Compile Include="RedfernUser.cs" />
     <Compile Include="RedfernUserManager.cs" />
@@ -122,6 +135,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201404172337042_AfterUpgradetoAspNetIdentity2.resx">
       <DependentUpon>201404172337042_AfterUpgradetoAspNetIdentity2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405141126375_AddTenantIdAndLastSignInDateColumn.resx">
+      <DependentUpon>201405141126375_AddTenantIdAndLastSignInDateColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405141132207_MakeTenantIdColumnMandatory.resx">
+      <DependentUpon>201405141132207_MakeTenantIdColumnMandatory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405170709036_AddSignupDateAndIsEnabledColumn.resx">
+      <DependentUpon>201405170709036_AddSignupDateAndIsEnabledColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

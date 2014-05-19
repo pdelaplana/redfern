@@ -133,7 +133,7 @@ function Card(cardModel, column) {
 
 }
 
-function Column(columnModel, board) {
+function Column(data, board) {
     var properties,
         board = board,
         self = this;
@@ -141,15 +141,14 @@ function Column(columnModel, board) {
     //
     self.board = board;
 
-    // column properties
-    self.columnId = ko.observable(columnModel.ColumnId);
-    self.name = ko.observable(columnModel.Name);
-    self.boardId = ko.observable(columnModel.BoardId);
-    self.expanded = ko.observable(columnModel.Expanded);
-    self.show = ko.observable(!columnModel.Hidden);
+    // observables
+    self.columnId = ko.observable(data.ColumnId);
+    self.name = ko.observable(data.Name);
+    self.boardId = ko.observable(data.BoardId);
+    self.expanded = ko.observable(data.Expanded);
+    self.show = ko.observable(!data.Hidden);
     self.mazimized = ko.observable(false);
     self.sortable = ko.observable(true);
-
     self.cards = ko.observableArray();
     self.cardCount = ko.computed(function () {
         return self.cards().count;
@@ -159,15 +158,20 @@ function Column(columnModel, board) {
             return card.show();
         }).length;
     });
-
     self.isArchiveColumn = ko.computed(function () {
         return self.name() == "Archived";
     })
 
-    // populate cards array from model
-    $.each(columnModel.Cards, function (index, value) {
-        self.cards.push(new Card(value, self));
-    });
+    // subscriptions
+    self.show.subscribe(function (newValue) {
+        var repository = new BoardColumnRepository();
+        repository.columnId(self.columnId());
+        repository.hidden(!newValue);
+        repository.update().done(function () {
+        });
+    })
+
+    // operations
     self.update = function () {
         var repository = new BoardColumnRepository();
         repository.columnId(self.columnId());
@@ -200,6 +204,33 @@ function Column(columnModel, board) {
     self.toggleFocus = function () {
         self.mazimized(!self.mazimized());
     }
+
+    self.resequenceAllCards = function (arg, event, ui) {
+        var movedCard = arg.item;
+        movedCard.parent = self;
+
+        var columnContent = this;
+        var card = ui.item;
+        var ids = new Array();
+        $.each(self.cards(), function (index, value) {
+            ids.push(value.cardId());
+        })
+        $.ajax({
+            url: '/api/card',
+            type: 'resequence',
+            data: {
+                ColumnId: self.columnId(),
+                CardIds: ids
+            }
+        }).done(function () {
+            $(columnContent).scrollTop(
+                ($(card).offset().top + 100) - $(columnContent).offset().top + $(columnContent).scrollTop()
+                );
+            //var height = $(columnContent)[0].scrollHeight;
+            //$(columnContent).scrollTop(height);
+        });
+    }
+
     
     // handle new cards
     self.newCard = {
@@ -218,40 +249,17 @@ function Column(columnModel, board) {
         }
     }
     
-    self.resequenceAllCards = function (arg, event, ui) {
-        var movedCard = arg.item;
-        movedCard.parent = self;
-
-        var columnContent = this;
-        var card = ui.item;
-        var ids = new Array();
-        $.each(self.cards(), function (index, value) {
-            ids.push(value.cardId());
-
-        })
-        $.ajax({
-            url: '/api/card',
-            type: 'resequence',
-            data: {
-                ColumnId: self.columnId(),
-                CardIds: ids
-            }
-        }).done(function () {
-            $(columnContent).scrollTop(
-                ($(card).offset().top+100) - $(columnContent).offset().top + $(columnContent).scrollTop()
-                );
-            //var height = $(columnContent)[0].scrollHeight;
-            //$(columnContent).scrollTop(height);
-        });
-    }
-
+    // column properties    
     self.openColumnProperties = function(data, event){
         properties = new ColumnProperties(event.target, data);
         properties.open();
     }
-
-    self.columnHeight = ko.observable($(window).height());
     
+    // populate cards array from model
+    $.each(data.Cards, function (index, value) {
+        self.cards.push(new Card(value, self));
+    });
+
 
 }
 
@@ -288,7 +296,7 @@ function CardType(data, board) {
 }
 
 
-function BoardUI(boardModel) {
+function BoardUI(data) {
     var board = $('#Board'),
         boardWidth = '1000px',
         columnWidth = 325,
@@ -297,16 +305,19 @@ function BoardUI(boardModel) {
     self.boardWidth = ko.observable('1000px');
     self.columnWidth = ko.observable(325);
 
-    // declare properties
-    self.boardId = ko.observable(boardModel.BoardId);
-    self.name = ko.observable(boardModel.Name);
-    self.owner = ko.observable(boardModel.Owner);
-    self.ownerFullName = ko.observable(boardModel.OwnerFullName);
+    // observables
+    self.boardId = ko.observable(data.BoardId);
+    self.name = ko.observable(data.Name);
+    self.owner = ko.observable(data.Owner);
+    self.ownerFullName = ko.observable(data.OwnerFullName);
     self.columns = ko.observableArray();
     self.members = ko.observableArray();
     self.cardTypes = ko.observableArray();
     self.viewMode = ko.observable('board');
+    self.height = ko.observable($(window).height());
+    self.viewOnly = ko.observable(data.ViewOnly);
 
+    // computed observables
     self.visibleColumnCount = ko.computed(function () {
         return ko.utils.arrayFilter(self.columns(), function (column) {
             return column.show() == true;
@@ -337,13 +348,14 @@ function BoardUI(boardModel) {
     self.newColumn = {
         name: ko.observable(),
         save: function () {
+            if (self.newColumn.name() == '') {
+                return;
+            }
             var repo = new BoardColumnRepository();
             repo.boardId(self.boardId());
             repo.name(self.newColumn.name());
-            
             repo.create().done(function (result) {
-                self.columns.splice(self.columns().length-1, 0, new Column(result, self))
-                //self.columns.push();
+                self.columns.splice(self.columns().length - 1, 0, new Column(result, self));
             });
         }
     }

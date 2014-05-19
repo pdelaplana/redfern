@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Postal;
 using Redfern.Core.Security;
+using Redfern.Web.Application;
 using Redfern.Web.Models;
 
 
@@ -19,6 +20,21 @@ namespace Redfern.Web.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private RedfernWebContext _context;
+        private SigninHelper _signinHelper;
+
+        private SigninHelper SigninHelper
+        {
+            get
+            {
+                if (_signinHelper == null)
+                {
+                    _signinHelper = new SigninHelper(UserManager, AuthenticationManager);
+                }
+                return _signinHelper;
+            }
+        }
+
         private RedfernUserManager UserManager 
         {
             get
@@ -27,12 +43,11 @@ namespace Redfern.Web.Controllers
             }
         }
 
-        public AccountController()
+        public AccountController(RedfernWebContext context)
         {
-            
+            _context = context;
         }
 
-        
         //
         // GET: /account/signin
         [AllowAnonymous]
@@ -58,16 +73,31 @@ namespace Redfern.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindAsync(model.UserName, model.Password);
-                if (user != null)
+                var result = await SigninHelper.PasswordSignIn(model.UserName, model.Password, model.RememberMe, true);
+                switch (result)
                 {
-                    await SignInAsync(user, model.RememberMe);
-                    return RedirectToLocal(returnUrl);
+                    case SignInStatus.Success:
+                        var user = await UserManager.FindByNameAsync(model.UserName);
+                        user.LastSignInDate = DateTime.UtcNow;
+                        UserManager.Update(user);
+                        return RedirectToLocal(returnUrl);
+                    case SignInStatus.NotFound:
+                        ModelState.AddModelError("", "Invalid user name or password");
+                        break;
+                    case SignInStatus.LockedOut:
+                        ModelState.AddModelError("", "This account has been locked out.");
+                        break;
+                    case SignInStatus.RequiresTwoFactorAuthentication:
+                        ModelState.AddModelError("", "This account requires two-factor authentication.");
+                        break;
+                        //return RedirectToAction("SendCode", new { ReturnUrl = returnUrl });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(model);
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid username or password.");
-                }
+               
+                
             }
 
             // If we got this far, something failed, redisplay form
@@ -95,7 +125,9 @@ namespace Redfern.Web.Controllers
                 { 
                     UserName = model.UserName, 
                     FullName = model.FullName, 
-                    Email = model.Email 
+                    Email = model.Email,
+                    TenantId = _context.TenantID,
+                    SignupDate = DateTime.UtcNow
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

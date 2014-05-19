@@ -10,7 +10,7 @@
         repository.create().done(function (result) {
             $.Dialog.close();
             app.router.go('/#/board/' + result.BoardId);
-            app.ui.appNavigationBar.boardsList.push({ boardId: result.BoardId, name: result.Name });
+            app.ui.appNavigationBar.addBoardMenuItem(result);
         });
     }
 

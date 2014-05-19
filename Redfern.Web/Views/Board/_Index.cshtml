@@ -3,8 +3,8 @@
 <div class="page-region" style="">
     <div class="page-region-content " >
         <div id="Board" class="inline" data-bind="visible:viewMode() == 'board', adjustBoardWidth: { settings:{ columnCount: visibleColumnCount(), columnWidth: columnWidth()   }  } ">
-            <div class="board" data-bind="sortable: { data: columns, afterMove: resequenceAllColumns, options:{ placeholder: BoardColumnPlaceHolder }  }">
-                <div class="board-column border" data-bind="visible: show, adjustColumnHeight:columnHeight">
+            <div class="board" data-bind="sortable: { data: columns, isEnabled: !viewOnly(), afterMove: resequenceAllColumns, options:{ placeholder: BoardColumnPlaceHolder }  }">
+                <div class="board-column border" data-bind="visible: show, adjustColumnHeight:$parent.height">
                     <div class="board-column-wrapper">
                         <div class="board-column-header ntm ntp clearfix">
                             <h4 class="ntm ntp">
@@ -17,10 +17,9 @@
                                 <i class="icon-zoom-in place-right" style="cursor:pointer" data-bind="click:$parent.expandColumn"></i>
                             </h4>
                         </div>
-                        <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
+                        <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable() && !$parent.viewOnly() , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
                             <div class="tile double" data-bind="visible: show, event: { dblclick: open }, setTileColor: color, archived : $parent.isArchiveColumn() ">
                                 <div class="tile-content">
-                                    
                                     <div class="padding10">
                                         <p class="fg-white" data-bind="text: title"></p>
                                     </div>
@@ -74,7 +73,7 @@
 
         <div id="ExpandedColumn" data-bind="if: viewMode() == 'columnview'">
             <div data-bind="with: selectedColumn">
-                <div class="board-column border" data-bind="maximizeColumn: maximixed, adjustColumnHeight:columnHeight">
+                <div class="board-column border" data-bind="maximizeColumn: maximixed, adjustColumnHeight:$parent.height">
                     <div class="board-column-wrapper">
                         <div class="board-column-header ntm ntp clearfix">
                             <h4 class="ntm ntp">

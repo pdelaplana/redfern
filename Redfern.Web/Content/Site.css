@@ -335,3 +335,14 @@ ul.ui-autocomplete li a:hover
   width: 30px!important;
   height: 30px!important;
 }
+
+
+/**************************************** 
+ *    Wiki custom styles
+ ****************************************/
+.wiki h1 {
+  letter-spacing: 0.00em;
+  font-size: 3rem;
+  line-height: 4.5rem;
+  border-bottom: 1px #d9d9d9 solid;
+}

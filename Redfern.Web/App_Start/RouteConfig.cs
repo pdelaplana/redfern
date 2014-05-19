@@ -19,7 +19,6 @@ namespace Redfern.Web
                 defaults: new { controller = "app", action = "credits" }
             );
 
-
             routes.MapRoute(
                 name: "Board",
                 url: "board/{id}/{action}",

@@ -69,6 +69,7 @@ namespace Redfern.Web.Models
         public string Name { get; set; }
         public string Owner { get; set; }
         public string OwnerFullName { get; set; }
+        public bool ViewOnly { get; set; }
 
         public IList<BoardMemberItem> Members { get; set; }
         public IList<CardTypeItem> CardTypes { get; set; }

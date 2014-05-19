@@ -145,8 +145,8 @@
             <li>
                 <div class="padding20">
                     <p class="text-muted">Select columns to show or hide.</p>
-                    <div class="listview small" data-bind="foreach: columns">
-                        <div class="list" style="width:100%" data-bind="click:function(){ show(!show()) }">
+                    <div class="listview small" data-bind="sortable: { data: columns, afterMove: resequence } ">
+                        <div class="list bg-dark" style="width:100%" data-bind="click:function(){ show(!show()) }">
                             <div class="list-content">
                                 <span class="icon icon-checkbox fg-white" data-bind="css:{ 'icon-checkbox-unchecked': show() != true }"></span>
                                 <div class="data fg-white">

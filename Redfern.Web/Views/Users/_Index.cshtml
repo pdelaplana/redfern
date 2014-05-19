@@ -1,0 +1,71 @@
+﻿@model Redfern.Web.Models.UsersListViewModel
+
+<div class="page-region">
+    <div class="page-region-content grid">
+        <div class="row">
+            <div class="offset1 span11" >
+                <h2>Users</h2>
+                <table id="UsersList" class="table" >
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Enabled</th>
+                            <th>Locked out</th>
+                            <th>Member since</th>
+                            <th>Last signin date</th>
+                            <th>Boards owned</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: users">
+                        <tr>
+                            <td>
+                                <span data-bind="text:fullName"></span><br/>
+                                <a data-bind="text:email, attr:{ href:'mailto:'+email()}"></a>
+                            </td>
+                            <td style="text-align:center">
+                                <i data-bind="css:{ 'icon-checkbox': isEnabled, 'icon-checkbox-unchecked': !isEnabled() }"></i>
+                            </td>
+                            <td style="text-align:center">
+                                <i data-bind="css:{ 'icon-checkbox': isLockedOut, 'icon-checkbox-unchecked': !isLockedOut() }"></i> 
+                            </td>
+
+                            <td>
+                                <span data-bind="text:signupDateInLocalTimeZone"></span><br />
+                                <span class="text-muted" data-bind="text:timeFromSignupDate"></span>
+                            </td>
+                            <td>
+                                <span data-bind="text:lastSigninDateInLocalTimeZone"></span><br/>
+                                <span class="text-muted" data-bind="text:timeFromLastSigninDate"></span>
+                            </td>
+                            <td data-bind="text:numberOfBoardsOwned" class="text-center"></td>
+                            <td>
+                                <div class="button-dropdown place-right">
+                                    <button class="dropdown-toggle link">Options</button>
+                                    <ul class="dropdown-menu place-right" data-role="dropdown">
+                                        <li><a href="" class="dropdown-toggle">Change Role...</a>
+                                            <ul class="dropdown-menu" data-role="dropdown">
+                                                <li data-bind="css: { checked: hasRole('ADMIN') }"><a href="" data-bind="click:function(data, event){ $parent.addOrRemoveFromRole(data, 'ADMIN'); }">Administrator</a> </li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="" data-bind="click: $parent.sendPasswordReset">Send Reset Password</a></li>
+                                        <li data-bind="visible: isLockedOut"><a href="" data-bind="click: $parent.unlockUser">Unlock</a></li>
+                                        <li data-bind="visible: isEnabled"><a href="" data-bind="click: $parent.disableUser">Disable</a></li>
+                                        <li data-bind="visible: !isEnabled()"><a href="" data-bind="click: $parent.enableUser">Enable</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="" data-bind="click: $parent.remove">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> 
+        </div>
+        
+    </div>
+</div>
+
+<script type="text/javascript">
+    var model = @Html.Raw(JsonConvert.SerializeObject(Model));
+</script>

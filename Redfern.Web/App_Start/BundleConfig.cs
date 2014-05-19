@@ -125,6 +125,7 @@ namespace Redfern.Web
                         "~/scripts/repositories/cardactivityrepository.js",
                         "~/scripts/repositories/cardtyperepository.js",
                         "~/scripts/repositories/cardattachmentrepository.js",
+                        "~/scripts/repositories/userrepository.js",
                         "~/scripts/widgets/appnavigationbar.js",
                         "~/scripts/widgets/createboarddialog.js",
                         "~/scripts/widgets/cardpropertiesdialog.js",
@@ -135,7 +136,8 @@ namespace Redfern.Web
                         "~/scripts/views/boardui.js",
                         "~/scripts/views/board.js",
                         "~/scripts/views/profile.js",
-                        "~/scripts/views/changepassword.js"
+                        "~/scripts/views/changepassword.js",
+                        "~/scripts/views/users.js"
                         ));
 
 

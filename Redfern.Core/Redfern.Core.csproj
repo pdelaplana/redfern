@@ -107,6 +107,10 @@
     <Compile Include="Migrations\201405081314214_IncreaseContentTypeLengthInCardAttachment.Designer.cs">
       <DependentUpon>201405081314214_IncreaseContentTypeLengthInCardAttachment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405191028349_AddIsPublicToBoard.cs" />
+    <Compile Include="Migrations\201405191028349_AddIsPublicToBoard.Designer.cs">
+      <DependentUpon>201405191028349_AddIsPublicToBoard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ActivityConstructor.cs" />
     <Compile Include="Models\CardAttachment.cs" />
     <Compile Include="Models\CardType.cs" />
@@ -209,6 +213,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405081314214_IncreaseContentTypeLengthInCardAttachment.resx">
       <DependentUpon>201405081314214_IncreaseContentTypeLengthInCardAttachment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405191028349_AddIsPublicToBoard.resx">
+      <DependentUpon>201405191028349_AddIsPublicToBoard.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

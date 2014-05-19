@@ -26,8 +26,7 @@
         self.sourceDisplayName = ko.observable(data.SourceDisplayName);
         self.targetDisplayName = ko.observable(data.TargetDisplayName);
 
-        //self.description = ko.observable(data.Description);
-
+        
         self.description = ko.computed(function () {
             var description = "";
             switch (self.verb()) {
@@ -254,8 +253,8 @@
                 icon: false,
                 title: '<strong>Card Properties</strong>',
                 content: content,
-                width: '60%',
-                height: '90%',
+                width: '70%',
+                height: '98%',
                 //position: { top: 50, left: 10 },
                 onShow: function (dialog) {
                     $('[data-role=datepicker]', dialog).datepicker();
@@ -306,6 +305,11 @@
                     self.commentThread.load();
                     self.activityStream.load();
                     self.attachmentsList.load();
+
+                    // if description is empty , open for editing
+                    if (self.data.description() == null || self.data.description() == '')
+                        self.wiki.editing(true);
+
                     ko.applyBindings(self, $(dialog).get(0));
 
                 },
