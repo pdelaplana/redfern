@@ -3,7 +3,7 @@
 <div class="page-region" style="">
     <div class="page-region-content " >
         <div id="Board" class="inline" data-bind="visible:viewMode() == 'board', adjustBoardWidth: { settings:{ columnCount: visibleColumnCount(), columnWidth: columnWidth()   }  } ">
-            <div class="board" data-bind="sortable: { data: columns, isEnabled: !viewOnly(), afterMove: resequenceAllColumns, options:{ placeholder: BoardColumnPlaceHolder }  }">
+            <div class="board" data-bind="sortable: { data: columns, isEnabled: hasAccess('RearrangeColumns'), afterMove: resequenceAllColumns, options:{ placeholder: BoardColumnPlaceHolder }  }">
                 <div class="board-column border" data-bind="visible: show, adjustColumnHeight:$parent.height">
                     <div class="board-column-wrapper">
                         <div class="board-column-header ntm ntp clearfix">
@@ -13,11 +13,11 @@
                                     (<span data-bind="text: visibleCardCount"></span> cards)
                                     <i class="icon-filter" data-bind="visible: sortable() == false"></i>
                                 </span>
-                                <i class="icon-forward place-right" style="cursor:pointer" data-bind="click:openColumnProperties, visible: !isArchiveColumn()"></i>
+                                <i class="icon-forward place-right" style="cursor:pointer" data-bind="click:openColumnProperties, visible: !isArchiveColumn() && $parent.hasAccess('OpenColumnProperties')"></i>
                                 <i class="icon-zoom-in place-right" style="cursor:pointer" data-bind="click:$parent.expandColumn"></i>
                             </h4>
                         </div>
-                        <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable() && !$parent.viewOnly() , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
+                        <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable() && $parent.hasAccess('RearrangeCards') , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
                             <div class="tile double" data-bind="visible: show, event: { dblclick: open }, setTileColor: color, archived : $parent.isArchiveColumn() ">
                                 <div class="tile-content">
                                     <div class="padding10">
@@ -32,20 +32,20 @@
                                         <span class="no-margin fg-white icon-tag" data-bind="visible: tags().length >0"> <small data-bind="text: tags().length"></small></span>
                                         <span class="no-margin fg-white icon-attachment" data-bind="visible: attachmentCount() >0"> <small data-bind="text: attachmentCount"></small></span>
                                     </div>
-                                </div>   
+                                </div>
                                 <img src="" class="padding5 place-bottom-right" data-bind="visible: assignedToUser() != null && assignedToUser().length > 0, attr: { src: '/api/avatar/'+assignedToUser() +'?height=25', title: assignedToUserFullName() }" />
                             </div>
                         </div>
                         <div class="board-column-footer">
                             <div class="padding10">
-                                <p class="fg-grayLight fg-gray fg-hover-grayDarker"><span data-bind="cardCreator: newCard.title, create: newCard.save"><i class="icon-plus"></i> Add a card...</span> </p>
+                                <p class="fg-grayLight fg-gray fg-hover-grayDarker" data-bind="visible: $parent.hasAccess('AddCard')"><span data-bind="addCard: newCard.title, create: newCard.save"><i class="icon-plus"></i> Add a card...</span> </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="board-column border bg-gray bg-hover-grayDarker fg-hover-white inline-editor" style="min-height:50px;cursor:pointer">
+            <div class="board-column border bg-gray bg-hover-grayDarker fg-hover-white inline-editor" style="min-height:50px;cursor:pointer" data-bind="visible: hasAccess('AddColumn')">
                 <div class="board-column-header ntm ntp ">
                     <span class="fg-white" data-bind="inlineEditor:newColumn.name, fontSize: '14pt', save:newColumn.save">Add a Column...</span>
                 </div>
@@ -82,11 +82,11 @@
                                     (<span data-bind="text: visibleCardCount"></span> cards)
                                     <i class="icon-filter" data-bind="visible: sortable() == false"></i>
                                 </span>
-                                <i class="icon-forward place-right" style="cursor:pointer" data-bind="click:openColumnProperties, visible: !isArchiveColumn()"></i>
+                                <i class="icon-forward place-right" style="cursor:pointer" data-bind="click:openColumnProperties, visible: !isArchiveColumn() && $parent.hasAccess('OpenColumnProperties')"></i>
                                 <i class="icon-zoom-out place-right" style="cursor:pointer" data-bind="click:function(){ $parent.viewMode('board') }"></i>
                             </h4>
                         </div>
-                        <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
+                        <div class="board-column-content content" data-bind="sortable: { data: cards, afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable() && $parent.hasAccess('RearrangeCards') , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
                             <div class="tile double bg-amber" data-bind="visible: show, event: { dblclick: open }, setTileColor: color, archived : $parent.isArchiveColumn() ">
                                 <div class="tile-content">
                                     <div class="padding10">
@@ -107,7 +107,7 @@
                         </div>
                         <div class="board-column-footer">
                             <div class="padding10">
-                                <p class="fg-grayLight fg-gray fg-hover-grayDarker"><span data-bind="cardCreator: newCard.title, create: newCard.save"><i class="icon-plus"></i> Add a card...</span> </p>
+                                <p class="fg-grayLight fg-gray fg-hover-grayDarker" data-bind="visible: $parent.hasAccess('AddCard')"><span data-bind="addCard: newCard.title, create: newCard.save"><i class="icon-plus"></i> Add a card...</span> </p>
                             </div>
                         </div>
                     </div>

@@ -15,7 +15,7 @@ $(function () {
         // Disable caching of AJAX responses
         cache: false,
         error: function (err, type, httpStatus) {
-            if ((err.status == '403') || (err.status == '401')) {
+            if ((err.status == '403') || (err.status == '401') || (err.status == '0')) {
                 window.location.reload();
             } else {
                 var dialog = new ErrorDialog(err);

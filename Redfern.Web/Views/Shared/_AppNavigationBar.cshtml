@@ -38,7 +38,8 @@
                 </a>
                 <ul class="dropdown-menu dark place-right" data-role="dropdown">
                     <li><a href="#/profile">Profile </a></li>
-                    @if (User.IsInRole("ADMIN")) { 
+                    @if (User.IsInRole("ADMIN") || User.IsInRole("Admin"))
+                    { 
                     <li class="divider"></li>
                     <li><a href="#/users">Users </a></li>
                     }

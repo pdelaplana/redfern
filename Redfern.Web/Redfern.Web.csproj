@@ -234,9 +234,11 @@
     <Compile Include="API\Providers\InMemoryMultipartFormDataStreamProvider.cs" />
     <Compile Include="API\TagController.cs" />
     <Compile Include="API\UserController.cs" />
+    <Compile Include="Application\AccessControlList.cs" />
     <Compile Include="Application\Cache\TenantsCache.cs" />
     <Compile Include="Application\Cache\UserCache.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\ActivityMappingProfile.cs" />
+    <Compile Include="Application\Configuration\Automapper\Profiles\GeneralMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\CardMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\UserProfileMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\BoardMappingProfile.cs" />
@@ -283,6 +285,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fileinput.css" />
+    <Content Include="Content\images\about-grey-64.png" />
+    <Content Include="Content\images\about.png" />
     <Content Include="Content\images\ajax-loader-bar-1.gif" />
     <Content Include="Content\images\ajax-loader-circle-1.gif" />
     <Content Include="Content\images\ajax-loader.gif" />

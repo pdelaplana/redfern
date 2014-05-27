@@ -51,27 +51,28 @@ function ColumnProperties(element, data) {
     }
 }
 
-function Card(cardModel, column) {
+function Card(data, column) {
     var column = column,
         self = this;
 
     self.parent = column;
-    self.cardId = ko.observable(cardModel.CardId);
-    self.title = ko.observable(cardModel.Title);
-    self.description = ko.observable(cardModel.Description);
-    self.cardTypeId = ko.observable(cardModel.CardTypeId);
-    self.color = ko.observable(cardModel.Color);
-    self.assignedToUser = ko.observable(cardModel.AssignedToUser);
-    self.assignedToUserFullName = ko.observable(cardModel.AssignedToUserFullName);
+    self.cardId = ko.observable(data.CardId);
+    self.title = ko.observable(data.Title);
+    self.description = ko.observable(data.Description);
+    self.cardTypeId = ko.observable(data.CardTypeId);
+    self.color = ko.observable(data.Color);
+    self.assignedToUser = ko.observable(data.AssignedToUser);
+    self.assignedToUserFullName = ko.observable(data.AssignedToUserFullName);
     self.dueDate = ko.observable();
-    self.archivedDate = ko.observable(cardModel.ArchivedDate);
-    self.isArchived = ko.observable(cardModel.IsArchived);
-    self.boardId = ko.observable(cardModel.BoardId);
-    self.columnId = ko.observable(cardModel.ColumnId);
-    self.sequence = ko.observable(cardModel.Sequence);
-    self.tags = ko.observableArray(cardModel.Tags)
-    self.commentCount = ko.observable(cardModel.CommentCount);
-    self.attachmentCount = ko.observable(cardModel.AttachmentCount);
+    self.archivedDate = ko.observable(data.ArchivedDate);
+    self.isArchived = ko.observable(data.IsArchived);
+    self.boardId = ko.observable(data.BoardId);
+    self.columnId = ko.observable(data.ColumnId);
+    self.sequence = ko.observable(data.Sequence);
+    self.tags = ko.observableArray(data.Tags)
+    self.commentCount = ko.observable(data.CommentCount);
+    self.attachmentCount = ko.observable(data.AttachmentCount);
+
     self.show = ko.observable(true);
 
     self.isArchived.subscribe(function (newValue) {
@@ -120,6 +121,12 @@ function Card(cardModel, column) {
             
             app.ui.unblock();
         });
+    }
+
+    self.move = function (fromColumn,toColumn) {
+        
+        $
+
     }
 
     self.assign = function () {
@@ -310,39 +317,24 @@ function BoardUI(data) {
     self.name = ko.observable(data.Name);
     self.owner = ko.observable(data.Owner);
     self.ownerFullName = ko.observable(data.OwnerFullName);
+    self.isPublic = ko.observable(data.IsPublic);
+    self.viewOnly = ko.observable(data.ViewOnly);
+    self.accessList = ko.observableArray(data.AccessList);
     self.columns = ko.observableArray();
     self.members = ko.observableArray();
     self.cardTypes = ko.observableArray();
     self.viewMode = ko.observable('board');
     self.height = ko.observable($(window).height());
-    self.viewOnly = ko.observable(data.ViewOnly);
+    
 
     // computed observables
     self.visibleColumnCount = ko.computed(function () {
         return ko.utils.arrayFilter(self.columns(), function (column) {
             return column.show() == true;
         }).length;
-
     });
 
-    
-    // add sidebar UI
-    self.sidebar = new BoardSidebar(self);
-
-    // load members from viewmodel
-    $.each(model.Members, function (index, value) {
-        self.members.push(new BoardMember(value, self));
-    });
-
-    // load card types from viewmodel
-    $.each(model.CardTypes, function (index, value) {
-        self.cardTypes.push(new CardType(value, self));
-    });
-
-    // load columns from viewmodel
-    $.each(model.Columns, function (index, value) {
-        self.columns.push(new Column(value, self));
-    });
+ 
     
     // handler for new columns
     self.newColumn = {
@@ -388,6 +380,33 @@ function BoardUI(data) {
         
     }
 
+
+    self.hasAccess = function (accessType) {
+        return ko.utils.arrayFirst(self.accessList(), function (item) {
+            return item == accessType;
+        }) != null;
+
+    }
+
+
+    // add sidebar UI
+    self.sidebar = new BoardSidebar(self);
+
   
+    // load members from viewmodel
+    $.each(model.Members, function (index, value) {
+        self.members.push(new BoardMember(value, self));
+    });
+
+    // load card types from viewmodel
+    $.each(model.CardTypes, function (index, value) {
+        self.cardTypes.push(new CardType(value, self));
+    });
+
+    // load columns from viewmodel
+    $.each(model.Columns, function (index, value) {
+        self.columns.push(new Column(value, self));
+    });
+
 
 }

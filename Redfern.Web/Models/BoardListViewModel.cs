@@ -10,6 +10,8 @@ namespace Redfern.Web.Models
         public string Name { get; set; }
         public string Owner { get; set; }
         public string OwnerFullName { get; set; }
+        public bool IsPublic { get; set; }
+        public string[] Collaborators { get; set; }
         public DateTime? ArchiveDate { get; set; }
         public int CardCount { get; set; }
     }

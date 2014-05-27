@@ -14,7 +14,7 @@ using System.IdentityModel.Services;
 using System.IdentityModel.Services.Configuration;
 using Redfern.Core.Models;
 using Redfern.Core.Migrations;
-
+using Redfern.Web.Application.Cache;
 
 namespace Redfern.Web
 {
@@ -32,10 +32,17 @@ namespace Redfern.Web
             UnityConfig.RegisterComponents();
             AutoMapperConfig.RegisterMaps();
 
-            
-            
+            // initialize user cache
+            var userCache = DependencyResolver.Current.GetService<UserCache>();
+            userCache.Init();
+
+            // initialize tenant Cache
+            var tenantCache = DependencyResolver.Current.GetService<TenantsCache>();
+            tenantCache.Init();
+
         }
 
+        
         /*
         void OnFederationConfigurationCreated(object sender, FederationConfigurationCreatedEventArgs e)
         {

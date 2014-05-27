@@ -8,12 +8,14 @@
 
     self.myBoards = ko.observableArray();
     self.sharedBoards = ko.observableArray();
+    self.publicBoards = ko.observableArray();
 
-    function BoardItem(boardModel) {
+    function BoardItem(data) {
         var self = this;
-        self.name = ko.observable(boardModel.Name)
-        self.boardId = ko.observable(boardModel.BoardId);
-        self.cardCount = ko.observable(boardModel.CardCount)
+        self.name = ko.observable(data.Name)
+        self.ownerFullName = ko.observable(data.OwnerFullName)
+        self.boardId = ko.observable(data.BoardId);
+        self.cardCount = ko.observable(data.CardCount)
     }
 
     var initialize = function () {
@@ -26,14 +28,18 @@
         var repository = new BoardRepository();
         repository.getBoardsOfUser(app.user.userName).done(function (result) {
             self.myBoards.removeAll();
-            self.sharedBoards.removeAll();    
+            self.sharedBoards.removeAll();
+            self.publicBoards.removeAll();
             $.each(result, function (index, value) {
                 if (value.Owner == app.user.userName) {
                     self.myBoards.push(new BoardItem(value));
-                } else {
+                }
+                else if ($.inArray(app.user.userName, value.Collaborators) > -1) {
                     self.sharedBoards.push(new BoardItem(value));
                 }
-
+                else if (value.IsPublic){
+                    self.publicBoards.push(new BoardItem(value));
+                } 
             })
             ui.addPart('boards', self).bindTo('#Boards');
         });

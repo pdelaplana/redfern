@@ -13,5 +13,6 @@ namespace Redfern.Core.Cache
         T Get(string userName);
         string GetFullName(string userName);
         IList<T> GetAll();
+        void Init();
     }
 }

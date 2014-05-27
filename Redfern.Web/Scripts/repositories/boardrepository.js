@@ -3,6 +3,7 @@
 
     self.boardId = ko.observable();
     self.name = ko.observable();
+    self.isPublic = ko.observable();
 
     self.getBoardsOfUser = function (userName) {
         return $.ajax({
@@ -31,6 +32,14 @@
         return $.ajax({
             url: '/api/board/' + self.boardId(),
             type: 'delete'
+        });
+    }
+
+    self.changeVisibility = function () {
+        return $.ajax({
+            url: '/api/board/' + self.boardId(),
+            type: 'changevisibility',
+            data: { BoardId: self.boardId(), IsPublic: self.isPublic() }
         });
     }
 

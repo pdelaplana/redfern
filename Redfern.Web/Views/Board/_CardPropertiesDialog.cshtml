@@ -4,40 +4,41 @@
             <div class="padding10 span12">
                 <label>Title</label>
                 <div class="input-control text">
-                    <input type="text"maxlength="100" data-bind="value: data.title" />
+                    <input type="text"maxlength="100" data-bind="value: title, enable: hasAccess('ChangeCardTitle')"  />
                 </div>
             </div>
         </div>
         <div class="row" style="height:100%">
 
-            <div class="padding10 ntp span8">
+            <!-- right hand column-->
+            <div class="padding10 ntp nbp span8">
                 <div class="tab-control" data-role="tab-control">
                     <ul class="tabs">
                         <li class="active"><a data-href="#page_0" href="#page_0">Details</a></li>
                         <li><a data-href="#page_1" href="#page_1">Conversations</a></li>
                         <li><a data-href="#page_2" href="#page_2">History</a></li>
                         <li><a data-href="#page_3" href="#page_3"><i class="icon-attachment"></i></a></li>
-                        <li class="place-right"><a data-href="#page_4" href="#page_4"><i class="icon-cog"></i></a></li>
+                        <li class="place-right" data-bind="visible: hasAccess('AdvanceCardOptions')"><a data-href="#page_4" href="#page_4"><i class="icon-cog"></i></a></li>
                     </ul>
                     <div class="frames">
                         <div id="page_0" class="frame" style="height:100%">
 
                             <div style="height:100%" data-bind="visible: !wiki.editing()">
-                                <div class="listview wiki" style="overflow-x: auto;  height: 95%" data-bind="markdown: data.description"></div>
-                                <button class="link place-right" data-bind="click: function(){ wiki.editing(true) }">Edit</button>
+                                <div class="listview wiki" style="overflow-x: auto;  height: 95%" data-bind="markdown: description"></div>
+                                <button class="link place-right" data-bind="click: function(){ wiki.editing(true) }, visible: hasAccess('ChangeCardDescription')">Edit</button>
                             </div>
 
-                            <div class="" data-bind="visible: wiki.editing" style="height:100%">
+                            <div class="" data-bind="visible: wiki.editing() && hasAccess('ChangeCardDescription')" style="height:100%">
                                 <div class="mdd_preview" style="display:none"></div>
                                 <div class="mdd_toolbar"></div>
-                                <textarea cols=50 class="mdd_editor" style="height:90%" data-bind="value: data.description, markdownEditor: data.description"></textarea>
+                                <textarea cols=50 class="mdd_editor" style="height:90%" data-bind="value: description, markdownEditor: description"></textarea>
 
                                 <button class="primary push-down-10" data-bind="click: wiki.save">Save</button>
                                 <button class="link push-down-10" data-bind="click: function(){ wiki.editing(false) }">Cancel</button>
                             </div>
                         </div>
                         <div class="frame" id="page_1" style="height:100%">
-                            <div class="row padding10" style="margin-bottom:5px;width:100%">
+                            <div class="row padding5" style="margin-bottom:5px;width:100%" data-bind="visible: hasAccess('AddComment')">
                                 <div class="span11">
                                     <div class="input-control textarea">
                                         <textarea placeholder="write a comment..." maxlength="250" style="min-height:50px;width:100%" data-bind="value: commentThread.newComment"></textarea>
@@ -50,7 +51,7 @@
                             <div style="text-align:center" data-bind="visible:commentThread.loading">
                                 <img src="/content/images/ajax-loader.gif" />
                             </div>
-                            <div class="listview padding10" id="commentslist" data-bind="template:'commentsListTemplate'" style="overflow-x:auto;height:80%;width:100%">
+                            <div class="listview padding5" id="commentslist" data-bind="template:'commentsListTemplate'" style="overflow-x:auto;height:80%;width:100%">
 
                             </div>
                         </div>
@@ -58,15 +59,15 @@
                             <div style="text-align:center" data-bind="visible:activityStream.loading">
                                 <img src="/content/images/ajax-loader.gif" />
                             </div>
-                            <div class="listview padding10" id="commentslist" data-bind="template:'activitiesListTemplate'" style="overflow-x:auto;height:99%;width:100%">
+                            <div class="listview padding5" id="commentslist" data-bind="template:'activitiesListTemplate'" style="overflow-x:auto;height:99%;width:100%">
                             </div>
                         </div>
                         <div class="frame" id="page_3" style="height:100%">
-                            <div class="padding10">
+                            <div class="padding10" data-bind="visible:hasAccess('UploadFile')">
                                 <form action="/file-upload" class="dropzone" id="DropZone">
                                     <div class="dz-message ">
                                         <img src="~/content/images/file-upload-greylight.png" style="height:70px" />
-                                        <div class="place-right text-center">
+                                        <div class="text-center place-right">
                                             <span class="text-muted">Drag and drop a file here to upload</span><br />
                                             <span class="text-muted">- or -</span> <br />
                                             <span class="text-muted">Click anywhere to select a file from your computer</span>
@@ -79,40 +80,53 @@
                             </div>
                         </div>
                         <div class="frame" id="page_4" style="height:100%">
-                            <p>Archive this card and remove it from view?</p>
-                            <button class="bg-red fg-white" data-bind="click: archive">Archive</button>
-                            <hr />
-                            <p>Delete this card permanently? </p>
-                            <button class="bg-red fg-white" data-bind="click: remove">Delete</button>
+                            <div data-bind="visible: hasAccess('RearrangeCards')">
+                                <label>Move Card To..</label><br />
+                                <div class="input-control select" style="width:200px">
+                                    <select data-bind="options: columns, optionsText: function(item){ return item.name() }, value: selectedColumn"></select>
+                                </div>
+                                <button class="primary" data-bind="click: moveCard">Move<i class="icon-arrow-right-5"></i></button>
+                                <hr />
+                            </div>
+                            <div data-bind="visible: hasAccess('ArchiveCard')">
+                                <button class="bg-red fg-white" style="width:150px;" data-bind="click: archiveCard">Archive Card</button>
+                                <small class="text-muted">Archiving this card will move it to the archive column.</small>
+
+                                <hr />
+                            </div>
+
+                            <div data-bind="visible: hasAccess('DeleteCard')">
+                                <button class="bg-red fg-white" style="width:150px" data-bind="click: removeCard">Delete Card</button>
+                                <small class="text-muted">Deleing this card will permanently remove it from this board.</small>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
 
             </div>
 
-
-            <div class="padding10 ntp span4" >
+            <!-- left hand column -->
+            <div class="padding10 ntp nbm span4" >
                 <div class="inline-block" style="width:100%">
                     <!-- ko foreach: cardTypes -->
-                    <div class="tile quarter" data-bind="setTileColor: color, css: { selected : color() == $parent.data.color()  }, changeTileColor: $parent.data.color, color: color, attr: { 'title': name }">
+                    <div class="tile quarter" data-bind="setTileColor: color, css: { selected : color() == $parent.color()  }, changeTileColor: $parent.color, color: color, attr: { 'title': name }, enable: $parent.hasAccess('ChangeCardColor')">
                     </div>
                     <!-- /ko -->
                 </div>
-                <label>Tags</label>
+                <h5>Tags</h5>
                 <div class="">
-                    <ul id="tags-container"></ul>
+                    <ul data-bind="tagsContainer: tags, tagitOptions: { enabled: hasAccess('AddTag'), initialTags: tags()  }"></ul>
                 </div>
-                <label class="">Assignee</label>
+                <h5 class="">Assignee</h5>
                 <div class="inline-block push-down-5" style="width:100%!important">
                     <img class="span2" data-bind="attr: { src: userPhotoUrl() }" />
                     <div class="input-control text span10" >
-                        <input type="text" placeholder="Unassigned" data-bind="assignCard: data.assignedToUser, assignCardOptions: { members: members(), displayValue: data.assignedToUserFullName }" />
+                        <input type="text" placeholder="Unassigned" data-bind="assignCard: assignedToUser, assignCardOptions: { members: members(), displayValue: assignedToUserFullName }, enable: hasAccess('ChangeCardAssignment')" />
                     </div>
                 </div>
-                
+               
             </div>
-
-            
         </div>
     </div>
 </div>

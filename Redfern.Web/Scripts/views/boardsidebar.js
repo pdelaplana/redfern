@@ -9,16 +9,25 @@
     self.owner = boardUI.owner;
     self.ownerFullName = boardUI.ownerFullName;
     self.viewMode = boardUI.viewMode;
+    self.isPublic = boardUI.isPublic;
+    self.viewOnly = boardUI.viewOnly;
+    self.hasAccess = boardUI.hasAccess;
+
     self.columns = boardUI.columns;
     self.members = boardUI.members;
     self.cardTypes = boardUI.cardTypes
     self.resequence = boardUI.resequenceAllColumns;
     
+    // computed observables
+    self.canChangeSettings = ko.computed(function () {
+        return (self.owner() == app.user.userName) || !self.viewOnly();
+    });
+
     self.canArchiveBoard = ko.computed(function () {
         return self.owner() == app.user.userName;
     });
 
-    self.canChangeSettings = ko.computed(function () {
+    self.canRemoveMember = ko.computed(function () {
         return self.owner() == app.user.userName;
     });
 
@@ -37,6 +46,18 @@
             app.ui.appNavigationBar.selectedMenu(self.name());
         });
     }
+
+    self.changeVisibility = function () {
+        var repository = new BoardRepository();
+        repository.boardId(self.boardId());
+        repository.isPublic(self.isPublic());
+        repository.changeVisibility().done(function () {
+            $.Notify.show('Board visibility has been changed.');
+            self.isPublic(!self.isPublic());
+        });
+    }
+
+
 
     self.filters = {
         title: ko.observable(),

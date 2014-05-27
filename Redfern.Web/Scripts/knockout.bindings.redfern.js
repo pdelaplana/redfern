@@ -1,4 +1,4 @@
-﻿ko.bindingHandlers.cardCreator = {
+﻿ko.bindingHandlers.addCard = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var column = $(element).parents('div.board-column'),
             bindings = allBindings();
@@ -187,10 +187,13 @@ ko.bindingHandlers.changeTileColor = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var observable = valueAccessor(),
             bindings = allBindingsAccessor();
+
         $(element).click(function () {
-            $(this).siblings('.tile').removeClass('selected');
-            $(this).addClass('selected');
-            observable(bindings.color());
+            if (bindings.enable) {
+                $(this).siblings('.tile').removeClass('selected');
+                $(this).addClass('selected');
+                observable(bindings.color());
+            }
         })
         
     }
@@ -309,9 +312,42 @@ ko.bindingHandlers.assignCard = {
             })
         $(element).after(button);
 
-        
+    }
+}
 
+ko.bindingHandlers.tagsContainer = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            observable = valueAccessor();
 
+        var options = $.extend({
+            initialTags: null,
+            triggerKeys: ['enter', 'tab'],
+            enabled: true,
+            tagSource: function (request, response) {
+                $.ajax({
+                    url: '/api/tag/',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: { name: request.term, boardId: bindingContext.$data.boardId() },
+                    success: function (data) {
+                        response($.map(data, function (name, val) {
+                            return { label: name, value: name, id: val }
+                        }))
+                    }
+                })
+            },
+            tagsChanged: function (tagValue, action, element) {
+                if (action == 'added') {
+                    observable.push(tagValue);
+                } else if (action == 'popped') {
+                    observable.remove(tagValue);
+                }
+            }
+        }, bindings.tagitOptions);
+
+        $(element).tagit(options);
+       
     }
 }
 

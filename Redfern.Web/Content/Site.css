@@ -42,6 +42,14 @@ div.center{
 
 }
 
+/* transparent backgrounds for disables inputs */
+input[type=text]:disabled{
+    background-color:transparent;
+    border-color:transparent;
+    border-width:0px;
+    outline:none;
+}
+
 
 /**************************************** 
  *    Board styles

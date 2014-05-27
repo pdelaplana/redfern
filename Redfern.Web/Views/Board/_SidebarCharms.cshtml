@@ -3,35 +3,45 @@
     <nav id="Sidebar" class="sidebar" data-bind="visible: activeOption() == 'main'">
         <ul>
             <li class="title">Board Options</li>
-            <li data-bind="visible: canChangeSettings "><a href="" data-bind="click: function(){ activeOption('changeboardsettings') }">Settings</a></li>
+            <li data-bind="visible: hasAccess('OpenBoardSettings') "><a href="" data-bind="click: function(){ activeOption('changeboardsettings') }">Settings</a></li>
             <li data-bind="visible: viewMode() =='board'"><a href="" data-bind="click: function(){ viewMode('overview') }">Zoom out</a></li>
             <li data-bind="visible: viewMode() =='overview'"><a href="" data-bind="click: function(){ viewMode('board') }">Zoom in</a></li>
-            <li><a href="" data-bind="click: function(){ activeOption('members') }">Members</a></li>
-            <li><a href="" data-bind="click: function(){ activeOption('colors') }">Colors</a></li>
-            <li data-bind="visible: viewMode() == 'board'"><a href="" data-bind="click: function(){ activeOption('columns') }">Columns</a></li>
-            <li><a href="" data-bind="click: function(){ activeOption('filter') }">Filter</a></li>
+            <li data-bind="visible: hasAccess('ViewCollaborators')"><a href="" data-bind="click: function(){ activeOption('members') }">Collaborators</a></li>
+            <li data-bind="visible: hasAccess('RelabelColors')"><a href="" data-bind="click: function(){ activeOption('colors') }">Colors</a></li>
+            <li data-bind="visible: hasAccess('RearrangeColumns') && viewMode() == 'board'"><a href="" data-bind="click: function(){ activeOption('columns') }">Columns</a></li>
+            <li data-bind="visible: hasAccess('FilterCards')"><a href="" data-bind="click: function(){ activeOption('filter') }">Filter</a></li>
         </ul>
     </nav>
 
     <nav id="Sidebar_BoardSettings" class="sidebar" data-bind="visible: activeOption() == 'changeboardsettings'">
         <ul>
-            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Change Board Settings</li>
+            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Settings</li>
             <li>
-                <div class="padding20">
+                <div class="padding15">
+                    <p class="text-muted">Rename board...</p>
                     @Html.Editor("BoardName", "textbox", new { databind = "value: name", autofocus="autofocus" })
                     <button data-bind="click: changeBoardName" class="primary">Save</button>
                 </div>
+                
             </li>
             <li>
-                <div class="padding20 fg-white">
-                    <p class="fg-white">Delete this board</p>
-                    <button class="bg-red fg-white" data-bind="click: remove">Delete</button>
-                    
+                <div class="padding15 fg-white">
+                    <p class="text-muted">Change visibility...</p>
+                    <div class="button-set">
+                        <button data-bind="css:{ active: !isPublic() }, click: changeVisibility">Private</button>
+                        <button data-bind="css:{ active: isPublic }, click: changeVisibility">Public</button>
+                    </div>
                 </div>
             </li>
             <li>
-                <div class="padding20">
-                    <p class="fg-white">Archive this board</p>
+                <div class="padding15 fg-white ">
+                    <p class="text-muted">Delete board...</p>
+                    <button class="bg-red fg-white" data-bind="click: remove">Delete</button>
+                </div>
+            </li>
+            <li>
+                <div class="padding15">
+                    <p class="text-muted">Archive board...</p>
                     <button class="bg-red fg-white">Archive</button>
                 </div>
             </li>
@@ -40,15 +50,15 @@
 
     <nav id="Sidebar_Members" class="sidebar" data-bind="visible: activeOption() == 'members'">
         <ul>
-            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Members</li>
+            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Collaborators</li>
             <li>
-                <div class="padding20">
+                <div class="padding15 nbp" data-bind="visible: hasAccess('AddColloborators')">
                     <div class="input-control text">
                         <input type="text" placeholder="find user by name" data-bind="userLookup: newMember.userName" />
                         <button class="btn-add" data-bind="click: newMember.add"></button>
                     </div>
                 </div>
-                <div class="padding20 inline-block ntp">
+                <div class="padding15 inline-block">
                     <div class="tile half">
                         <img class="icon " src="" data-bind="attr: { src : '/api/avatar/'+owner(), title : ownerFullName()+ ' (The Owner)' }" />
                     </div>
@@ -60,7 +70,7 @@
                 </div>
             </li>
             <li data-bind="if: selectedMember.boardMemberId() > 0">
-                <div class="padding10 grid fluid">
+                <div class="padding15 grid fluid">
                     <div class="row">
                         <div class="span4">
                             <img class="icon " data-bind="attr: { src: '/api/avatar/'+selectedMember.userName(), title: selectedMember.fullName() }" />
@@ -144,7 +154,7 @@
             <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Columns</li>
             <li>
                 <div class="padding20">
-                    <p class="text-muted">Select columns to show or hide.</p>
+                    <p class="text-muted"></p>
                     <div class="listview small" data-bind="sortable: { data: columns, afterMove: resequence } ">
                         <div class="list bg-dark" style="width:100%" data-bind="click:function(){ show(!show()) }">
                             <div class="list-content">

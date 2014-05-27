@@ -14,11 +14,13 @@ namespace Redfern.Core.Repository.Commands
     public class CreateBoardCommand : IRepositoryCommand<Board>
     {
         public string Name { get; set; }
+        public bool IsPublic { get; set; }
 
         public Board Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
         {
             Board board = db.Boards.Create();
             board.Name = this.Name;
+            board.IsPublic = this.IsPublic;
             board.Owner = db.Context.ClientUserName;
             board = db.Boards.Add(board);
             db.SaveChanges();

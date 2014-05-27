@@ -122,7 +122,10 @@
             maxTags: undefined,
             //should 'paste' event trigger 'blur', thus potentially adding a new tag
             // (true for backwards compatibility)
-            blurOnPaste: true
+            blurOnPaste: true,
+            //
+            //
+            enabled: true
         },
 
         _splitAt: /\ |,/g,
@@ -184,6 +187,10 @@
             this.element.html('<li class="tagit-new"><input class="tagit-input" type="text" /></li>');
 
             this.input = this.element.find(".tagit-input");
+
+            // disable the input if tagit is not enabled
+            if (!self.options.enabled) this.input.attr('disabled', 'disabled')
+
             this.input.autoGrowInput();
             //setup click handler
             $(this.element).click(function (e) {
@@ -192,7 +199,7 @@
                     var parent = $(e.target).parent();
 
                     var tag = self.tagsArray[parent.index()];
-
+                    
                     tag.element.remove();
                     self._popTag(tag);
                 }
@@ -484,7 +491,10 @@
                 + (newTag.type !== undefined ? ' tagit-type-' + newTag.type + '"' : '"')
                 + (newTag.value !== undefined ? ' tagValue="' + newTag.value + '"' : '') + '>'
                 + (this.options.sortable == 'handle' ? '<a class="ui-icon ui-icon-grip-dotted-vertical" style="float:left"></a>' : '')
-                + '<div class="tagit-label">' + newTag.label + '</div>' + '<a class="tagit-close">x</a></li>');
+                + '<div class="tagit-label">' + newTag.label + '</div>'
+                + (this.options.enabled ? '<a class="tagit-close">x</a>' : '')
+                + '</li>');
+           
             tag.element.insertBefore(this.input.parent());
             this.tagsArray.push(tag);
 

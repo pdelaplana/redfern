@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Redfern.Core.Models;
 using Redfern.Core.Repository;
+using Redfern.Web.Application;
 using Redfern.Web.Models;
 
 namespace Redfern.Web.Controllers
@@ -17,12 +18,22 @@ namespace Redfern.Web.Controllers
         public BoardController(IRedfernRepository repository)
         {
             _repository = repository;
-
         }
 
         public ActionResult Index(int id)
         {
-            var model = AutoMapper.Mapper.Map<Board, BoardViewModel>(_repository.Get<Board>(id));
+            RedfernAccessType[] accessList;
+            Board board = _repository.Get<Board>(id);
+
+            if (board.Owner == User.Identity.Name)
+                accessList = AccessControlList.ForOwner;
+            else if (board.Members.Count(member => member.UserName == User.Identity.Name)>0)
+                accessList = AccessControlList.ForCollaborator;
+            else
+                accessList = AccessControlList.ForViewer;
+            
+            var model = AutoMapper.Mapper.Map<Board, BoardViewModel>(board);
+            model.AccessList = AutoMapper.Mapper.Map<RedfernAccessType[], string[]>(accessList);
             return PartialView("_index", model);
         }
 	}

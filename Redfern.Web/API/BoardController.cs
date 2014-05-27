@@ -23,8 +23,7 @@ namespace Redfern.Web.API
 
         public IEnumerable<BoardListItem> Get(string id)
         {
-
-            var list = _repository.Boards.Where(b => b.Owner == id || b.Members.Where(m => m.UserName == id).Count() > 0).ToList();
+            var list = _repository.Boards.Where(b => b.Owner == id || b.IsPublic || b.Members.Where(m => m.UserName == id).Count() > 0).ToList();
             return AutoMapper.Mapper.Map<IList<Board>, IList<BoardListItem>>(list);
         }
 
@@ -34,6 +33,12 @@ namespace Redfern.Web.API
         }
 
         public void Put(int id, [FromBody]ChangeBoardNameCommand command)
+        {
+            _repository.ExecuteCommand(command);
+        }
+
+        [AcceptVerbs("changevisibility")]
+        public void ChangeVisibility(int id, [FromBody]ChangeBoardVisibilityCommand command)
         {
             _repository.ExecuteCommand(command);
         }

@@ -119,6 +119,7 @@
     <Compile Include="Models\Configuration\BoardColumnConfiguration.cs" />
     <Compile Include="Repository\Commands\AddCardAttachmentCommand.cs" />
     <Compile Include="Repository\Commands\AssignCardCommand.cs" />
+    <Compile Include="Repository\Commands\ChangeBoardVisibilityCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardMemberCommand.cs" />
     <Compile Include="Repository\Commands\AddBoardMemberCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardCommand.cs" />

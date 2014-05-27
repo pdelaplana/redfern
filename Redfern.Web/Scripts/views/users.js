@@ -60,7 +60,7 @@
     self.users = ko.observableArray();
     self.remove = function (user) {
         if (user.numberOfBoardsOwned() > 0) {
-            $.Notify.show('You cannot delete that have boards associated with them.');
+            $.Notify.show('You cannot delete a user with boards associated with them.');
             return;
         } 
         var repository = new UserRepository();

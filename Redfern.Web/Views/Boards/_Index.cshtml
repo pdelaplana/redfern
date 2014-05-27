@@ -5,49 +5,121 @@
     </div>
 </div>
 
-
-<script id="boardslist" type="text/html">
-    <div class="grid fluid">
-        <div class="row">
-            <div class="span12">
-                <h2>My Boards</h2>
-                <div class="" id="MyBoards" data-bind="foreach: myBoards">
-                    <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
-                        <div class="tile-content">
-                            <div class="padding10 text-left">
-                                <h4 class="fg-white no-margin" data-bind="text:name"></h4>
-                                <h1 class="fg-white" data-bind="text: cardCount"></h1>
-                            </div>
-                        </div>
-                        <div class="brand">
-                            <div class="label"><span class="no-margin fg-white"><span class="icon-grid-view"></span></span></div>
-                            <div class="badge"></div>
-                        </div>
-                    </a>
+<script id="boards" type="text/html">
+    <div class="tile-area no-padding no-margin">
+        <div class="tile-group no-margin ">
+            <!-- ko foreach: myBoards -->
+            <a href="" class="tile double bg-darkCrimson" data-bind="attr: { href: '#/board/'+boardId() }">
+                <div class="tile-content">
+                    <div class="padding10 text-left">
+                        <h4 class="fg-white no-margin" data-bind="text:name"></h4>
+                        <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                    </div>
                 </div>
-                <p class="text-alert" style="height:150px" data-bind="visible: myBoards().length == 0">You have not created any boards.  Click <a href="" data-bind="click: app.ui.appNavigationBar.createBoard">here</a> to create your first board.</p>
-            </div>
-        </div>
-        <div class="row" style="margin-top:50px">
-            <div class="span12">
-                <h2>Shared Boards</h2>
-                <div class="" id="SharedBoards" data-bind="foreach: sharedBoards">
-                    <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
-                        <div class="tile-content">
-                            <div class="padding10 text-left">
-                                <h4 class="fg-white no-margin" data-bind="text:name"></h4>
-                                <h1 class="fg-white" data-bind="text: cardCount"></h1>
-                            </div>
-                        </div>
-                        <div class="brand">
-                            <div class="label"><span class="no-margin fg-white"><span class="icon-grid-view"></span></span></div>
-                            <div class="badge"></div>
-                        </div>
-                    </a>
+                <div class="brand">
+                    <div class="label"><span data-bind="text: ownerFullName"></span></div>
+                    <div class="badge"></div>
                 </div>
-                <p class="text-alert" style="height:150px" data-bind="visible: sharedBoards().length == 0">There are no shared boards found.</p>
-            </div>
+            </a>
+            <!-- /ko -->
+            <!-- ko foreach: sharedBoards -->
+            <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
+                <div class="tile-content">
+                    <div class="padding10 text-left">
+                        <h4 class="fg-white no-margin" data-bind="text:name"></h4>
+                        <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                    </div>
+                </div>
+                <div class="brand">
+                    <div class="label" data-bind="text: ownerFullName"></div>
+                    <div class="badge"></div>
+                </div>
+            </a>
+            <!-- /ko -->
+            <!-- ko foreach: publicBoards -->
+            <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
+                <div class="tile-content">
+                    <div class="padding10 text-left">
+                        <h4 class="fg-white no-margin" data-bind="text:name"></h4>
+                        <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                    </div>
+                </div>
+                <div class="brand">
+                    <div class="label"><span class="no-margin fg-white"><span class="icon-grid-view"></span></span></div>
+                    <div class="badge"></div>
+                </div>
+            </a>
+            <!-- /ko -->
         </div>
     </div>
+</script>
 
+<script id="boardslist" type="text/html">
+    <div class="tile-area no-padding no-margin">
+        <div class="tile-group no-margin padding5 ntp" style="width:100%">
+            <h2 class="ntm ntp">My Boards</h2>
+            <!-- ko foreach: myBoards -->
+            <a href="" class="tile double bg-darkCrimson" data-bind="attr: { href: '#/board/'+boardId() }">
+                <div class="tile-content">
+                    <div class="padding10 text-left">
+                        <h4 class="fg-white no-margin" data-bind="text:name"></h4>
+                        <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                    </div>
+                </div>
+                <div class="brand">
+                    <div class="label"><span data-bind="text: ownerFullName"></span></div>
+                    <div class="badge"></div>
+                </div>
+            </a> 
+            <!-- /ko -->            
+            <div class="bg-grayLighter text-center" data-bind="visible: myBoards().length == 0" style="height:120px;padding-top:30px" >
+
+                <img src="/content/images/about-grey-64.png" />
+                <span class="center fg-darker readable-text"  >You have not created any boards yet.  Click <a href="" data-bind="click: app.ui.appNavigationBar.createBoard">here</a> to create your first board.</span>
+            </div>
+            
+        </div>
+
+        <div class="tile-group no-margin padding5 ntp" style="width:100%" data-bind="visible: sharedBoards().length > 0">
+            <h2>Shared with Me</h2>
+            <!-- ko foreach: sharedBoards -->
+            <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
+                <div class="tile-content">
+                    <div class="padding10 text-left">
+                        <h4 class="fg-white no-margin" data-bind="text:name"></h4>
+                        <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                    </div>
+                </div>
+                <div class="brand">
+                    <div class="label" data-bind="text: ownerFullName"></div>
+                    <div class="badge"></div>
+                </div>
+            </a>
+            <!-- /ko -->
+            <p data-bind="visible: sharedBoards().length == 0">No boards have been shared with you.</p>
+        </div>
+
+        <div class="tile-group no-margin padding5 ntp" style="width:100%" data-bind="visible: publicBoards().length > 0">
+            <h2>Public Boards</h2>
+            <!-- ko foreach: publicBoards -->
+            <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
+                <div class="tile-content">
+                    <div class="padding10 text-left">
+                        <h4 class="fg-white no-margin" data-bind="text:name"></h4>
+                        <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                    </div>
+                </div>
+                <div class="brand">
+                    <div class="label"><span class="no-margin fg-white"><span class="icon-grid-view"></span></span></div>
+                    <div class="badge"></div>
+                </div>
+            </a>
+            <!-- /ko -->
+            <p class="" data-bind="visible: publicBoards().length == 0">No public boards are available.</p>
+
+        </div>
+
+    </div>
+
+    
 </script>

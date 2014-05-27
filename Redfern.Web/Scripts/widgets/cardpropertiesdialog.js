@@ -1,4 +1,4 @@
-﻿function CardPropertiesDialog(elementId, data) {
+﻿function CardPropertiesDialog(elementId, source) {
 
     function CommentListItem(data) {
         var self = this;
@@ -63,32 +63,93 @@
     }
 
     var elementId = elementId,
-        data = data,
         self = this;
 
+    // properties
     self.changed = false;
-    self.data = data;
+    
+    // mirror data source
+    self.column = source.parent;
+    self.cardId = source.cardId;
+    self.boardId = source.boardId;
+    self.title = source.title;
+    self.description = source.description;
+    self.assignedToUser = source.assignedToUser;
+    self.assignedToUserFullName = source.assignedToUserFullName;
+    self.cardTypeId = source.cardTypeId;
+    self.color = source.color;
+    self.tags = source.tags;
 
-    self.data.title.subscribe(function (newValue) {
+    self.commentCount = source.commentCount;
+    self.attachmentCount = source.attachmentCount;
+
+    self.cardTypes = source.parent.board.cardTypes;
+    self.boardMembers = source.parent.board.members;
+    self.boardOwner = source.parent.board.owner;
+    self.boardOwnerFullName = source.parent.board.ownerFullName;
+    self.columns = source.parent.board.columns;
+    self.hasAccess = source.parent.board.hasAccess;
+
+    self.assign = source.assign;
+    self.archive = source.archive;
+    self.update = source.update;
+    self.remove = source.remove;
+
+    self.selectedColumn = ko.observable(source.parent);
+
+    // subscriptions
+
+    self.selectedColumn.subscribe(function (newValue) {
+
+      
+       
+    });
+
+
+    self.title.subscribe(function (newValue) {
         self.changed = true;
     })
 
-    self.data.assignedToUser.subscribe(function (newValue) {
-        self.data.assign();
+    self.assignedToUser.subscribe(function (newValue) {
+        self.assign().done(function () {
+            self.assignedToUserFullName();
+        });
     })
 
-    self.data.color.subscribe(function (newValue) {
+    self.color.subscribe(function (newValue) {
         var cardType = ko.utils.arrayFirst(self.cardTypes(), function (cardType) {
             return cardType.color() == newValue;
         });
-        self.data.cardTypeId(cardType.cardTypeId());
+        self.cardTypeId(cardType.cardTypeId());
         self.changed = true;
-    })
-    
-    self.cardTypes = data.parent.board.cardTypes;
+    });
 
+    self.tags.subscribe(function (changes) {
+
+        $.each(changes, function (index, change) {
+            if (change.status == 'added') {
+                var repository = new CardTagRepository();
+                repository.cardId(self.cardId());
+                repository.tagName(change.value);
+                repository.create().done(function () {
+                    //self.tags.push(tagName);
+                });
+
+            } else if (change.status == 'deleted') {
+                var repository = new CardTagRepository();
+                repository.cardId(self.cardId());
+                repository.tagName(change.value);
+                repository.remove().done(function () {
+                    //self.tags.pop(tagName)
+                });
+            }
+        })
+        
+    }, null, "arrayChange")
+
+    
     self.members = function () {
-        var members = $.map(self.data.parent.board.members(), function (value) {
+        var members = $.map(self.boardMembers(), function (value) {
             return {
                 label: value.fullName(),
                 value: value.fullName(),
@@ -96,9 +157,9 @@
             }
         });
         members.splice(0, 0, {
-            label: self.data.parent.board.ownerFullName(),
-            value: self.data.parent.board.ownerFullName(),
-            id: self.data.parent.board.owner()
+            label: self.boardOwnerFullName(),
+            value: self.boardOwnerFullName(),
+            id: self.boardOwner()
         })
         return members;
     }
@@ -107,46 +168,27 @@
         editing: ko.observable(false),
         save: function () {
             var repository = new CardRepository();
-            repository.cardId(self.data.cardId());
-            repository.description(self.data.description());
+            repository.cardId(self.cardId());
+            repository.description(self.description());
             repository.update().done(function () {
                 self.wiki.editing(false);
             })
         }
     }
 
-    self.tags = {
-        add: function (tagName) {
-            var repository = new CardTagRepository();
-            repository.cardId(data.cardId());
-            repository.tagName(tagName);
-            repository.create().done(function () {
-                data.tags.push(tagName);
-            });
-
-        },
-        remove : function (tagName) {
-            var repository = new CardTagRepository();
-            repository.cardId(data.cardId());
-            repository.tagName(tagName);
-            repository.remove().done(function () {
-                data.tags.pop(tagName)
-            });
-        }
-    }
-
+    
     self.commentThread = {
         comments: ko.observableArray(),
         newComment: ko.observable(),
         add: function () {
             if (self.commentThread.newComment() != null) {
                 var repository = new CardCommentRepository();
-                repository.cardId(self.data.cardId());
+                repository.cardId(self.cardId());
                 repository.comment(self.commentThread.newComment());
                 repository.create().done(function (result) {
                     self.commentThread.comments.splice(0, 0, new CommentListItem(result));
                     self.commentThread.newComment('');
-                    self.data.commentCount(self.commentThread.comments().length);
+                    self.commentCount(self.commentThread.comments().length);
                 });
             }
         },
@@ -155,13 +197,13 @@
             repository.commentId(comment.commentId());
             repository.remove().done(function () {
                 self.commentThread.comments.remove(comment);
-                self.data.commentCount(self.commentThread.comments().length);
+                self.commentCount(self.commentThread.comments().length);
             });
         },
         loading: ko.observable(true),
         load: function () {
             var repository = new CardCommentRepository();
-            repository.cardId(self.data.cardId());
+            repository.cardId(self.cardId());
             repository.getComments().done(function (result) {
                 $.each(result, function (index, value) {
                     self.commentThread.comments.push(new CommentListItem(value));
@@ -177,7 +219,7 @@
         loading: ko.observable(true),
         load: function () {
             var repository = new CardActivityRepository();
-            repository.cardId(self.data.cardId());
+            repository.cardId(self.cardId());
             repository.getList().done(function (result) {
                 $.each(result, function (index, value) {
                     self.activityStream.activities.push(new ActivityListItem(value));
@@ -191,7 +233,7 @@
         attachments : ko.observableArray(),
         load: function () {
             var repository = new CardAttachmentRepository();
-            repository.cardId(self.data.cardId());
+            repository.cardId(self.cardId());
             repository.getAll().done(function (result) {
                 $.each(result, function (index, value) {
                     self.attachmentsList.attachments.push(new AttachmentListItem(value));
@@ -209,31 +251,52 @@
     }
 
 
-    self.remove = function () {
+    self.removeCard = function () {
         $.Dialog.close();
-        self.data.remove().done(function () {
+        self.remove().done(function () {
             self.changed = false;
-            
         })
     }
 
-    self.archive = function () {
+    self.archiveCard = function () {
         $.Dialog.close();
-        self.data.archive().done(function () {
+        self.archive().done(function () {
             self.changed = false;
-            
         });
     }
 
-    self.assign = function () {
-        self.data.assign().done(function () {
-            self.data.assignedToUserFullName();
-
+    self.moveCard = function () {
+        var targetColumn = ko.utils.arrayFirst(self.columns(), function (column) {
+            return column.columnId() == self.selectedColumn().columnId();
         });
+
+        if (targetColumn != null) {
+            var clonedCard = self.column.cards.remove(function (card) { return card.cardId() == self.cardId(); })[0];
+            if (clonedCard == null) return;
+            clonedCard.parent = targetColumn;
+            clonedCard.sequence(targetColumn.cards().length);
+            clonedCard.show(true);
+            targetColumn.cards.push(clonedCard);
+
+            var ids = new Array();
+            $.each(targetColumn.cards(), function (index, value) {
+                ids.push(value.cardId());
+            })
+            $.ajax({
+                url: '/api/card',
+                type: 'resequence',
+                data: {
+                    ColumnId: targetColumn.columnId(),
+                    CardIds: ids
+                }
+            });
+        }
+
+
     }
 
     self.userPhotoUrl = function () {
-        var assignedToUser = self.data.assignedToUser();
+        var assignedToUser = self.assignedToUser();
         if (assignedToUser != null && assignedToUser.length > 0) {
             return '/api/avatar/'+assignedToUser+'?height=25'
         } else {
@@ -242,87 +305,68 @@
         
     }
 
+    self.open = function () {
+        var content = $(elementId).html();
+        $.Dialog({
+            overlay: false,
+            shadow: true,
+            flat: true,
+            icon: false,
+            title: '<strong>Card Properties</strong>',
+            content: content,
+            width: '70%',
+            height: '98%',
+            //position: { top: 50, left: 10 },
+            onShow: function (dialog) {
+                $('[data-role=datepicker]', dialog).datepicker();
+                $('[data-role=dropdown]', dialog).dropdown();
+                $('[data-role=accordion]', dialog).accordion({
+                    closeAny: true, //true or false. if true other frames (when current opened) will be closed
+                    open: function (frame) { }, // when current frame opened this function will be fired
+                    action: function (frame) { } // when any frame opened this function will be fired
+                });
+                $('.tab-control', dialog).tabcontrol();
 
-    return {
-        open: function () {
-            var content = $(elementId).html();
-            $.Dialog({
-                overlay: false,
-                shadow: true,
-                flat: true,
-                icon: false,
-                title: '<strong>Card Properties</strong>',
-                content: content,
-                width: '70%',
-                height: '98%',
-                //position: { top: 50, left: 10 },
-                onShow: function (dialog) {
-                    $('[data-role=datepicker]', dialog).datepicker();
-                    $('[data-role=dropdown]', dialog).dropdown();
-                    $('.tab-control', dialog).tabcontrol();
-                    $('#tags-container', dialog).tagit({
-                        initialTags: data.tags(),
-                        triggerKeys: ['enter', 'tab'],
-                        tagSource: function (request, response) {
-                            $.ajax({
-                                url: '/api/tag/',
-                                type: 'GET',
-                                dataType: 'json',
-                                data: { name: request.term, boardId: self.data.boardId() },
-                                success: function (data) {
-                                    response($.map(data, function (name, val) {
-                                        return { label: name, value: name, id: val }
-                                    }))
-                                }
-                            })
-                        },
-                        tagsChanged: function (tagValue, action, element) {
-                            if (action == 'added') {
-                                self.tags.add(tagValue);
-                            } else if (action == 'popped') {
-                                self.tags.remove(tagValue);
-                            }
-                        }
-                    });
-                    $('form#DropZone', dialog).dropzone({
-                        url: '/api/cardattachment/' + self.data.cardId(),
-                        dictResponseError: 'test error',
-                        init: function () {
-                            this.on('addedfile', function (file) {
 
-                            })
+                $('form#DropZone', dialog).dropzone({
+                    url: '/api/cardattachment/' + self.cardId(),
+                    dictResponseError: 'test error',
+                    init: function () {
+                        this.on('addedfile', function (file) {
 
-                            this.on('complete', function (file) {
-                                this.removeFile(file);
-                            })
-                            this.on('success', function (file, response) {
-                                self.attachmentsList.attachments.splice(0, 0, new AttachmentListItem(response));
-                            })
+                        })
 
-                        },
-                    });
-                    
-                    self.commentThread.load();
-                    self.activityStream.load();
-                    self.attachmentsList.load();
+                        this.on('complete', function (file) {
+                            this.removeFile(file);
+                        })
+                        this.on('success', function (file, response) {
+                            self.attachmentsList.attachments.splice(0, 0, new AttachmentListItem(response));
+                        })
 
-                    // if description is empty , open for editing
-                    if (self.data.description() == null || self.data.description() == '')
-                        self.wiki.editing(true);
+                    },
+                });
 
-                    ko.applyBindings(self, $(dialog).get(0));
+                self.commentThread.load();
+                self.activityStream.load();
+                self.attachmentsList.load();
 
-                },
-                onClose: function () {
-                    if (self.changed)
-                        self.data.update();
-                },
-                onResize: function (dialog) {
-                    var height = $(dialog).height() - 180;
-                    $('.tab-control .frames', dialog).height(height)
-                }
-            });
-        }
+                // if description is empty , open for editing
+                if (self.description() == null || self.description() == '')
+                    self.wiki.editing(true);
+
+                ko.applyBindings(self, $(dialog).get(0));
+
+            },
+            onClose: function () {
+                if (self.changed)
+                    self.update();
+            },
+            onResize: function (dialog) {
+                var height = $(dialog).height() - 180;
+                $('.tab-control .frames', dialog).height(height)
+            }
+        });
     }
 
+    
 }
