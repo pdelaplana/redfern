@@ -28,8 +28,8 @@
                 <div class="padding15 fg-white">
                     <p class="text-muted">Change visibility...</p>
                     <div class="button-set">
-                        <button data-bind="css:{ active: !isPublic() }, click: changeVisibility">Private</button>
-                        <button data-bind="css:{ active: isPublic }, click: changeVisibility">Public</button>
+                        <button data-bind="css:{ 'active': isPublic() }, click: changeVisibility">Private</button>
+                        <button data-bind="css:{ 'active': !isPublic() }, click: changeVisibility">Public</button>
                     </div>
                 </div>
             </li>
@@ -153,8 +153,7 @@
         <ul>
             <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Columns</li>
             <li>
-                <div class="padding20">
-                    <p class="text-muted"></p>
+                <div id="columns_wrapper" class="padding20" style="overflow-y:auto;overflow-x:hidden">
                     <div class="listview small" data-bind="sortable: { data: columns, afterMove: resequence } ">
                         <div class="list bg-dark" style="width:100%" data-bind="click:function(){ show(!show()) }">
                             <div class="list-content">

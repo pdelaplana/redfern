@@ -48,16 +48,16 @@
     }
 
     self.changeVisibility = function () {
+
+        self.isPublic(!self.isPublic());
         var repository = new BoardRepository();
         repository.boardId(self.boardId());
         repository.isPublic(self.isPublic());
         repository.changeVisibility().done(function () {
             $.Notify.show('Board visibility has been changed.');
-            self.isPublic(!self.isPublic());
+            //self.isPublic(!self.isPublic());
         });
     }
-
-
 
     self.filters = {
         title: ko.observable(),
@@ -142,7 +142,6 @@
             self.filters.title(null);
             $('#tags-container-filter').tagit('reset');
         }
-
     }
 
     self.filters.title.subscribe(function (newValue) {
@@ -161,8 +160,8 @@
         self.filters.applyFilter();
     }, null, "arrayChange")
 
-    // members
 
+    // members
     self.newMember = {
         userName: ko.observable(),
         lookupUser: function (request, response) {
@@ -252,15 +251,11 @@
             repository.boardId(self.boardId());
             repository.remove().done(function () {
                 app.ui.appNavigationBar.removeBoardMenuItem(self.boardId());
-                app.router.go('/#/boards');
-                
+                app.router.go('/#/boards');       
             });
         }
-
     }
     
-    
-
     $('.slide-out-div').tabSlideOut({
         tabHandle: '.handle',                     //class of the element that will become your tab
         //pathToTabImage: '/content/images/contact_tab.gif', //path to the image for the tab //Optionally can be set using css
@@ -274,10 +269,16 @@
         fixedPosition: true                      //options: true makes it stick(fixed position) on scroll
     });
 
-    // resize the hieght of the charms sidebar when window resizes 
+    
     $(window).resize(function () {
+        // resize the height of the charms sidebar when window resizes 
         $('.slide-out-div').height($(this).outerHeight());
-    })
+        // resize the height columns div when window resizes 
+        $('#Sidebar_columns').find('ul li:nth-child(2) > div').height($(this).outerHeight() - 180);
+    });
+
+    // trigger the resize
+    $(window).resize();
 
     $('#tags-container-filter').tagit({
         allowNewTags: false,

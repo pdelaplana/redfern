@@ -2,11 +2,11 @@
     ViewBag.Title = "Redfern - Visual Task Management";
 }
 
-<div style="background: url('/content/images/standup.jpg') top left no-repeat; background-size: cover; height: 400px; margin-top:-5px">
+<div style="background: url('/content/images/standup.jpg') top left no-repeat; background-size: cover; height: 300px;">
     <div class="container padding20" style="">
-        <h1 class="fg-orange text-shadow">Visual Project Management for free</h1>
+        <h1 class="fg-orange text-shadow">Visual task management for free</h1>
         <h2 class="fg-darkOrange text-shadow">
-            Redfern is a kanban-style visual project management tool to help you visualize and organize work for any kind of project.
+            Redfern is a kanban-style visual task management tool to help you visualize and organize work for any kind of project.
         </h2>
         <a style="margin-top:50px;" href="/account/register" class="place-left button bg-darkRed bg-hover-red fg-white fg-hover-white bd-orange" style="margin-top: 10px">
             <h3 class="text-normal" style="margin: 10px 40px">Create your free account </h3>
@@ -15,39 +15,161 @@
 
 </div>
 
-<div class="bg-grayLighter" style="height:400px;margin-top:-10px;">
-    <div class="container padding20">
-        <div class="grid fluid">
-            <div class="row">
-                <div class="span4 bg-amber padding20 text-center" style="height:200px">
-                    <h2 class="fg-white">Easy to use</h2>
-                    <p>
-                        Built to be intuitive, it'll take you mere minutes to learn to use Redfern.
-                        A simplified interface, with instantaneous feedback and go-to features, never again risk inspiration to evaporate.
-                    </p>
-                </div>
+@*
+    <div class="bg-grayLighter" style="height:400px;margin-top:-10px;">
+        <div class="container padding20">
+            <div class="grid fluid">
+                <div class="row">
+                    <div class="span4 bg-amber padding20 text-center" style="height:200px">
+                        <h2 class="fg-white">Easy to use</h2>
+                        <p>
+                            Built to be intuitive, it'll take you mere minutes to learn to use Redfern.
+                            A simplified interface, with instantaneous feedback and go-to features, never again risk inspiration to evaporate.
+                        </p>
+                    </div>
 
-                <div class="span4  bg-pink padding20 text-center" style="height:200px">
-                    <h2 class="fg-white">Include everyone</h2>
-                    <p>
-                        Working on your own?  No problems.  But if you crave the company of others, Redfern can do that as well.
-                        Include everyone who's a stakeholder, get them involved, and make sure that stuff gets communicated.
-                    </p>
+                    <div class="span4  bg-pink padding20 text-center" style="height:200px">
+                        <h2 class="fg-white">Include everyone</h2>
+                        <p>
+                            Working on your own?  No problems.  But if you crave the company of others, Redfern can do that as well.
+                            Include everyone who's a stakeholder, get them involved, and make sure that stuff gets communicated.
+                        </p>
 
-                </div>
-                <div class="span4  bg-green padding20 text-center" style="height:200px">
-                    <h2 class="fg-white">Make it yours</h2>
-                    <p>
-                        Make a to-do list, plan an event, outline a novel, build your dream house, track your collection.... make Redfern yours by using it they way you want to use it and not the other way around
-                    </p>
+                    </div>
+                    <div class="span4  bg-green padding20 text-center" style="height:200px">
+                        <h2 class="fg-white">Make it yours</h2>
+                        <p>
+                            Make a to-do list, plan an event, outline a novel, build your dream house, track your collection.... make Redfern yours by using it they way you want to use it and not the other way around
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-        
     </div>
+*@
 
+<div class="bg-grayLighter border-top" style="overflow:hidden;">
+    <div class="container padding20">
+        <div class="grid fluid">
+            <div class="row">
+                <div class="span12 ">
+                    <h1 class="text-center">Do all your work in one place</h1>
+                    <video width="1100" controls autoplay loop style="margin-top:50px; display:block">
+                        <source src="/content/images/public/redfern-demo.mp4" type="video/mp4">
+                        <source src="/content/images/public/redfern-demo.ogg" type="video/ogg">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="bg-dark" style="height: 200px; margin-top: -10px;">
+
+<div class=" border-top border-color-darken"   >
+    <div class="container padding20">
+        <div class="grid fluid">
+            <div class="row ">
+                <div class="span12">
+                    <h1 class="text-center">The top five features</h1>        
+                </div>
+            </div>
+
+            <div class="row push-down-40">
+                <div class="span5 ">
+                    <h2>Multiple boards</h2>
+                    <p class="tertiary-info-secondary-text push-down-25">
+                        Use multiple boards to organize your work.  Start a board for a project at work or at home, use it track everyday to-dos, reading list for book clubs, your personal goals, or to manage your beloved collection of things.  There's no limit to the number you can have so create as many as you need.
+                    </p>
+                </div>
+                <div class="span6 offset1">
+                    <img src="/content/images/public/multiple-boards.png" class="polaroid" />
+                </div>
+
+            </div>
+
+            <div class="row" style="margin-top:100px">
+                <div class="span5 ">
+                    <h2 class="fg-darker">Show your cards</h2>
+                    <p class="tertiary-info-text push-down-25">
+                        Cards can represent all sorts of information.   Use them to keep tabs on individuals tasks for your project,  or to post facts, ideas and other tidbits of interesting information.  You can even use it track every movie you have in your personal movie collection.
+                    </p>
+                </div>
+                <div class="span6 offset1">
+                    <img src="/content/images/public/show-your-cards.png" class=" polaroid" />
+                </div>
+            </div>
+           
+            <div class="row" style="margin-top:100px">
+                <div class="span5 ">
+                    <h2 class="fg-darker">Go into details</h2>
+                    <p class="tertiary-info-text push-down-25">
+                        Use the popular Markdown syntax to add as much detail to a card as needed.  Start a conversation to communicate status, to get feedback and to obtain consensus with others.  Upload and attach files of any kind.
+  
+                    </p>
+                </div>
+                <div class="span6 offset1">
+                    <img src="/content/images/public/go-into-details.png" class=" polaroid" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:100px">
+                <div class="span5 ">
+                    <h2>Organize flexibly</h2>
+                    <p class="tertiary-info-text push-down-25">
+                        Organize your cards in any way you want.  Use columns to represent work states or categories to classify where each card sits.    Tag cards as features, milestones, genres, areas etc.  Or change the card's color to make them stand out.
+                    </p>
+                </div>
+                <div class="span6 offset1">
+
+                    <img src="/content/images/public/organize-flexibly.png" class="polaroid" />
+                </div>
+
+            </div>
+
+
+            <div class="row" style="margin-top:100px">
+                <div class="span5">
+                    <h2>Work together</h2>
+                    <p class="tertiary-info-text push-down-25">
+                        You can collaborate with as many people as you want. They all can add cards, leave comments, upload attachments and do much more.  You can even assign a card to others to work on.   So include everyone you need, get them involved, and make sure that stuff gets done.
+                    </p>
+                </div>
+                <div class="span6 offset1">
+                    <img src="/content/images/public/work-together.png" class="polaroid" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="bg-grayLighter" style="height: 210px;">
+    <div class="container text-center padding40">
+        <div class="grid fluid">
+            <div class="row">
+                <div class="span12">
+                    <h2 class="push-down-40">
+                        With Redfern, all the work you need to do is all in one place.
+                        No more jumping from page to page looking for documents, issues logs, and task lists.
+                    </h2>
+
+                    <a  href="/account/register" class="button bg-darkRed bg-hover-red fg-white fg-hover-white bd-orange" style="margin-top: 10px">
+                        <h3 class="text-normal" style="margin: 10px 40px">Create your free account </h3>
+                    </a>
+
+                    
+                </div>
+            </div>
+
+        </div>
+
+       
+    </div>
+</div>
+
+
+
+<div class="bg-dark" style="height: 210px; margin-top: -20px;">
     <div class="container">
 
     </div>
