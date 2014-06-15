@@ -26,6 +26,8 @@ namespace Redfern.Web.Models
         public int Sequence { get; set; }
         public int CardTypeId { get; set; }
         public string Color { get; set; }
+        public string CreatedByUserFullName { get; set; }
+        public DateTime CreatedDate { get; set; }
         public string AssignedToUser { get; set; }
         public string AssignedToUserFullName { get; set; }
         public DateTime? DueDate { get; set; }

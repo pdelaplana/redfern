@@ -9,8 +9,7 @@
            content = observable();
 
         if (content == null || content == '') {
-            content = 'You can use this area to enter additional details for the card.  ' +
-                        'Click the Edit link to add new content.  ';
+            content = '';
         }
         content = markdown.Transform(content);
         $(element).html(content);
@@ -22,20 +21,23 @@ ko.bindingHandlers.markdownEditor = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var observable = valueAccessor();
         
-        $(element).MarkdownDeep({
+        $(element).val(observable()).MarkdownDeep({
             help_location: "/Content/mdd_help.html",
             disableTabHandling: true,
+            disableAutoIndent: true,
             resizebar: false,
             cmd_img: function (ctx) {
-                alert('to be implemeted');
+                alert('to be implemented');
             },
             cmd_link: function (ctx) {
-                alert('to be implemeted');
+                alert('to be implemented');
             },
             onPreTransform: function (editor, markdown) {
                 observable(markdown);
             }
         });
+
+        //$(element).autosize();
 
     },
     update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -47,4 +49,6 @@ ko.bindingHandlers.markdownEditor = {
     }
 
 }
+
+
 

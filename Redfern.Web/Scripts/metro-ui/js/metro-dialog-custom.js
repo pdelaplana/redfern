@@ -63,6 +63,7 @@
         });
 
         if (params.sysButtons) {
+            
             if (params.sysButtons.btnClose) {
                 $("<button/>").addClass("btn-close").on('click', function(e){
                     e.preventDefault();
@@ -86,7 +87,7 @@
                 }).appendTo(_caption);
             }
         }
-
+        
         if (params.icon) $(params.icon).addClass("icon").appendTo(_caption);
         $("<div/>").addClass("title").html(params.title).appendTo(_caption);
 
@@ -119,7 +120,7 @@
                 .css('left', params.position.left);
         } else {
             _window
-                .css("top", ($(window).height() - METRO_DIALOG.outerHeight()) / 2)
+                .css("top", ($(window).height()-90 - METRO_DIALOG.outerHeight()) / 2)
                 .css("left", ($(window).width() - _window.outerWidth()) / 2)
             ;
         }

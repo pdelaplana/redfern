@@ -61,6 +61,8 @@ function Card(data, column) {
     self.description = ko.observable(data.Description);
     self.cardTypeId = ko.observable(data.CardTypeId);
     self.color = ko.observable(data.Color);
+    self.createdByUserFullName = ko.observable(data.CreatedByUserFullName);
+    self.createdDate = ko.observable(data.CreatedDate);
     self.assignedToUser = ko.observable(data.AssignedToUser);
     self.assignedToUserFullName = ko.observable(data.AssignedToUserFullName);
     self.dueDate = ko.observable();
@@ -68,6 +70,7 @@ function Card(data, column) {
     self.isArchived = ko.observable(data.IsArchived);
     self.boardId = ko.observable(data.BoardId);
     self.columnId = ko.observable(data.ColumnId);
+    self.columnName = column.name;
     self.sequence = ko.observable(data.Sequence);
     self.tags = ko.observableArray(data.Tags)
     self.commentCount = ko.observable(data.CommentCount);

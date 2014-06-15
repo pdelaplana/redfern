@@ -30,8 +30,9 @@ namespace Redfern.Web
                         "~/Scripts/moment-with-lang.js",
                         "~/scripts/jquery.tabslideout.js",
                         "~/scripts/markdowndeeplib.min.js",
-                        "~/scripts/markdowndeeplib.min.js",
-                        "~/scripts/dropzone/dropzone.js"
+                        "~/scripts/dropzone/dropzone.js",
+                        "~/scripts/jquery.autosize.js",
+                        "~/scripts/popModal.js"
                         ));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -147,6 +148,7 @@ namespace Redfern.Web
             //
             bundles.Add(new StyleBundle("~/content/css").Include(
                       "~/content/metro-ui/css/metro-bootstrap.css",
+                      "~/content/metro-ui/css/metro-bootstrap-responsive.css",
                       "~/content/metro-custom.css",
                       "~/content/themes/metro/jquery-ui.css",
                       "~/content/nanoscroller.css",
@@ -155,6 +157,7 @@ namespace Redfern.Web
                       "~/content/mdd_styles.css",
                       "~/scripts/dropzone/css/basic.css",
                       "~/scripts/dropzone/css/dropzone.css",
+                      "~/content/popModal.css",
                       "~/content/site.css"));
         }
     }

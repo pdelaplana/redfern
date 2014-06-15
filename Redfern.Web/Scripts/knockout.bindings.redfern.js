@@ -252,7 +252,10 @@ ko.bindingHandlers.userLookup = {
     }
 }
 
-
+/**
+ * Lookup user with jquery ui autocomplete
+ * 
+ */
 ko.bindingHandlers.assignCard = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var bindings = allBindings(),
@@ -315,7 +318,11 @@ ko.bindingHandlers.assignCard = {
     }
 }
 
-ko.bindingHandlers.tagsContainer = {
+/**
+ * Lookup user with jquery ui autocomplete
+ * 
+ */
+ko.bindingHandlers.tagit = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var bindings = allBindings(),
             observable = valueAccessor();
@@ -350,4 +357,183 @@ ko.bindingHandlers.tagsContainer = {
        
     }
 }
+
+/**
+ * card title editor
+ * 
+ */
+ko.bindingHandlers.cardTitleEditor = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            observable = valueAccessor(),
+            text = $('<span/>').text(observable()),
+            input = $('<textarea/>').autosize();
+            
+        $(input).hide();
+        
+        $(element).addClass('card-title-editor cursor-pointer').append(text).append(input);
+
+        $(text).on('click', function () {
+            if (bindings.enable) {
+                $(input).val(observable()).show().focus().trigger('autosize.resize');
+                $(text).hide();
+            }
+            return false;
+        });
+
+        $(input)
+            //.blur(function (event) {
+            //    observable($(input).val());
+            //    $(input).hide();
+            //    $(text).show();
+            //    event.stopPropagation();
+            //    event.stopImmediatePropagation();
+            //})
+            .keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $(this).blur();
+                }
+
+            })
+
+    },
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var observable = valueAccessor(),
+            text = $(element).find('span'),
+            input = $(element).find('input[type=text]');
+
+        $(text).text(observable());
+
+    }
+};
+
+/**
+ * card wiki editor
+ * 
+ */
+ko.bindingHandlers.wikiEditor = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            observable = valueAccessor(),
+            markdown = new MarkdownDeep.Markdown(),
+            contentContainer = $('<div/>').addClass('markdown-content bd-hover-grayDarker ' + (bindings.enable ? 'cursor-pointer' : '')),
+            editorContainer = $('<div/>').addClass('markdown-editor').hide(),
+            preview = $('<div/>').addClass('mdd_preview').hide(),
+            toolbar = $('<div/>').addClass('mdd_toolbar'),
+            textarea = $('<textarea/>').addClass('mdd_editor'),
+            saveButton = $('<button/>').addClass('primary push-down-10').text('Save'),
+            editButton = $('<button/>').addClass('push-down-10').text('Edit').hide(),
+            previewButton = $('<button/>').addClass('push-down-10').text('Preview'),
+            cancelButton = $('<button/>').addClass('link push-down-10').text('Cancel');
+
+        // create the content
+        var content = observable();
+        if (content == null || content == '') {
+            if (bindings.enable)
+                // create content to prompt user to enter a description
+                content = $('<span/>').addClass('fg-grayLight fg-gray fg-hover-grayDarker cursor-pointer').append('<i class="icon-plus-2"></i> Add a description...');
+            else
+                content = '';
+        } else {
+            content = markdown.Transform(content);
+        }
+        contentContainer.html(content);
+
+        // allow the user to click on content to edit
+        contentContainer.click(function (event) {
+            if (bindings.enable) {
+                contentContainer.fadeOut(function () {
+                    editButton.click();
+                    editorContainer.fadeIn(function () {
+                        textarea.trigger('autosize.resize');
+                    });
+
+                });
+                
+            }
+            event.preventDefault();
+        })
+
+        // create the editor , with markdown and autosize
+
+        editorContainer
+            .append(preview)
+            .append(toolbar)
+            .append(textarea)
+            .append(saveButton).append('&nbsp;')
+            .append(editButton).append('&nbsp;')
+            .append(previewButton).append('&nbsp;')
+            .append(cancelButton);
+
+        $(textarea)
+            .val(observable())
+            .MarkdownDeep({
+                help_location: "/Content/mdd_help.html",
+                disableTabHandling: true,
+                disableAutoIndent: true,
+                resizebar: false,
+                cmd_img: function (ctx) {
+                    alert('to be implemented');
+                },
+                cmd_link: function (ctx) {
+                    alert('to be implemented');
+                },
+                onPreTransform: function (editor, markdown) {
+                    observable(markdown);
+                }
+            })
+            .autosize();
+
+        saveButton.click(function (event) {
+            observable(textarea.val());
+            contentContainer.html(markdown.Transform(observable()));
+            editorContainer.fadeOut('slow', function () {
+                contentContainer.fadeIn();
+            });
+            if (bindings.save != undefined)
+                bindings.save();
+        });
+
+        previewButton.click(function (event) {
+            preview.html(markdown.Transform(observable()));
+            textarea.fadeOut('slow', function () {
+                preview.fadeIn();
+                toolbar.hide();
+                previewButton.hide();
+                editButton.show();
+            });
+        });
+
+        editButton.click(function (event) {
+            preview.fadeOut('slow', function () {
+                toolbar.show();
+                textarea.fadeIn().trigger('autosize.resize');
+                previewButton.show();
+                editButton.hide();
+            });
+        });
+
+        cancelButton.click(function () {
+            editorContainer.fadeOut('slow', function () {
+                contentContainer.fadeIn();
+            });
+        })
+
+
+
+
+        $(element).after(contentContainer).after(editorContainer);
+
+    },
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var observable = valueAccessor(),
+            content = observable();
+        //if (content != '')
+        //    $(element).val(content);
+
+    }
+
+}
+
+
 

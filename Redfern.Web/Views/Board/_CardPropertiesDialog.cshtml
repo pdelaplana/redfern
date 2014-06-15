@@ -1,131 +1,86 @@
-﻿<div id="CardPropertiesDialog" style="display:none;min-height:100%">
-    <div class="grid fluid" style="min-height:100%">
+﻿<div id="CardPropertiesDialog" style="display:none;" >
+    <div class="grid fluid">
         <div class="row">
             <div class="padding10 span12">
-                <label>Title</label>
-                <div class="input-control text">
-                    <input type="text"maxlength="100" data-bind="value: title, enable: hasAccess('ChangeCardTitle')"  />
-                </div>
             </div>
         </div>
-        <div class="row" style="height:100%">
 
+        <div class="row" >
             <!-- right hand column-->
-            <div class="padding10 ntp nbp span8">
-                <div class="tab-control" data-role="tab-control">
-                    <ul class="tabs">
-                        <li class="active"><a data-href="#page_0" href="#page_0">Details</a></li>
-                        <li><a data-href="#page_1" href="#page_1">Conversations</a></li>
-                        <li><a data-href="#page_2" href="#page_2">History</a></li>
-                        <li><a data-href="#page_3" href="#page_3"><i class="icon-attachment"></i></a></li>
-                        <li class="place-right" data-bind="visible: hasAccess('AdvanceCardOptions')"><a data-href="#page_4" href="#page_4"><i class="icon-cog"></i></a></li>
-                    </ul>
-                    <div class="frames">
-                        <div id="page_0" class="frame" style="height:100%">
-
-                            <div style="height:100%" data-bind="visible: !wiki.editing()">
-                                <div class="listview wiki" style="overflow-x: auto;  height: 95%" data-bind="markdown: description"></div>
-                                <button class="link place-right" data-bind="click: function(){ wiki.editing(true) }, visible: hasAccess('ChangeCardDescription')">Edit</button>
-                            </div>
-
-                            <div class="" data-bind="visible: wiki.editing() && hasAccess('ChangeCardDescription')" style="height:100%">
-                                <div class="mdd_preview" style="display:none"></div>
-                                <div class="mdd_toolbar"></div>
-                                <textarea cols=50 class="mdd_editor" style="height:90%" data-bind="value: description, markdownEditor: description"></textarea>
-
-                                <button class="primary push-down-10" data-bind="click: wiki.save">Save</button>
-                                <button class="link push-down-10" data-bind="click: function(){ wiki.editing(false) }">Cancel</button>
-                            </div>
-                        </div>
-                        <div class="frame" id="page_1" style="height:100%">
-                            <div class="row padding5" style="margin-bottom:5px;width:100%" data-bind="visible: hasAccess('AddComment')">
-                                <div class="span11">
-                                    <div class="input-control textarea">
-                                        <textarea placeholder="write a comment..." maxlength="250" style="min-height:50px;width:100%" data-bind="value: commentThread.newComment"></textarea>
-                                    </div>
-                                </div>
-                                <div class="span1">
-                                    <button data-bind="click:commentThread.add" class="bg-darker fg-white place-left" style="height:50px"><i class="icon-comments"></i></button>
-                                </div>
-                            </div>
-                            <div style="text-align:center" data-bind="visible:commentThread.loading">
-                                <img src="/content/images/ajax-loader.gif" />
-                            </div>
-                            <div class="listview padding5" id="commentslist" data-bind="template:'commentsListTemplate'" style="overflow-x:auto;height:80%;width:100%">
-
-                            </div>
-                        </div>
-                        <div class="frame" id="page_2" style="height:100%">
-                            <div style="text-align:center" data-bind="visible:activityStream.loading">
-                                <img src="/content/images/ajax-loader.gif" />
-                            </div>
-                            <div class="listview padding5" id="commentslist" data-bind="template:'activitiesListTemplate'" style="overflow-x:auto;height:99%;width:100%">
-                            </div>
-                        </div>
-                        <div class="frame" id="page_3" style="height:100%">
-                            <div class="padding10" data-bind="visible:hasAccess('UploadFile')">
-                                <form action="/file-upload" class="dropzone" id="DropZone">
-                                    <div class="dz-message ">
-                                        <img src="~/content/images/file-upload-greylight.png" style="height:70px" />
-                                        <div class="text-center place-right">
-                                            <span class="text-muted">Drag and drop a file here to upload</span><br />
-                                            <span class="text-muted">- or -</span> <br />
-                                            <span class="text-muted">Click anywhere to select a file from your computer</span>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="listview padding10" id="attachmentslist" data-bind="template:'attachmentsListTemplate'" style="overflow-x:auto;height:60%;width:100%">
-
-                            </div>
-                        </div>
-                        <div class="frame" id="page_4" style="height:100%">
-                            <div data-bind="visible: hasAccess('RearrangeCards')">
-                                <label>Move Card To..</label><br />
-                                <div class="input-control select" style="width:200px">
-                                    <select data-bind="options: columns, optionsText: function(item){ return item.name() }, value: selectedColumn"></select>
-                                </div>
-                                <button class="primary" data-bind="click: moveCard">Move<i class="icon-arrow-right-5"></i></button>
-                                <hr />
-                            </div>
-                            <div data-bind="visible: hasAccess('ArchiveCard')">
-                                <button class="bg-red fg-white" style="width:150px;" data-bind="click: archiveCard">Archive Card</button>
-                                <small class="text-muted">Archiving this card will move it to the archive column.</small>
-
-                                <hr />
-                            </div>
-
-                            <div data-bind="visible: hasAccess('DeleteCard')">
-                                <button class="bg-red fg-white" style="width:150px" data-bind="click: removeCard">Delete Card</button>
-                                <small class="text-muted">Deleing this card will permanently remove it from this board.</small>
-                            </div>
-                            
-                        </div>
+            <div class="span8 padding10 ntp">
+                <div class="row">
+                    <span class="subheader card-title-editor border-bottom" >
+                        <textarea maxlength="100" rows="1" id="title" data-bind="value: title, enable:hasAccess('ChangeCardTitle'), autosize:true"></textarea>
+                    </span>
+                    <small class="text-muted">
+                        Created by <span data-bind="text: createdByUserFullName"></span>, <span data-bind="text:moment(moment.utc(createdDate()).toDate()).format('ll')"></span> 
+                        - <b data-bind="text: selectedColumn().name()"></b> <a href="" data-bind="popModal: selectedColumn, popModalOptions: { html: $('#ChangeParentColumn').html()  }, visible: hasAccess('RearrangeCards')">(Change)</a> </small>
+                </div>
+               
+                <div class="row push-down-20">
+                    <div style="height:100%" data-bind="wikiEditor: description, enable: hasAccess('ChangeCardDescription'), save: wiki.save">
                     </div>
                 </div>
+                <div class="row push-down-40">
+                    <span class="subheader-secondary">Attachments</span>
+                    <div style="margin-top:20px; margin-bottom:20px;width:100%" data-bind="visible:hasAccess('UploadFile')">
+                        <span id="uploadfile" class="fg-grayLight fg-gray fg-hover-grayDarker cursor-pointer"><i class="icon-upload-2"></i> Click to upload a file or drag and drop a file anywhere on the dialog...</span>
+                        <div id="previews" class="dropzone-previews"></div>
+                    </div>
+                    <div class="listview small" id="attachmentslist" data-bind="template:'attachmentsListTemplate'" style="">
+                    </div>
+                </div>
+
+                <div class="row push-down-40">
+                    <span class="subheader-secondary">Conversations</span>
+                    <div class="row" style="margin-top:10px; margin-bottom:5px;width:100%" data-bind="visible: hasAccess('AddComment')">
+                        <div class="span11">
+                            <div class="input-control textarea">
+                                <textarea placeholder="leave a comment..." maxlength="250" style="min-height:50px;width:100%" data-bind="value: commentThread.newComment"></textarea>
+                            </div>
+                        </div>
+                        <div class="span1">
+                            <button data-bind="click:commentThread.add" class="bg-darker fg-white place-left" style="height:50px"><i class="icon-comments"></i></button>
+                        </div>
+                    </div>
+                    <div style="text-align:center" data-bind="visible:commentThread.loading">
+                        <img src="/content/images/ajax-loader.gif" />
+                    </div>
+                    <div class="listview" id="commentslist" data-bind="template:'commentsListTemplate'">
+                    </div>
+                </div>
+
+                <div class="row push-down-40" style="height:20px">&nbsp;</div>
+
 
             </div>
 
             <!-- left hand column -->
             <div class="padding10 ntp nbm span4" >
+                
                 <div class="inline-block" style="width:100%">
                     <!-- ko foreach: cardTypes -->
                     <div class="tile quarter" data-bind="setTileColor: color, css: { selected : color() == $parent.color()  }, changeTileColor: $parent.color, color: color, attr: { 'title': name }, enable: $parent.hasAccess('ChangeCardColor')">
                     </div>
                     <!-- /ko -->
+                    
                 </div>
                 <h5>Tags</h5>
                 <div class="">
-                    <ul data-bind="tagsContainer: tags, tagitOptions: { enabled: hasAccess('AddTag'), initialTags: tags()  }"></ul>
+                    <ul data-bind="tagit: tags, tagitOptions: { enabled: hasAccess('AddTag'), initialTags: tags()  }"></ul>
                 </div>
                 <h5 class="">Assignee</h5>
                 <div class="inline-block push-down-5" style="width:100%!important">
                     <img class="span2" data-bind="attr: { src: userPhotoUrl() }" />
-                    <div class="input-control text span10" >
+                    <div class="input-control text span10">
                         <input type="text" placeholder="Unassigned" data-bind="assignCard: assignedToUser, assignCardOptions: { members: members(), displayValue: assignedToUserFullName }, enable: hasAccess('ChangeCardAssignment')" />
                     </div>
                 </div>
-               
+              
+                
+                <div style="bottom:0;margin-top:85%">
+                    <a href="" data-bind="click: removeCard, visible: hasAccess('DeleteCard')"><i class="icon-remove" ></i> Delete</a>
+                </div>
             </div>
         </div>
     </div>
@@ -133,7 +88,7 @@
 
 <script id="attachmentsListTemplate" type="text/html">
     <!-- ko foreach: attachmentsList.attachments -->
-    <div class="list" style="width:100%">
+    <div class="list no-border no-border-all" style="width:100%">
         <div class="list-content">
             <img class="icon" src="" data-bind="attr: { src: '/api/cardattachment/?thumbid='+cardAttachmentId() }" style="width:80px;height:80px" />
             <div class="data">
@@ -154,14 +109,14 @@
 
 <script id="commentsListTemplate" type="text/html">
     <!-- ko foreach: commentThread.comments-->
-    <div class="list" style="width:100%">
+    <div class="list no-border" style="width:100%">
         <div class="list-content">
             <img class="icon" data-bind="attr: { src: '/api/avatar/'+commentByUser() }" />
             <div class="data">
                 <span class="list-title item-title" data-bind="text: commentByUserFullName"></span>
                 <span class="list-subtitle" data-bind="text: comment"></span>
                 <span class="list-remark fg-grayLight" style="margin-top:10px" data-bind="text: commentDateFromNow, attr: { title: commentDateInLocalTimezone }"></span>
-                <span class="place-bottom-right" data-bind="visible: commentByUser() == app.user.userName"><a href="" data-bind="click: $parent.commentThread.remove"><i class="icon-remove"></i></a></span>
+                <span class="place-top-right" data-bind="visible: commentByUser() == app.user.userName"><a href="" data-bind="click: $parent.commentThread.remove"><i class="icon-cancel-2 fg-grayLight fg-hover-grayDark" style="font-size:xx-small;font-weight:100" ></i></a></span>
             </div>
         </div>
     </div>
@@ -181,3 +136,16 @@
     </div>
     <!--/ko-->
 </script>
+
+<script id="ChangeParentColumn" type="text/html">
+    <div class=""  data-bind="foreach: columns">
+        <div class="padding10 border-bottom bg-hover-grayLighter" >
+            <i class="" data-bind="css: { 'icon-checkbox': $parent.selectedColumn().columnId() == columnId(),   'icon-checkbox-unchecked': $parent.selectedColumn().columnId() != columnId()}"></i>
+            <a href="" data-bind="text:name, click: function(){ $parent.selectedColumn($data); $parent.moveCard() }"></a>
+        </div>
+        
+     </div>
+    
+</script>
+
+

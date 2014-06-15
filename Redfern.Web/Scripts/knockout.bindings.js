@@ -357,5 +357,50 @@ ko.bindingHandlers.inlineEditor = {
 };
 
 
+ko.bindingHandlers.autosize = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var enable = ko.utils.unwrapObservable(valueAccessor()),
+            id = $(element).attr('id') ? $(element).attr('id') : 'none';
+        if (enable)
+            $(element).autosize({ id :id, append:'' });
+    }
+};
+
+ko.bindingHandlers.popModal = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            enable = ko.utils.unwrapObservable(valueAccessor()),
+            options = $.extend({
+                html: '',
+                placement: 'bottomLeft',
+                showCloseBut: false,
+                onDocumentClickClose: false,
+                onOkBut: function () { },
+                onCancelBut: function () { },
+                onLoad: function () { },
+                onClose: function () { }
+            }, bindings.popModalOptions);
+            
+        $(element).click(function (event) {
+            if ($(this).hasClass('popModalOpen')) {
+                $(this).removeClass('popModalOpen');
+                $(this).popModal('hide');
+
+            } else {
+                $(this).popModal(options);
+                
+                ko.applyBindings(bindingContext.$data, $(element).next('.popModal').get(0));
+                $(this).addClass('popModalOpen');
+
+            }
+            event.preventDefault();
+            event.stopPropagation();
+            
+        })
+
+    }
+};
+
+
 
 

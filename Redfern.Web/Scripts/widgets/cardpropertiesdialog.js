@@ -26,7 +26,6 @@
         self.sourceDisplayName = ko.observable(data.SourceDisplayName);
         self.targetDisplayName = ko.observable(data.TargetDisplayName);
 
-        
         self.description = ko.computed(function () {
             var description = "";
             switch (self.verb()) {
@@ -74,6 +73,8 @@
     self.boardId = source.boardId;
     self.title = source.title;
     self.description = source.description;
+    self.createdByUserFullName = source.createdByUserFullName;
+    self.createdDate = source.createdDate;
     self.assignedToUser = source.assignedToUser;
     self.assignedToUserFullName = source.assignedToUserFullName;
     self.cardTypeId = source.cardTypeId;
@@ -94,6 +95,7 @@
     self.archive = source.archive;
     self.update = source.update;
     self.remove = source.remove;
+
 
     self.selectedColumn = ko.observable(source.parent);
 
@@ -165,13 +167,12 @@
     }
 
     self.wiki = {
-        editing: ko.observable(false),
         save: function () {
             var repository = new CardRepository();
             repository.cardId(self.cardId());
             repository.description(self.description());
             repository.update().done(function () {
-                self.wiki.editing(false);
+                
             })
         }
     }
@@ -245,7 +246,7 @@
             repository.cardAttachmentId(attachment.cardAttachmentId());
             repository.remove().done(function () {
                 self.attachmentsList.attachments.remove(attachment);
-                self.data.attachmentCount(self.attachmentsList.attachments().length);
+                self.attachmentCount(self.attachmentsList.attachments().length);
             });
         }
     }
@@ -288,6 +289,11 @@
                 data: {
                     ColumnId: targetColumn.columnId(),
                     CardIds: ids
+                },
+                success: function () {
+                    //self.columnName(targetColumn.name());
+                    //self.column
+
                 }
             });
         }
@@ -315,44 +321,72 @@
             title: '<strong>Card Properties</strong>',
             content: content,
             width: '70%',
-            height: '98%',
+            height: 'auto',
             //position: { top: 50, left: 10 },
             onShow: function (dialog) {
+
+                
                 $('[data-role=datepicker]', dialog).datepicker();
                 $('[data-role=dropdown]', dialog).dropdown();
-                $('[data-role=accordion]', dialog).accordion({
-                    closeAny: true, //true or false. if true other frames (when current opened) will be closed
-                    open: function (frame) { }, // when current frame opened this function will be fired
-                    action: function (frame) { } // when any frame opened this function will be fired
-                });
                 $('.tab-control', dialog).tabcontrol();
-
-
-                $('form#DropZone', dialog).dropzone({
+                $(dialog).dropzone({
                     url: '/api/cardattachment/' + self.cardId(),
+                    previewsContainer: "#previews",
+                    clickable: "#uploadfile",
                     dictResponseError: 'test error',
                     init: function () {
                         this.on('addedfile', function (file) {
 
                         })
-
                         this.on('complete', function (file) {
                             this.removeFile(file);
                         })
                         this.on('success', function (file, response) {
                             self.attachmentsList.attachments.splice(0, 0, new AttachmentListItem(response));
+                            self.attachmentCount(self.attachmentsList.attachments().length);
                         })
-
                     },
                 });
+                $('#options',dialog).click(function (event) {
+                    $('#options',dialog).popModal({
+                        html: $('#optionsContent').html(),
+                        placement: 'bottomRight',
+                        showCloseBut: true,
+                        onDocumentClickClose: true,
+                        onOkBut: function () { },
+                        onCancelBut: function () { },
+                        onLoad: function () { },
+                        onClose: function () { }
+                    });
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                })
+                $('#ChangeColumn', dialog).click(function (event) {
+                    $('#ChangeColumn', dialog).popModal({
+                        html: $('#ChangeParentColumn').html(),
+                        placement: 'bottomLeft',
+                        showCloseBut: true,
+                        onDocumentClickClose: true,
+                        onOkBut: function () { },
+                        onCancelBut: function () { },
+                        onLoad: function () { },
+                        onClose: function () { }
+                    });
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                })
+
+
 
                 self.commentThread.load();
                 self.activityStream.load();
                 self.attachmentsList.load();
 
                 // if description is empty , open for editing
-                if (self.description() == null || self.description() == '')
-                    self.wiki.editing(true);
+                //if (self.description() == null || self.description() == '')
+                //    self.wiki.editing(true);
 
                 ko.applyBindings(self, $(dialog).get(0));
 
@@ -362,8 +396,9 @@
                     self.update();
             },
             onResize: function (dialog) {
-                var height = $(dialog).height() - 180;
-                $('.tab-control .frames', dialog).height(height)
+                //var height = $(dialog).height() - 180;
+                //$('.content', dialog).height($(dialog).height());
+                //$('.tab-control .frames', dialog).height(height)
             }
         });
     }

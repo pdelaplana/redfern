@@ -182,14 +182,18 @@ div.mdd_links a:hover
 
 div.mdd_editor_wrap
 {
+
     padding-right: 8px;
+    padding-right: 0;
+
 }
 textarea.mdd_editor
 {
 	width:100%;
-    height:100%!important;
+    /*height:100%!important;*/
 	resize:none;
 	margin:0;padding: 3px;
+    min-height:200px;
 }
 
 div.mdd_resizer_wrap
@@ -212,9 +216,10 @@ div.mdd_resizer
 
 .mdd_editor_wrap{
 
-    height:85%!important;
+    /*height:85%!important;*/
     width:100%;
     display:inline-block;
+    
 }
 
 .mdd_help{

@@ -328,6 +328,7 @@
     <Content Include="Content\metro-ui\fonts\iconFont.dev.svg" />
     <Content Include="Content\metro-ui\fonts\iconFont.svg" />
     <Content Include="Content\nanoscroller.css" />
+    <Content Include="Content\popModal.css" />
     <Content Include="Content\tagit-stylish-yellow.css" />
     <Content Include="Scripts\app\ui.js" />
     <Content Include="Content\images\public\redfern-demo.ogg" />
@@ -345,6 +346,8 @@
     <Content Include="Scripts\dropzone\images\spritemap.png" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
+    <Content Include="Scripts\jquery.autosize-min.js" />
+    <Content Include="Scripts\jquery.autosize.js" />
     <Content Include="Scripts\jquery.ddslick.js" />
     <Content Include="Scripts\jquery.fileinput.js" />
     <Content Include="Scripts\jquery.tabslideout.js" />
@@ -367,6 +370,7 @@
     <Content Include="Content\mdd_toolbar.png" />
     <Content Include="Scripts\metro-ui\js\metro-notify-custom.js" />
     <Content Include="Scripts\modernizr-2.7.2.js" />
+    <Content Include="Scripts\popModal.js" />
     <Content Include="Scripts\repositories\boardmemberrepository.js" />
     <Content Include="Scripts\repositories\cardactivityrepository.js" />
     <Content Include="Scripts\repositories\cardattachmentrepository.js" />
@@ -674,6 +678,7 @@
     <Content Include="Views\Account\EmailConfirmation.cshtml" />
     <Content Include="Views\Shared\_Credits.cshtml" />
     <Content Include="Views\Users\_Index.cshtml" />
+    <Content Include="Views\Board\_CardPropertiesDialog - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
