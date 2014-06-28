@@ -8,7 +8,9 @@
                     <div class="board-column-wrapper">
                         <div class="board-column-header ntm ntp clearfix">
                             <h4 class="ntm ntp">
-                                <strong data-bind="text: name"></strong>
+                               
+                                <strong data-bind="truncatedText: name, maxTextLength:18"></strong>
+                                
                                 <span class="text-muted">
                                     (<span data-bind="text: visibleCardCount"></span> cards)
                                     <i class="icon-filter" data-bind="visible: sortable() == false"></i>
@@ -87,7 +89,7 @@
                             </h4>
                         </div>
                         <div class="board-column-content content" data-bind="sortable: { data: cards, afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable() && $parent.hasAccess('RearrangeCards') , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
-                            <div class="tile double bg-amber" data-bind="visible: show, event: { dblclick: open }, setTileColor: color, archived : $parent.isArchiveColumn() ">
+                            <div class="tile double bg-amber" data-bind="visible: show, event: { click: open }, setTileColor: color, archived : $parent.isArchiveColumn() ">
                                 <div class="tile-content">
                                     <div class="padding10">
                                         <p class="fg-white" data-bind="text: title"></p>

@@ -102,7 +102,7 @@
         //if (params.height != 'auto') _window.css('min-height', params.height);
 
         if (params.width != 'auto') _window.css('width', params.width);
-        if (params.height != 'auto') _window.css('height', params.height);
+        if (params.height != 'auto') _window.css('min-height', params.height);
 
         _overlay.hide().appendTo('body').fadeIn('fast');
 
@@ -120,7 +120,8 @@
                 .css('left', params.position.left);
         } else {
             _window
-                .css("top", ($(window).height()-90 - METRO_DIALOG.outerHeight()) / 2)
+                //.css("top", ($(window).height()-90 - METRO_DIALOG.outerHeight()) / 2)
+                .css("top", ($(window).height() - METRO_DIALOG.outerHeight()) / 2)
                 .css("left", ($(window).width() - _window.outerWidth()) / 2)
             ;
         }

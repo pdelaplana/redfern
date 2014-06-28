@@ -321,7 +321,7 @@
             title: '<strong>Card Properties</strong>',
             content: content,
             width: '70%',
-            height: 'auto',
+            height: '92%',
             //position: { top: 50, left: 10 },
             onShow: function (dialog) {
 
