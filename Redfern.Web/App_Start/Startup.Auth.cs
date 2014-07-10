@@ -25,9 +25,9 @@ namespace Redfern.Web
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
-            app.CreatePerOwinContext(Redfern.Core.Security.RedfernSecurityContext.Create);
-            app.CreatePerOwinContext<Redfern.Core.Security.RedfernUserManager>(Redfern.Core.Security.RedfernUserManager.Create);
-            app.CreatePerOwinContext<Redfern.Core.Security.RedfernRoleManager>(Redfern.Core.Security.RedfernRoleManager.Create);
+            app.CreatePerOwinContext(Redfern.Security.RedfernSecurityContext.Create);
+            app.CreatePerOwinContext<Redfern.Security.RedfernUserManager>(Redfern.Security.RedfernUserManager.Create);
+            app.CreatePerOwinContext<Redfern.Security.RedfernRoleManager>(Redfern.Security.RedfernRoleManager.Create);
 
 
             int timeOut = 15;

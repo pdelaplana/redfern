@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using AutoMapper;
-using Redfern.Core.Security;
+using Redfern.Security;
 using Redfern.Web.Models;
 using Redfern.Web.Application.Configuration.Automapper.Resolvers;
 

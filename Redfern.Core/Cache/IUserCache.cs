@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Redfern.Core.Security;
+using Redfern.Security;
 
 namespace Redfern.Core.Cache
 {

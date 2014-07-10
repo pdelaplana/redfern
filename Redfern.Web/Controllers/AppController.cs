@@ -8,7 +8,7 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using Redfern.Core;
 using Redfern.Core.Cache;
-using Redfern.Core.Security;
+using Redfern.Security;
 using Redfern.Web.Application.Cache;
 using Redfern.Web.Models;
 

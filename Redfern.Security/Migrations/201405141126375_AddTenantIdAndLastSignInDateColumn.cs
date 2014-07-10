@@ -1,4 +1,4 @@
-namespace Redfern.Core.Security.Migrations
+namespace Redfern.Security.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

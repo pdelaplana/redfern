@@ -10,7 +10,7 @@ using System.Web.Helpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
-using Redfern.Core.Security;
+using Redfern.Security;
 using Redfern.Web.Models;
 
 namespace Redfern.Web.API

@@ -172,9 +172,9 @@
       <Project>{9845066a-3c9e-4f51-8f5f-8f513e8d03c1}</Project>
       <Name>Livefrog.Commons</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Redfern.Core.Security\Redfern.Core.Security.csproj">
+    <ProjectReference Include="..\Redfern.Security\Redfern.Security.csproj">
       <Project>{cd226807-d568-4286-98b4-77b46a6c86f7}</Project>
-      <Name>Redfern.Core.Security</Name>
+      <Name>Redfern.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

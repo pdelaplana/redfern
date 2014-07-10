@@ -10,7 +10,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Postal;
-using Redfern.Core.Security;
+using Redfern.Security;
 using Redfern.Web.Application;
 using Redfern.Web.Models;
 

@@ -10,7 +10,7 @@ using System.Web.Http.ModelBinding;
 using System.Web.Helpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Redfern.Core.Security;
+using Redfern.Security;
 using Redfern.Web.API.Binders;
 using Redfern.Web.API.DTO;
 

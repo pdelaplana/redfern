@@ -7,7 +7,7 @@ using Livefrog.Commons.Unity;
 using Redfern.Core;
 using Redfern.Core.Cache;
 using Redfern.Core.Repository;
-using Redfern.Core.Security;
+using Redfern.Security;
 using Redfern.Web.Application;
 using Redfern.Web.Application.Cache;
 

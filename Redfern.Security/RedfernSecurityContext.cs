@@ -5,7 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Threading.Tasks;
 
-namespace Redfern.Core.Security
+namespace Redfern.Security
 {
     public class RedfernSecurityContext : IdentityDbContext<RedfernUser>
     {

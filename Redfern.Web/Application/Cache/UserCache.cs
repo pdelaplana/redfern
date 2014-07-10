@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Livefrog.Commons.Services;
 using Redfern.Core.Cache;
-using Redfern.Core.Security;
+using Redfern.Security;
 
 namespace Redfern.Web.Application.Cache
 {

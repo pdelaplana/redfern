@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Redfern.Core;
 using Redfern.Core.Models.Configuration;
-using Redfern.Core.Security;
+using Redfern.Security;
 
 
 namespace Redfern.Core.Models

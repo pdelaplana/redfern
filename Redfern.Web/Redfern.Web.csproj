@@ -618,7 +618,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -701,9 +703,9 @@
       <Project>{1c3612fa-eed4-4e19-84b6-766ed7da616e}</Project>
       <Name>Livefrog.Tenants.Db</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Redfern.Core.Security\Redfern.Core.Security.csproj">
+    <ProjectReference Include="..\Redfern.Security\Redfern.Security.csproj">
       <Project>{cd226807-d568-4286-98b4-77b46a6c86f7}</Project>
-      <Name>Redfern.Core.Security</Name>
+      <Name>Redfern.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\Redfern.Core\Redfern.Core.csproj">
       <Project>{80b41a2f-181e-49e4-a530-72455e974603}</Project>

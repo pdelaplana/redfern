@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using AutoMapper;
 using Redfern.Core.Cache;
-using Redfern.Core.Security;
+using Redfern.Security;
 
 namespace Redfern.Web.Application.Configuration.Automapper.Resolvers
 {

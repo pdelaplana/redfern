@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using AutoMapper;
 using Redfern.Core.Cache;
-using Redfern.Core.Security;
+using Redfern.Security;
 
 namespace Redfern.Web.Application.Configuration.Automapper.Resolvers
 {

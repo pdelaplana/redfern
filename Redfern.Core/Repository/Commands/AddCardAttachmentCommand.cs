@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Redfern.Core.Cache;
 using Redfern.Core.Models;
 using Redfern.Core.Repository;
-using Redfern.Core.Security;
+using Redfern.Security;
 
 namespace Redfern.Core.Repository.Commands
 {

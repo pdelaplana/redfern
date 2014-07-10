@@ -1,4 +1,4 @@
-namespace Redfern.Core.Security.Migrations
+namespace Redfern.Security.Migrations
 {
     using System;
     using System.Data.Entity;
@@ -7,14 +7,14 @@ namespace Redfern.Core.Security.Migrations
     using System.Threading.Tasks;
 
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Redfern.Core.Security.RedfernSecurityContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Redfern.Security.RedfernSecurityContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected async override void Seed(Redfern.Core.Security.RedfernSecurityContext context)
+        protected async override void Seed(Redfern.Security.RedfernSecurityContext context)
         {
             //  This method will be called after migrating to the latest version.
 

@@ -10,7 +10,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 
 
-namespace Redfern.Core.Security
+namespace Redfern.Security
 {
     public class RedfernRoleManager : RoleManager<IdentityRole>
     {
