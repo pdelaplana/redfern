@@ -18,7 +18,7 @@ namespace Redfern.Core.Repository.Commands
         public string Title { get; set; }
         public int Sequence { get; set; }
 
-        public Card Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<Card> Execute(RedfernDb db)
         {
             Board board = db.Boards.Find(this.BoardId);
 
@@ -29,23 +29,22 @@ namespace Redfern.Core.Repository.Commands
             card.Sequence = this.Sequence;
             card.CardTypeId = board.CardTypes.Where(ct => ct.ColorCode == "amber").SingleOrDefault().CardTypeId;
             card = db.Cards.Add(card);
-            
             db.SaveChanges();
 
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;
             activity.SetVerb("added");
-            activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
+            activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
             activity.SetObject("card", card.CardId.ToString(), card.Title, String.Format(@"#/board/{0}/card/{1}", card.BoardId, card.CardId));
             activity.SetTarget("column", card.ColumnId.ToString(), card.Column.Name, "");
             activity.SetContext("board", card.BoardId.ToString(), card.Board.Name, String.Format(@"/board/{0}", card.BoardId));
             activity.SetDescription("{actorlink} added card {objectlink} to {target} in {context}");
-           
             activity = db.Activities.Add(activity);
             db.SaveChanges();
 
+            return this.CommandResult<Card>(card, db, activity);
 
-            return card;
+            
         }
     }
 }

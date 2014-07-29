@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using AutoMapper;
+using Redfern.Core.Repository;
+using Redfern.Web.API;
 using Redfern.Web.Application;
-using Redfern.Web.Application.Configuration.Automapper.Resolvers;
 
 namespace Redfern.Web.Application.Configuration.Automapper.Profiles
 {
@@ -13,6 +14,14 @@ namespace Redfern.Web.Application.Configuration.Automapper.Profiles
         protected override void Configure()
         {
             Mapper.CreateMap<RedfernAccessType, string>().ConvertUsing(src => src.ToString());
+
+            Mapper.CreateMap<Redfern.Core.Repository.ActivityContext, Redfern.Web.API.ActivityContext>();
+
+            Mapper.CreateMap<Redfern.Core.Repository.CommandContext, Redfern.Web.API.CommandContext>();
+
+            Mapper.CreateMap<CommandResult<bool>, WebApiResult<bool>>();
+
+            Mapper.CreateMap<CommandResult<string>, WebApiResult<string>>();
         }
         
     }

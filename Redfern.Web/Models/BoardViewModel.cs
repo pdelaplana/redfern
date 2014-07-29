@@ -5,9 +5,18 @@ using System.Web;
 
 namespace Redfern.Web.Models
 {
+    public class CardTagItem
+    {
+        public int BoardId { get; set; }
+        public int CardTagId { get; set; }
+        public int CardId { get; set; }
+        public int TagId { get; set; }
+        public string TagName { get; set; }
+    }
 
     public class CardCommentModel
     {
+        public int BoardId { get; set; }
         public int CommentId { get; set; }
         public int CardId { get; set; }
         public string Comment {get; set;}

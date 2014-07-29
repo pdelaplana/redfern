@@ -20,7 +20,7 @@ namespace Redfern.Core.Repository.Commands
         public string FileExtension { get; set; }
 
 
-        public CardAttachment Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<CardAttachment> Execute(RedfernDb db)
         {
             CardAttachment attachment = db.CardAttachments.Create();
             attachment.CardId = this.CardId;
@@ -34,15 +34,16 @@ namespace Redfern.Core.Repository.Commands
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;
             activity.SetVerb("attached");
-            activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
+            activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
             activity.SetObject("attachment", attachment.CardAttachmentId.ToString(), attachment.FileName, String.Format(@"/api/attachment/{0}", attachment.CardAttachmentId.ToString()));
-            activity.SetObject("card", attachment.CardId.ToString(), attachment.Card.Title, String.Format(@"/board/{0}/card/{1}", attachment.Card.BoardId.ToString(), attachment.CardId.ToString()));
+            activity.SetTarget("card", attachment.CardId.ToString(), attachment.Card.Title, String.Format(@"/board/{0}/card/{1}", attachment.Card.BoardId.ToString(), attachment.CardId.ToString()));
             activity.SetContext("board", attachment.Card.BoardId.ToString(), attachment.Card.Board.Name, String.Format(@"/board/{0}", attachment.Card.BoardId));
             activity.SetDescription("{actorlink} attached file {objectlink} to card {targetlink} in {contextlink}");
             activity = db.Activities.Add(activity);
             db.SaveChanges();
 
-            return attachment;
+            return this.CommandResult<CardAttachment>(attachment, db, activity);
+
         }
     }
 }

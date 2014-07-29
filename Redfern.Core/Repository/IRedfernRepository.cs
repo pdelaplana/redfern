@@ -9,7 +9,7 @@ namespace Redfern.Core.Repository
 {
     public interface IRedfernRepository
     {
-        T ExecuteCommand<T>(IRepositoryCommand<T> command);
+        CommandResult<T> ExecuteCommand<T>(IRepositoryCommand<T> command);
         
         T Get<T>(int id) where T : class;
 

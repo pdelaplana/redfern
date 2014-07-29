@@ -11,6 +11,7 @@ using Redfern.Web.Models;
 
 namespace Redfern.Web.API
 {
+    [RoutePrefix("api/boards")]
     [Authorize]
     public class BoardController : ApiController
     {
@@ -21,31 +22,39 @@ namespace Redfern.Web.API
             _repository = repository;
         }
 
-        public IEnumerable<BoardListItem> Get(string id)
+        [Route("list/{userId}")]
+        public IEnumerable<BoardListItem> Get(string userId)
         {
-            var list = _repository.Boards.Where(b => b.Owner == id || b.IsPublic || b.Members.Where(m => m.UserName == id).Count() > 0).ToList();
+            var list = _repository.Boards.Where(b => b.Owner == userId || b.IsPublic || b.Members.Where(m => m.UserName == userId).Count() > 0).ToList();
             return AutoMapper.Mapper.Map<IList<Board>, IList<BoardListItem>>(list);
         }
 
+        [Route("{id:int}")]
         public BoardListItem Post([FromBody]CreateBoardCommand command)
         {
-            return AutoMapper.Mapper.Map<Board, BoardListItem>(_repository.ExecuteCommand(command));
+            return AutoMapper.Mapper.Map<Board, BoardListItem>(_repository.ExecuteCommand(command).Data as Board);
         }
 
-        public void Put(int id, [FromBody]ChangeBoardNameCommand command)
+        [Route("{id:int}")]
+        public WebApiResult<BoardListItem> Put(int id, [FromBody]ChangeBoardNameCommand command)
         {
-            _repository.ExecuteCommand(command);
+            var result =_repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<Board>, WebApiResult<BoardListItem>>(result);
         }
 
-        [AcceptVerbs("changevisibility")]
-        public void ChangeVisibility(int id, [FromBody]ChangeBoardVisibilityCommand command)
+        [Route("{id:int}/changevisibility")]
+        [HttpPost]
+        public WebApiResult<BoardListItem> ChangeVisibility(int id, [FromBody]ChangeBoardVisibilityCommand command)
         {
-            _repository.ExecuteCommand(command);
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<Board>, WebApiResult<BoardListItem>>(result);
         }
 
-        public void Delete(int id)
+        [Route("{id:int}")]
+        public WebApiResult<bool> Delete(int id)
         {
-            _repository.ExecuteCommand(new DeleteBoardCommand { BoardId = id });
+            var result = _repository.ExecuteCommand(new DeleteBoardCommand { BoardId = id });
+            return AutoMapper.Mapper.Map<CommandResult<bool>, WebApiResult<bool>>(result);
         }
 
 

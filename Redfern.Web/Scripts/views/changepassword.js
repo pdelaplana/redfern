@@ -1,4 +1,4 @@
-﻿app.modules.add('changepassword', function () {
+﻿app.views.add('changepassword', function () {
 
     // register route
     app.router.registerRoute('#/profile/changepassword', function (context) {

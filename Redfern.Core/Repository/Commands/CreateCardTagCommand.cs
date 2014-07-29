@@ -15,32 +15,48 @@ namespace Redfern.Core.Repository.Commands
         public int CardId { get; set; }
         public string TagName { get; set; }
         
-
-        public CardTag Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<CardTag> Execute(RedfernDb db)
         {
             Card card = db.Cards.Find(this.CardId);
 
-            CardTag cardTag = db.CardTags.Where(ct => ct.CardId == this.CardId && ct.Tag.TagName == this.TagName).SingleOrDefault();
+            CardTag cardTag = db.CardTags.Where(ct => ct.CardId == this.CardId && ct.Tag.TagName == this.TagName).FirstOrDefault();
 
-            if (cardTag != null) return cardTag;
-
-            Tag tag = db.Tags.Where(t=>t.TagName == this.TagName && t.BoardId == card.BoardId).SingleOrDefault();
-            if (tag == null)
+            if (cardTag == null)
             {
-                tag = db.Tags.Create();
-                tag.TagName = this.TagName;
-                tag.BoardId = card.BoardId;
-                tag = db.Tags.Add(tag);
-                db.SaveChanges();
-            }
-                
-            cardTag = db.CardTags.Create();
-            cardTag.CardId = this.CardId;
-            cardTag.TagId = tag.TagId;
-            cardTag = db.CardTags.Add(cardTag);
-            db.SaveChanges();
+                Tag tag = db.Tags.Where(t => t.TagName == this.TagName && t.BoardId == card.BoardId).FirstOrDefault();
+                if (tag == null)
+                {
+                    tag = db.Tags.Create();
+                    tag.TagName = this.TagName;
+                    tag.BoardId = card.BoardId;
+                    tag = db.Tags.Add(tag);
+                    db.SaveChanges();
+                }
 
-            return cardTag;
+                cardTag = db.CardTags.Create();
+                cardTag.CardId = this.CardId;
+                cardTag.TagId = tag.TagId;
+                cardTag = db.CardTags.Add(cardTag);
+                db.SaveChanges();
+
+                Activity activity = db.Activities.Create();
+                activity.ActivityDate = DateTime.UtcNow;
+                activity.SetVerb("added");
+                activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
+                activity.SetObject("tag", cardTag.CardTagId.ToString(), cardTag.Tag.TagName, String.Format(@"#/board/{0}/card/{1}", card.BoardId, card.CardId));
+                activity.SetTarget("card", cardTag.CardId.ToString(), cardTag.Card.Title, "");
+                activity.SetContext("board", cardTag.Card.BoardId.ToString(), cardTag.Card.Board.Name, String.Format(@"/board/{0}", cardTag.Card.BoardId));
+                activity.SetDescription("{actorlink} added tag to {target} in {context}");
+                activity = db.Activities.Add(activity);
+                db.SaveChanges();
+
+                return this.CommandResult<CardTag>(cardTag, db, activity);
+            }
+            else
+            {
+                return this.CommandResult<CardTag>(cardTag, db);
+            }
+            
         }
     }
 }

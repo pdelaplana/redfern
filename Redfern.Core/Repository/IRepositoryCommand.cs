@@ -4,10 +4,10 @@ using Redfern.Security;
 
 namespace Redfern.Core.Repository
 {
-    
+       
     public interface IRepositoryCommand<T>
     {
-        T Execute(RedfernDb db, IUserCache<RedfernUser> userCache);
+        CommandResult<T> Execute(RedfernDb db);
     }
 
 

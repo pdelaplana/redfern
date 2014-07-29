@@ -1,30 +1,31 @@
 ﻿function CardCommentRepository() {
     var self = this;
-    self.cardId = ko.observable();
-    self.commentId = ko.observable();
-    self.comment = ko.observable();
+    self.boardId = null;
+    self.cardId = null;
+    self.commentId = null;
+    self.comment = null;
 
     self.getComments = function () {
         return $.ajax({
-            url: '/api/comment/' + self.cardId(),
+            url: '/api/board/{0}/card/{1}/comments'.format(self.boardId, self.cardId),
             type: 'get'
         });
     }
 
     self.create = function () {
         return $.ajax({
-            url: '/api/comment',
+            url: '/api/board/{0}/card/{1}/comments'.format(self.boardId, self.cardId),
             type: 'post',
             data: {
-                CardId: self.cardId(),
-                Comment: self.comment()
+                CardId: self.cardId,
+                Comment: self.comment
             }
         });
     }
 
     self.remove = function () {
         return $.ajax({
-            url: '/api/comment/'+self.commentId(),
+            url: '/api/board/{0}/card/{1}/comments/{2}'.format(self.boardId, self.cardId, self.commentId),
             type: 'delete'
         });
     }

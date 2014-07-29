@@ -45,7 +45,7 @@ namespace Redfern.Core.Repository.Commands
             set { _colorCodeChanged = true; _colorCode = value; }
         }
         
-        public CardType Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<CardType> Execute(RedfernDb db)
         {
             CardType cardType = db.CardTypes.Find(this._cardTypeId);
             if (_boardIdChanged)
@@ -56,8 +56,34 @@ namespace Redfern.Core.Repository.Commands
                 cardType.ColorCode = this.ColorCode;
             db.SaveChanges();
 
+            Activity activity = db.Activities.Create();
+            activity.ActivityDate = DateTime.UtcNow;
+
+            if (_nameChanged)
+            {
+                activity.SetVerb("renamed");
+                activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
+                activity.SetObject("color", cardType.ColorCode, cardType.ColorCode, "");
+                activity.SetTarget("name", cardType.Name, cardType.Name, "");
+                activity.SetContext("board", cardType.BoardId.ToString(), cardType.Board.Name, "");
+                activity.SetDescription("{actorlink} renamed color {object} to {target} in {contextlink}");
+            }
+            else
+            {
+                activity.SetVerb("updated");
+                activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
+                activity.SetObject("cardtype", cardType.CardTypeId.ToString(), cardType.Name, "");
+                activity.SetContext("board", cardType.BoardId.ToString(), cardType.Board.Name, "");
+                activity.SetDescription("{actorlink} updated cardtype {objectlink} in {contextlink}");
+
+            }
+
+           
+            activity = db.Activities.Add(activity);
+            db.SaveChanges();
+
+            return this.CommandResult<CardType>(cardType, db, activity);
             
-            return cardType;
         }
     }
 }

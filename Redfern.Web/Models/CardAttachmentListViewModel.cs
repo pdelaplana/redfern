@@ -7,6 +7,7 @@ namespace Redfern.Web.Models
 {
     public class CardAttachmentListItem 
     {
+        public int CardId { get; set; }
         public int CardAttachmentId { get; set; }
         public string FileName { get; set; }
         public string ContentType { get; set; }

@@ -11,6 +11,7 @@ using Redfern.Web.Models;
 
 namespace Redfern.Web.API
 {
+    [RoutePrefix("api/board/{boardid:int}/columns")]
     [Authorize]
     public class BoardColumnController : ApiController
     {
@@ -33,30 +34,57 @@ namespace Redfern.Web.API
             return "value";
         }
 
-        // POST api/boardcolumn
-        public BoardColumnItem Post([FromBody]CreateBoardColumnCommand command)
+        
+        // POST api/board/1/columns
+        [Route("")]
+        public WebApiResult<BoardColumnItem> Post([FromBody]CreateBoardColumnCommand command)
         {
-            var column = _repository.ExecuteCommand(command);
-            return AutoMapper.Mapper.Map<BoardColumn, BoardColumnItem>(column);
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<BoardColumn>, WebApiResult<BoardColumnItem>>(result);
         }
 
-        // PUT api/boardcolumn/5
-        public BoardColumnItem Put(int id, [FromBody]UpdateBoardColumnPropertiesCommand command)
+        // PUT api/board/1/columns/5
+        [Route("{id:int}")]
+        public WebApiResult<BoardColumnItem> Put(int id, [FromBody]UpdateBoardColumnPropertiesCommand command)
         {
-            var column = _repository.ExecuteCommand(command);
-            return AutoMapper.Mapper.Map<BoardColumn, BoardColumnItem>(column);
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<BoardColumn>, WebApiResult<BoardColumnItem>>(result);
         }
 
-        // DELETE api/boardcolumn/5
-        public void Delete(int id)
+        // PUT api/board/1/columns/5/hide
+        [Route("{id:int}/hide")]
+        [HttpPut]
+        public WebApiResult<BoardColumnItem> Hide(int id, [FromBody]UpdateBoardColumnPropertiesCommand command)
         {
-            _repository.ExecuteCommand(new DeleteBoardColumnCommand { ColumnId = id });
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<BoardColumn>, WebApiResult<BoardColumnItem>>(result);
         }
 
-        [AcceptVerbs("resequence")]
-        public void Resequence([FromBody]ResequenceBoardColumnsCommand command)
+        // PUT api/board/1/columns/5/show
+        [Route("{id:int}/show")]
+        [HttpPut]
+        public WebApiResult<BoardColumnItem> Show(int id, [FromBody]UpdateBoardColumnPropertiesCommand command)
         {
-            _repository.ExecuteCommand(command);
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<BoardColumn>, WebApiResult<BoardColumnItem>>(result);
+        }
+
+
+        // DELETE api/board/1/columns/5
+        [Route("{id:int}")]
+        public WebApiResult<bool> Delete(int id)
+        {
+            var result = _repository.ExecuteCommand(new DeleteBoardColumnCommand { ColumnId = id });
+            return AutoMapper.Mapper.Map<CommandResult<bool>, WebApiResult<bool>>(result);
+        }
+
+        //POST api/board/1/columns/resequence
+        [Route("resequence")]
+        [HttpPost]
+        public WebApiResult<BoardColumnItem> Resequence([FromBody]ResequenceBoardColumnsCommand command)
+        {
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<BoardColumn>, WebApiResult<BoardColumnItem>>(result);
         }
 
     }

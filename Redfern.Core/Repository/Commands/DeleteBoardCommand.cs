@@ -14,7 +14,7 @@ namespace Redfern.Core.Repository.Commands
     {
         public int BoardId { get; set; }
         
-        public bool Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<bool> Execute(RedfernDb db)
         {
             Board board = db.Boards.Find(this.BoardId);
 
@@ -38,20 +38,17 @@ namespace Redfern.Core.Repository.Commands
             
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;
-            activity.SetVerb("delete");
-            activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
+            activity.SetVerb("deleted");
+            activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
             activity.SetObject("board", board.BoardId.ToString(), board.Name, String.Format(@"/board/{0}", board.BoardId));
-            activity.SetDescription(String.Format(@"<a href=""{0}"">{1}</a> deleted board <b>{2}</b>.",
-                    activity.ActorUrl,
-                    activity.ActorDisplayName,
-                    activity.ObjectDisplayName
-                ));
+            activity.SetDescription("{actorlink} deleted board <b>{object}</b>.");
             activity = db.Activities.Add(activity);
 
             db.Boards.Remove(board);
             db.SaveChanges();
 
-            return true;
+            return this.CommandResult<bool>(true, db, activity);
+          
         }
     }
 }

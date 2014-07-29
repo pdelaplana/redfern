@@ -16,33 +16,37 @@ namespace Redfern.Core.Repository.Commands
         public int BoardId { get; set; }
         public string UserName { get; set; }
 
-        public BoardMember Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<BoardMember> Execute(RedfernDb db)
         {
+            Activity activity = null;
+            BoardMember member = db.BoardMembers.Where(m => m.BoardId == this.BoardId && m.UserName == this.UserName).SingleOrDefault();
 
-            BoardMember member = db.BoardMembers.Create();
-            member.BoardId = this.BoardId;
-            member.UserName = this.UserName;
-            member = db.BoardMembers.Add(member);
-            db.SaveChanges();
+            if (member == null) 
+            {
+                member = db.BoardMembers.Create();
+                member.BoardId = this.BoardId;
+                member.UserName = this.UserName;
+                member = db.BoardMembers.Add(member);
+                db.SaveChanges();
 
-            Activity activity = db.Activities.Create();
-            activity.ActivityDate = DateTime.UtcNow;
-            activity.SetVerb("added");
-            activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
-            activity.SetObject("member", member.BoardMemberId.ToString(), userCache.GetFullName(member.UserName), String.Format(@"/profile/{0}", member.UserName));
-            activity.SetContext("board", member.BoardId.ToString(), member.Board.Name, String.Format(@"/board/{0}", member.BoardId));
-            activity.SetDescription(String.Format(@"<a href=""{0}"">{1}</a> added <a href=""{2}"">{3}</a> to board <a href=""{4}"">{5}</a>.",
-                    activity.ActorUrl,
-                    activity.ActorDisplayName,
-                    activity.ObjectUrl,
-                    activity.ObjectDisplayName,
-                    activity.ContextUrl,
-                    activity.ContextDisplayName
-                ));
-            activity = db.Activities.Add(activity);
-            db.SaveChanges();
+                activity = db.Activities.Create();
+                activity.ActivityDate = DateTime.UtcNow;
+                activity.SetVerb("inlcuded");
+                activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
+                activity.SetObject("member", member.BoardMemberId.ToString(), db.GetUserFullName(member.UserName), String.Format(@"/profile/{0}", member.UserName));
+                activity.SetContext("board", member.BoardId.ToString(), member.Board.Name, String.Format(@"/board/{0}", member.BoardId));
+                activity.SetDescription("{actorlink} included member {object} to {context}");
+                activity = db.Activities.Add(activity);
+                db.SaveChanges();
 
-            return member;
+            }
+            else
+            {
+
+            }
+
+            return this.CommandResult<BoardMember>(member, db, activity);
+
         }
     }
 }

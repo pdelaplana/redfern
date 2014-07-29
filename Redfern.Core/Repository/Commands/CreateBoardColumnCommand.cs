@@ -17,7 +17,7 @@ namespace Redfern.Core.Repository.Commands
         public string Name { get; set; }
         public int Sequence { get; set; }
 
-        public BoardColumn Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<BoardColumn> Execute(RedfernDb db)
         {
             Board board = db.Boards.Find(this.BoardId);
 
@@ -36,7 +36,20 @@ namespace Redfern.Core.Repository.Commands
 
             db.SaveChanges();
 
-            return column;
+            Activity activity = db.Activities.Create();
+            activity.ActivityDate = DateTime.UtcNow;
+            activity.SetVerb("created");
+            activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
+            activity.SetObject("column", column.ColumnId.ToString(), column.Name, String.Format(@"/board/{0}", board.BoardId));
+            activity.SetContext("board", column.BoardId.ToString(), column.Board.Name, String.Format(@"/board/{0}", board.BoardId));
+            activity.SetDescription("{actor} created new column {object} in board {context}.");
+            activity = db.Activities.Add(activity);
+            db.SaveChanges();
+
+            return this.CommandResult<BoardColumn>(column, db, activity);
+
         }
+
+        
     }
 }

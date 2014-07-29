@@ -1,20 +1,21 @@
 ﻿function CardTypeRepository() {
     var self = this;
 
-    self.cardTypeId = ko.observable();
-    self.name = ko.observable();
-    self.colorCode = ko.observable();
+    self.cardTypeId = null;
+    self.name = null;
+    self.colorCode = null;
 
     
     self.update = function () {
+        var postData = {
+            CardTypeId: self.cardTypeId
+        };
+        if (self.name != null) postData.Name = self.name;
+        if (self.colorCode != null) postData.ColorCode = self.colorCode;
         return $.ajax({
-            url: '/api/cardtype/'+self.cardTypeId(),
+            url: '/api/cardtype/'+self.cardTypeId,
             type: 'put',
-            data: {
-                CardTypeId: self.cardTypeId(),
-                Name: self.name(),
-                ColorCode : self.colorCode()
-            }
+            data: postData
         });
     }
 

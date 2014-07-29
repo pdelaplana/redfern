@@ -11,7 +11,6 @@
 		var value = valueAccessor();
 		$(element).val(value);
 	}
-
 };
 
 

@@ -1,18 +1,19 @@
 ﻿function CardAttachmentRepository() {
-    var self = this;
-    self.cardAttachmentId = ko.observable();
-    self.cardId = ko.observable();
+    var apiUrl = '/api/card/{0}/attachments',
+        self = this;
+    self.cardAttachmentId = null;
+    self.cardId = null;
     
     self.getAll = function () {
         return $.ajax({
-            url: '/api/cardattachment/?cardid=' + self.cardId(),
+            url: apiUrl.format(self.cardId),
             type: 'get'
         });
     }
 
     self.remove = function () {
         return $.ajax({
-            url: '/api/cardattachment/'+self.cardAttachmentId(),
+            url: apiUrl.format(self.cardId)+'/'+self.cardAttachmentId,
             type: 'delete'
         })
     }

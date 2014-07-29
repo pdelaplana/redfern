@@ -7,7 +7,7 @@
             loader = $('<div/>').addClass('pinned double tile no-outline').attr('style', 'height:20px;text-align:center').append($('<img/>').attr('src','/content/images/ajax-loader-bar-1.gif')).hide(),
             container = $('<div/>').addClass('pinned double tile no-outline'),//.attr('style', 'min-height:50px;margin-top:10px;padding:10px'),
             div = $('<div/>').addClass('input-control textarea'),
-            textarea = $('<textarea/>').attr('style', 'min-height:50px').attr('maxlength', '100'),
+            textarea = $('<textarea/>').attr('style', 'min-height:50px;max-height:50px').attr('maxlength', '100'),
             add = $('<button class="primary">Add</button>').attr('style', 'margin-top:10px'),
             cancel = $('<button class="link">Cancel</button>').attr('style', 'margin-top:10px');
 
@@ -139,6 +139,10 @@ ko.bindingHandlers.adjustBoardWidth = {
     }
 }
 
+/**
+ * Dynamically adjust height of columns based on height of viewport
+ * 
+ */
 ko.bindingHandlers.adjustColumnHeight = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var columnHeight = valueAccessor(),
@@ -193,6 +197,9 @@ ko.bindingHandlers.changeTileColor = {
                 $(this).siblings('.tile').removeClass('selected');
                 $(this).addClass('selected');
                 observable(bindings.color());
+                if (bindings.updateValue != null) {
+                    bindings.updateValue(observable());
+                }
             }
         })
         
@@ -272,12 +279,14 @@ ko.bindingHandlers.assignCard = {
         $(element).autocomplete({
             source: members,
             minLength: 0,
+            /*
             select: function (event, ui) {
                 observable(ui.item ? ui.item.id : "");
                 if (assignCardOptions != null && assignCardOptions.displayValue != null) {
                     assignCardOptions.displayValue($(element).val());
                 }
             },
+            */
             /*
             focus: function (event, ui) {
                 observable(ui.item ? ui.item.id : "");
@@ -290,6 +299,7 @@ ko.bindingHandlers.assignCard = {
                 observable(ui.item ? ui.item.id : "");
                 if (assignCardOptions != null && assignCardOptions.displayValue != null) {
                     assignCardOptions.displayValue($(element).val());
+                    assignCardOptions.updateValue(observable());
                 }
             }
         })
@@ -347,14 +357,25 @@ ko.bindingHandlers.tagit = {
             tagsChanged: function (tagValue, action, element) {
                 if (action == 'added') {
                     observable.push(tagValue);
+                    if (bindings.tagitOptions.addTag != null) {
+                        bindings.tagitOptions.addTag(tagValue);
+                    }
                 } else if (action == 'popped') {
                     observable.remove(tagValue);
+                    if (bindings.tagitOptions.removeTag != null) {
+                        bindings.tagitOptions.removeTag(tagValue);
+                    }
+                    
                 }
             }
         }, bindings.tagitOptions);
 
         $(element).tagit(options);
        
+    },
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var data = ko.utils.unwrapObservable(valueAccessor());
+        $(element).tagit('reset');
     }
 }
 
@@ -532,8 +553,58 @@ ko.bindingHandlers.wikiEditor = {
         //    $(element).val(content);
 
     }
-
 }
 
+/**
+ * column properties 
+ * 
+ */
+ko.bindingHandlers.columnProperties = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            formElementId = ko.utils.unwrapObservable(valueAccessor()),
+            observable = valueAccessor(),
+            column = $(element).parents('div.board-column'),
+            form = $('#' + formElementId);
 
+        $(element).on('click', function () {
+            var cloned = $(form).clone();
+            $(cloned).removeAttr('id').insertBefore($('.board-column-wrapper', column));
+            $('.revert', cloned).click(function () {
+                cloned.slideUp('slow', function () {
+                    cloned.remove();
+                    $('.board-column-wrapper', column).show();
+                });
+                $('.board-column-wrapper', column).show('slow', function () { });
+            });
+            $('.board-column-wrapper', column).slideToggle();
+            $(cloned).slideDown('slow', function () {
+                ko.applyBindings(viewModel, $(cloned).get(0));
+                $('input', cloned).focus();
+            });
+        })
+        
+    }
+}
+
+/**
+ * column properties 
+ * 
+ */
+ko.bindingHandlers.timeago = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            observable = valueAccessor();
+
+        function updateTimeAgo() {
+            $(element).text(moment.utc(ko.utils.unwrapObservable(observable())).fromNow())
+        }
+        
+        setInterval(updateTimeAgo, 1000);
+
+        $(element).attr('title', ko.utils.unwrapObservable(observable()));
+        updateTimeAgo();
+        
+    }
+}
 

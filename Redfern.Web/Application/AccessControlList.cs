@@ -15,6 +15,8 @@ namespace Redfern.Web.Application
         DeleteBoard,
         MakeBoardPublic,
 
+        ViewBoardActivities,
+
         ViewCollaborators,
         AddColloborators,
         RemoveColloborators,
@@ -79,6 +81,8 @@ namespace Redfern.Web.Application
                     RedfernAccessType.DeleteBoard,
                     RedfernAccessType.MakeBoardPublic,
 
+                    RedfernAccessType.ViewBoardActivities,
+
                     RedfernAccessType.ViewCollaborators,
                     RedfernAccessType.AddColloborators,
                     RedfernAccessType.RemoveColloborators,
@@ -131,6 +135,8 @@ namespace Redfern.Web.Application
             {
                 return new RedfernAccessType[]
                 {
+                    RedfernAccessType.ViewBoardActivities,
+
                     RedfernAccessType.ViewCollaborators,
                     RedfernAccessType.AddColloborators,
                     
@@ -180,6 +186,8 @@ namespace Redfern.Web.Application
                 return new RedfernAccessType[]
                 {
                     
+                    RedfernAccessType.ViewBoardActivities,
+
                     RedfernAccessType.ViewCollaborators,
                     
                     RedfernAccessType.FilterCards,

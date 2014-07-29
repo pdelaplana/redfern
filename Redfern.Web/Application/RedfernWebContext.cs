@@ -11,7 +11,7 @@ namespace Redfern.Web.Application
 {
     public class RedfernWebContext : RedfernContext
     {
-        public RedfernWebContext(TenantsCache tenantsCache)
+        public RedfernWebContext(TenantsCache tenantsCache, UserCache userCache)
         {
             //TODO: Obtaining the client user name and IP address from HTTPContext makes an assumption that 
             //      HTTPRequest is always available,this is not always the e.g. Application Start.  As a workaround, 
@@ -20,9 +20,17 @@ namespace Redfern.Web.Application
             try
             {
                 if ((HttpContext.Current.User != null) && (!String.IsNullOrEmpty(HttpContext.Current.User.Identity.Name)))
+                {
                     this.ClientUserName = HttpContext.Current.User.Identity.Name;
-                else
+                    this.ClientUserFullName = userCache.GetFullName(this.ClientUserName);
+                }
+                else 
+                {
                     this.ClientUserName = "Anonymous";
+                    this.ClientUserFullName = "Anonymous";
+                }
+                
+                    
                 this.ClientIpAddress = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"].ToString();
                 this.ClientTimeZone = ClientTimeZoneHelper.UserTimeZone;
                 string host = HttpContext.Current.Request.Headers["Host"].Split(':')[0];

@@ -11,6 +11,7 @@ using Redfern.Web.Models;
 
 namespace Redfern.Web.API
 {
+    [RoutePrefix("api/board/{boardid:int}/members")]
     [Authorize]
     public class BoardMemberController : ApiController
     {
@@ -34,15 +35,13 @@ namespace Redfern.Web.API
             return "value";
         }
 
-        // POST api/boardmember
-        public BoardMemberItem Post([FromBody]AddBoardMemberCommand command)
+        // POST api/board/1/members
+        [Route("")]
+        public WebApiResult<BoardMemberItem> Post([FromBody]AddBoardMemberCommand command)
         {
-            var board = _repository.Get<Board>(command.BoardId);
-            var member = board.Members.Where(m => m.UserName == command.UserName).SingleOrDefault();
-            if (member != null) 
-                return AutoMapper.Mapper.Map<BoardMember,BoardMemberItem>(member);
-            // else
-            return AutoMapper.Mapper.Map<BoardMember, BoardMemberItem>(_repository.ExecuteCommand(command));
+           
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<BoardMember>, WebApiResult<BoardMemberItem>>(result);
         }
 
         // PUT api/<controller>/5
@@ -50,10 +49,12 @@ namespace Redfern.Web.API
         {
         }
 
-        // DELETE api/<controller>/5
-        public void Delete(int id)
+        // DELETE api/board/1/members/5
+        [Route("{id:int}")]
+        public WebApiResult<bool> Delete(int id)
         {
-            _repository.ExecuteCommand(new DeleteBoardMemberCommand { BoardMemberId = id });
+            var result = _repository.ExecuteCommand(new DeleteBoardMemberCommand { BoardMemberId = id });
+            return AutoMapper.Mapper.Map<CommandResult<bool>, WebApiResult<bool>>(result);
         }
     }
 }

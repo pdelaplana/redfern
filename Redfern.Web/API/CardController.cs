@@ -7,10 +7,13 @@ using System.Web.Http;
 using Redfern.Core.Models;
 using Redfern.Core.Repository;
 using Redfern.Core.Repository.Commands;
+using Redfern.Web.Hubs;
 using Redfern.Web.Models;
+
 
 namespace Redfern.Web.API
 {
+    [RoutePrefix("api/board/{boardid:int}/cards")]
     [Authorize]
     public class CardController : ApiController
     {
@@ -33,30 +36,37 @@ namespace Redfern.Web.API
             return "value";
         }
 
-        // POST api/card
-        public CardItem Post([FromBody]CreateCardCommand command)
+        // POST api/board/1/cards
+        [Route("")]
+        public WebApiResult<CardItem> Post([FromBody]CreateCardCommand command)
         {
-            Card card = _repository.ExecuteCommand(command);
-            return AutoMapper.Mapper.Map<Card, CardItem>(card);
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<Card>, WebApiResult<CardItem>>(result); 
         }
 
-        // PUT api/card/5
-        public CardItem Put(int id, [FromBody]UpdateCardCommand command)
+        // PUT api/board/1/card/5
+        [Route("{id:int}")]
+        public WebApiResult<CardItem> Put(int id, [FromBody]UpdateCardCommand command)
         {
-            Card card = _repository.ExecuteCommand(command);
-            return AutoMapper.Mapper.Map<Card, CardItem>(card);
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<Card>, WebApiResult<CardItem>>(result);
         }
 
-        // DELETE api/card/5
-        public void Delete(int id)
+        // DELETE api/board/1/card/5
+        [Route("{id:int}")]
+        public WebApiResult<bool> Delete(int id)
         {
-            _repository.ExecuteCommand(new DeleteCardCommand { CardId = id });
+            var result = _repository.ExecuteCommand(new DeleteCardCommand { CardId = id });
+            return AutoMapper.Mapper.Map<CommandResult<bool>, WebApiResult<bool>>(result);
         }
 
-        [AcceptVerbs("resequence")]
-        public void Resequence([FromBody]ResequenceCardsCommand command)
+        // POST api/board/1/card/resequence
+        [Route("resequence")]
+        [HttpPost]
+        public WebApiResult<CardItem> Resequence([FromBody]ResequenceCardsCommand command)
         {
-            _repository.ExecuteCommand(command);
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<Card>, WebApiResult<CardItem>>(result);
         }
 
         [AcceptVerbs("archive")]
@@ -71,10 +81,20 @@ namespace Redfern.Web.API
             _repository.ExecuteCommand(new UnarchiveCardCommand { CardId = id });
         }
 
-        [AcceptVerbs("assign")]
-        public void Assign(int id, [FromBody]AssignCardCommand command)
+        [Route("{id:int}/assign")]
+        [HttpPost]
+        public WebApiResult<CardItem> Assign(int id, [FromBody]AssignCardCommand command)
         {
-            _repository.ExecuteCommand(command);
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<Card>, WebApiResult<CardItem>>(result);
+        }
+
+        [Route("{id:int}/color")]
+        [HttpPost]
+        public WebApiResult<CardItem> Color(int id, [FromBody]ChangeCardColorCommand command)
+        {
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<Card>, WebApiResult<CardItem>>(result);
         }
 
 

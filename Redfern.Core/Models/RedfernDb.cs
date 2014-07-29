@@ -17,6 +17,7 @@ namespace Redfern.Core.Models
     public class RedfernDb : DbContext
     {
         private RedfernContext _context;
+        private RedfernSecurityContext _securityContext;
 
         public static string CreateConnectionString(RedfernContext context)
         {
@@ -35,9 +36,9 @@ namespace Redfern.Core.Models
         public RedfernDb(RedfernContext context) : base(RedfernDb.CreateConnectionString(context))
         {
             this._context = context;
+            this._securityContext = new RedfernSecurityContext();
             this.Configuration.LazyLoadingEnabled = true;
             this.Configuration.ProxyCreationEnabled = true;
-
         }
 
         public RedfernDb() : base("Name=RedfernDbConnection") 
@@ -86,6 +87,7 @@ namespace Redfern.Core.Models
 
         public RedfernContext Context { get { return _context; } }
 
+        public RedfernSecurityContext SecurityContext { get { return _securityContext; } }
         
         public DbSet<Activity> Activities { get; set; }
 

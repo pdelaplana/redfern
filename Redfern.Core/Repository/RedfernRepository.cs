@@ -13,17 +13,16 @@ namespace Redfern.Core.Repository
     public class RedfernRepository : IRedfernRepository
     {
         RedfernDb _db;
-        IUserCache<RedfernUser> _userCache;
-
-        public RedfernRepository(RedfernContext context, IUserCache<RedfernUser> userCache)
+        
+        public RedfernRepository(RedfernContext context)
         {
             _db = new RedfernDb(context);
-            _userCache = userCache;
+            
         }
 
-        public T ExecuteCommand<T>(IRepositoryCommand<T> command)
+        public CommandResult<T> ExecuteCommand<T>(IRepositoryCommand<T> command)
         {
-            return command.Execute(_db, _userCache);
+            return command.Execute(_db);
             
         }
 

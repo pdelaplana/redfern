@@ -1,4 +1,4 @@
-﻿app.modules.add('profile', function () {
+﻿app.views.add('profile', function () {
 
     // register route
     app.router.registerRoute('#/profile', function (context) {

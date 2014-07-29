@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using AutoMapper;
 using Redfern.Core.Models;
+using Redfern.Core.Repository;
+using Redfern.Web.API;
 using Redfern.Web.API.DTO;
 using Redfern.Web.Models;
 using Redfern.Web.Application.Configuration.Automapper.Resolvers;
@@ -14,6 +16,11 @@ namespace Redfern.Web.Application.Configuration.Automapper.Profiles
     {
         protected override void Configure()
         {
+            Mapper.CreateMap<CommandResult<BoardColumn>, WebApiResult<BoardColumnItem>>();
+            Mapper.CreateMap<CommandResult<Board>, WebApiResult<BoardListItem>>();
+            Mapper.CreateMap<CommandResult<BoardMember>, WebApiResult<BoardMemberItem>>();
+
+
             Mapper.CreateMap<Board, BoardMenuItem>();
 
             Mapper.CreateMap<Board, BoardListItem>()
@@ -34,7 +41,6 @@ namespace Redfern.Web.Application.Configuration.Automapper.Profiles
                 .ForMember(dest => dest.FullName, opts => opts.ResolveUsing<CacheUserFullNameResolver>().FromMember(src => src.UserName));
 
             
-
         }
         
     }

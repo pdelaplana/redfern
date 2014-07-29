@@ -17,7 +17,7 @@ namespace Redfern.Core.Repository.Commands
         public bool IsPublic { get; set; }
 
 
-        public Board Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<Board> Execute(RedfernDb db)
         {
             Board board = db.Boards.Find(this.BoardId);
             board.IsPublic = this.IsPublic;
@@ -27,14 +27,16 @@ namespace Redfern.Core.Repository.Commands
 
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;
-            activity.SetVerb("change");
-            activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
+            activity.SetVerb("changed");
+            activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
             activity.SetObject("board", board.BoardId.ToString(), board.Name, String.Format(@"/board/{0}", board.BoardId));
             activity.SetDescription("{actorlink} change visibility of board {objectlink} to " + visibility + ".");
             activity = db.Activities.Add(activity);
             db.SaveChanges();
 
-            return board;
+            return this.CommandResult<Board>(board, db, activity);
+
+            
         }
 
         

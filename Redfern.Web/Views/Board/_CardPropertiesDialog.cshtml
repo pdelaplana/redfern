@@ -60,20 +60,20 @@
                 
                 <div class="inline-block" style="width:100%">
                     <!-- ko foreach: cardTypes -->
-                    <div class="tile quarter" data-bind="setTileColor: color, css: { selected : color() == $parent.color()  }, changeTileColor: $parent.color, color: color, attr: { 'title': name }, enable: $parent.hasAccess('ChangeCardColor')">
+                    <div class="tile quarter" data-bind="setTileColor: color, css: { selected : color() == $parent.color()  }, changeTileColor: $parent.color, color: color, updateValue: $parent.changeColor, attr: { 'title': name }, enable: $parent.hasAccess('ChangeCardColor')">
                     </div>
                     <!-- /ko -->
                     
                 </div>
                 <h5>Tags</h5>
                 <div class="">
-                    <ul data-bind="tagit: tags, tagitOptions: { enabled: hasAccess('AddTag'), initialTags: tags()  }"></ul>
+                    <ul data-bind="tagit: tags, tagitOptions: { enabled: hasAccess('AddTag'), initialTags: tags(), addTag: tags.add, removeTag: tags.delete  }"></ul>
                 </div>
                 <h5 class="">Assignee</h5>
                 <div class="inline-block push-down-5" style="width:100%!important">
                     <img class="span2" data-bind="attr: { src: userPhotoUrl() }" />
                     <div class="input-control text span10">
-                        <input type="text" placeholder="Unassigned" data-bind="assignCard: assignedToUser, assignCardOptions: { members: members(), displayValue: assignedToUserFullName }, enable: hasAccess('ChangeCardAssignment')" />
+                        <input type="text" placeholder="Unassigned" data-bind="assignCard: assignedToUser, assignCardOptions: { members: members(), displayValue: assignedToUserFullName, updateValue: assign }, enable: hasAccess('ChangeCardAssignment')" />
                     </div>
                 </div>
               
@@ -90,14 +90,14 @@
     <!-- ko foreach: attachmentsList.attachments -->
     <div class="list no-border no-border-all" style="width:100%">
         <div class="list-content">
-            <img class="icon" src="" data-bind="attr: { src: '/api/cardattachment/?thumbid='+cardAttachmentId() }" style="width:80px;height:80px" />
+            <img class="icon" src="" data-bind="attr: { src: '/api/card/'+$parent.cardId()+'/attachments/'+cardAttachmentId()+'/thumbnail' }" style="width:80px;height:80px" />
             <div class="data">
                 <p>
                     <span class="list-title item-title" data-bind="text: fileName"></span>
                     <span class="list-remark text-muted" style="margin-top:10px" data-bind="text: uploadDateFromNow, attr: { title: uploadDateInLocalTimezone }">Uploaded 10 days ago</span>
                 </p>
                 <p>
-                    <a href="" class="text-muted span2" data-bind="attr: { href:'/api/cardattachment/'+cardAttachmentId() }"><i class="icon-download"></i> Download</a> <a href="" class="text-muted span2" data-bind="click: $parent.attachmentsList.remove"><i class="icon-remove"></i> Remove</a>
+                    <a href="" class="text-muted span2" data-bind="attr: { href:'/api/card/'+$parent.cardId()+'/attachment/'+cardAttachmentId() }"><i class="icon-download"></i> Download</a> <a href="" class="text-muted span2" data-bind="click: $parent.attachmentsList.remove"><i class="icon-remove"></i> Remove</a>
                 </p>
             </div>
         </div>

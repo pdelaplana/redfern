@@ -13,25 +13,27 @@ namespace Redfern.Core.Repository.Commands
     public class DeleteCardAttachmentCommand : IRepositoryCommand<bool>
     {
         public int CardAttachmentId { get; set; }
-        
-        public bool Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+
+        public CommandResult<bool> Execute(RedfernDb db)
         {
             CardAttachment attachment = db.CardAttachments.Find(this.CardAttachmentId);
             
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;
-            activity.SetVerb("deleted");
-            activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
-            activity.SetObject("attachment", attachment.CardAttachmentId.ToString(), "", "");
+            activity.SetVerb("removed");
+            activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
+            activity.SetObject("attachment", attachment.CardAttachmentId.ToString(), attachment.FileName, "");
             activity.SetSource("card", attachment.CardId.ToString(), attachment.Card.Title, "");
             activity.SetContext("board", attachment.Card.BoardId.ToString(), attachment.Card.Board.Name, String.Format(@"/board/{0}", attachment.Card.BoardId));
-            activity.SetDescription("<b>{actorlink}</b> deleted <b>{object}</b> from {sourcelink} in {contextlink}");
+            activity.SetDescription("{actorlink} deleted <b>{object}</b> from {sourcelink} in {contextlink}");
             activity = db.Activities.Add(activity);
 
             db.CardAttachments.Remove(attachment);
             db.SaveChanges();
 
-            return true;
+            return this.CommandResult<bool>(true, db, activity);
+
+          
         }
     }
 }

@@ -121,6 +121,19 @@ input[type=text]:disabled{
     height:25px;
 }
 
+
+/**************************************** 
+ *    Board Activity Stream styles
+ ****************************************/
+#activities_wrapper .listview .list .list-content .data {
+    font-size:smaller;
+    min-width:0;
+    line-height:initial;
+    vertical-align:top;
+}
+
+
+
 /* Tiny Scrollbar */
 .scrollbar1 { width: 270px; margin: 20px 0 10px;  }
 .scrollbar1 .viewport { width: 270px; height: 500px; overflow: hidden; position: absolute; }

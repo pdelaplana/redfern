@@ -1,4 +1,4 @@
-﻿app.modules.add('boards', function () {
+﻿app.views.add('boards', function () {
     var self = this;
         
     // register routes
@@ -12,10 +12,10 @@
 
     function BoardItem(data) {
         var self = this;
-        self.name = ko.observable(data.Name)
-        self.ownerFullName = ko.observable(data.OwnerFullName)
-        self.boardId = ko.observable(data.BoardId);
-        self.cardCount = ko.observable(data.CardCount)
+        self.name = ko.observable(data.name)
+        self.ownerFullName = ko.observable(data.ownerFullName)
+        self.boardId = ko.observable(data.boardId);
+        self.cardCount = ko.observable(data.cardCount)
     }
 
     var initialize = function () {
@@ -31,13 +31,13 @@
             self.sharedBoards.removeAll();
             self.publicBoards.removeAll();
             $.each(result, function (index, value) {
-                if (value.Owner == app.user.userName) {
+                if (value.owner == app.user.userName) {
                     self.myBoards.push(new BoardItem(value));
                 }
-                else if ($.inArray(app.user.userName, value.Collaborators) > -1) {
+                else if ($.inArray(app.user.userName, value.collaborators) > -1) {
                     self.sharedBoards.push(new BoardItem(value));
                 }
-                else if (value.IsPublic){
+                else if (value.isPublic){
                     self.publicBoards.push(new BoardItem(value));
                 } 
             })

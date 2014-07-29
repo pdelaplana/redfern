@@ -2,21 +2,19 @@
 
 <div class="page-region" style="">
     <div class="page-region-content " >
-        <div id="Board" class="inline" data-bind="visible:viewMode() == 'board', adjustBoardWidth: { settings:{ columnCount: visibleColumnCount(), columnWidth: columnWidth()   }  } ">
-            <div class="board" data-bind="sortable: { data: columns, isEnabled: hasAccess('RearrangeColumns'), afterMove: resequenceAllColumns, options:{ placeholder: BoardColumnPlaceHolder }  }">
+        <div id="Board" class="inline" data-bind="visible:viewMode() == 'board', adjustBoardWidth: { settings: { columnCount: columns.filterByVisible().length, columnWidth: columnWidth()   }  } ">
+            <div class="board" data-bind="sortable: { data: columns, isEnabled: hasAccess('RearrangeColumns'), afterMove: columns.resequenceAll, options:{ placeholder: BoardColumnPlaceHolder, handle: '.board-column-header *' }  }">
                 <div class="board-column border" data-bind="visible: show, adjustColumnHeight:$parent.height">
                     <div class="board-column-wrapper">
-                        <div class="board-column-header ntm ntp clearfix">
+                        <div class="board-column-header ntm ntp clearfix cursor-move">
                             <h4 class="ntm ntp">
-                               
                                 <strong data-bind="truncatedText: name, maxTextLength:18"></strong>
-                                
                                 <span class="text-muted">
                                     (<span data-bind="text: visibleCardCount"></span> cards)
                                     <i class="icon-filter" data-bind="visible: sortable() == false"></i>
                                 </span>
-                                <i class="icon-forward place-right" style="cursor:pointer" data-bind="click:openColumnProperties, visible: !isArchiveColumn() && $parent.hasAccess('OpenColumnProperties')"></i>
-                                <i class="icon-zoom-in place-right" style="cursor:pointer" data-bind="click:$parent.expandColumn"></i>
+                                <i class="icon-forward place-right" style="cursor:pointer" data-bind="columnProperties:'ColumnPropertiesForm', visible: !isArchiveColumn() && $parent.hasAccess('OpenColumnProperties')"></i>
+                                <i class="icon-zoom-in place-right" style="cursor:pointer" data-bind="click:expand"></i>
                             </h4>
                         </div>
                         <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable() && $parent.hasAccess('RearrangeCards') , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
@@ -74,7 +72,7 @@
         </div>
 
         <div id="ExpandedColumn" data-bind="if: viewMode() == 'columnview'">
-            <div data-bind="with: selectedColumn">
+            <div data-bind="with: columns.selected">
                 <div class="board-column border" data-bind="maximizeColumn: maximixed, adjustColumnHeight:$parent.height">
                     <div class="board-column-wrapper">
                         <div class="board-column-header ntm ntp clearfix">
@@ -84,7 +82,7 @@
                                     (<span data-bind="text: visibleCardCount"></span> cards)
                                     <i class="icon-filter" data-bind="visible: sortable() == false"></i>
                                 </span>
-                                <i class="icon-forward place-right" style="cursor:pointer" data-bind="click:openColumnProperties, visible: !isArchiveColumn() && $parent.hasAccess('OpenColumnProperties')"></i>
+                                <i class="icon-forward place-right" style="cursor:pointer" data-bind="columnProperties:'ColumnPropertiesForm', visible: !isArchiveColumn() && $parent.hasAccess('OpenColumnProperties')"></i>
                                 <i class="icon-zoom-out place-right" style="cursor:pointer" data-bind="click:function(){ $parent.viewMode('board') }"></i>
                             </h4>
                         </div>
@@ -125,5 +123,5 @@
 
 
 <script type="text/javascript">
-    var model = @Html.Raw(JsonConvert.SerializeObject(Model));
+    var model = @Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings(){ ContractResolver = new CamelCasePropertyNamesContractResolver() }));
 </script>

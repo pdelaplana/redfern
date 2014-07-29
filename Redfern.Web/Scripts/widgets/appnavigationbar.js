@@ -2,8 +2,8 @@
     
     function BoardItemMenu(data) {
         var self = this;
-        self.boardId = ko.observable(data.BoardId);
-        self.name = ko.observable(data.Name);
+        self.boardId = ko.observable(data.boardId);
+        self.name = ko.observable(data.name);
     }
 
 

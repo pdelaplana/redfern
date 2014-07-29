@@ -4,8 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Redfern.Core.Models;
 using Redfern.Core.Repository;
 using Redfern.Core.Repository.Commands;
+using Redfern.Web.Models;
 
 namespace Redfern.Web.API
 {
@@ -38,9 +40,10 @@ namespace Redfern.Web.API
         }
 
         // PUT api/cardtype/5
-        public void Put(int id, [FromBody]UpdateCardTypeCommand command)
+        public WebApiResult<CardTypeItem> Put(int id, [FromBody]UpdateCardTypeCommand command)
         {
-            _repository.ExecuteCommand(command);
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<CardType>, WebApiResult<CardTypeItem>>(result);
         }
 
         // DELETE api/<controller>/5

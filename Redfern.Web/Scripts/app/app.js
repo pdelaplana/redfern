@@ -5,16 +5,16 @@
         appContainer: 'application-container'
     }, config);
 
-    function ModulesArray() {
-        this.add = function (name, module) {
-            this[name] = module;
+    function ViewsArray() {
+        this.add = function (name, view) {
+            this[name] = view;
         }
     }
-    ModulesArray.prototype = [];
+    ViewsArray.prototype = [];
     
     var ui = new UI(),
         router = new Router(config.appContainer),
-        modules = new ModulesArray();
+        views = new ViewsArray();
 
     ui.appTitle(config.appTitle);
 
@@ -29,7 +29,7 @@
 
         router: router,
     
-        modules: modules,
+        views: views,
 
         start: function (path) {
 

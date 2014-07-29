@@ -74,3 +74,5 @@ function KeepAlive() {
         $.get('/session/keepalive');
     }, 840000); // 14 mins * 60 * 1000
 }
+
+

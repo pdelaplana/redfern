@@ -14,33 +14,27 @@ namespace Redfern.Core.Repository.Commands
     {
 
         public int BoardMemberId { get; set; }
-       
 
-        public bool Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<bool> Execute(RedfernDb db)
         {
             BoardMember member = db.BoardMembers.Find(this.BoardMemberId);
            
-            // set activity
+            // create the activity
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;
             activity.SetVerb("removed");
-            activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
-            activity.SetObject("member", member.BoardMemberId.ToString(), userCache.GetFullName(member.UserName), String.Format(@"/profile/{0}", member.UserName));
+            activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
+            activity.SetObject("member", member.BoardMemberId.ToString(), db.GetUserFullName(member.UserName), String.Format(@"/profile/{0}", member.UserName));
             activity.SetContext("board", member.BoardId.ToString(), member.Board.Name, String.Format(@"/board/{0}", member.BoardId));
-            activity.SetDescription(String.Format(@"<a href=""{0}"">{1}</a> removed <a href=""{2}"">{3}</a> from board <a href=""{4}"">{5}</a>.",
-                    activity.ActorUrl,
-                    activity.ActorDisplayName,
-                    activity.ObjectUrl,
-                    activity.ObjectDisplayName,
-                    activity.ContextUrl,
-                    activity.ContextDisplayName
-                ));
+            activity.SetDescription("{actorlink} removed {object} from board {contextlink}");
             activity = db.Activities.Add(activity);
-     
+            
+            // remove board member
             db.BoardMembers.Remove(member);
             db.SaveChanges();
 
-            return true;
+            return this.CommandResult<bool>(true, db, activity);
+            
         }
     }
 }

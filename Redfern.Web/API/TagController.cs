@@ -7,10 +7,12 @@ using System.Web.Http;
 using Redfern.Core.Models;
 using Redfern.Core.Repository;
 using Redfern.Core.Repository.Commands;
+using Redfern.Web.Models;
 
 
 namespace Redfern.Web.API
 {
+    
     [Authorize]
     public class TagController : ApiController
     {
@@ -38,21 +40,12 @@ namespace Redfern.Web.API
             return "value";
         }
 
-        // POST api/tag
-        public void Post([FromBody]CreateCardTagCommand command)
-        {
-            _repository.ExecuteCommand(command);
-        }
-
+       
         // PUT api/<controller>/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/tag/
-        public void Delete([FromBody]DeleteCardTagCommand command)
-        {
-            _repository.ExecuteCommand(command);
-        }
+        
     }
 }

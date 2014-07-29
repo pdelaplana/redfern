@@ -15,8 +15,7 @@ namespace Redfern.Core.Repository.Commands
 
         public int CardId { get; set; }
         
-
-        public Card Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<Card> Execute(RedfernDb db)
         {
             Card card = db.Cards.Find(this.CardId);
             BoardColumn archivedColumn = db.BoardColumns.Where(c => c.Name == "Archived" && c.BoardId == card.BoardId).SingleOrDefault();
@@ -39,14 +38,16 @@ namespace Redfern.Core.Repository.Commands
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;
             activity.SetVerb("archived");
-            activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
+            activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
             activity.SetObject("card", card.CardId.ToString(), card.Title, String.Format(@"/board/{0}/card/{1}", card.BoardId, card.CardId));
             activity.SetContext("board", card.BoardId.ToString(), card.Board.Name, String.Format(@"/board/{0}", card.BoardId));
             activity.SetDescription("{actorlink} archived card {objectlink} in {contextlink}");
             activity = db.Activities.Add(activity);
             db.SaveChanges();
 
-            return card;
+            return this.CommandResult<Card>(card, db, activity);
+
+            
         }
     }
 }

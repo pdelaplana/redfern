@@ -1,27 +1,29 @@
 ﻿function CardTagRepository() {
-    var self = this;
+    var apiUrl = '/api/board/{0}/card/{1}/tags'
+        self = this;
 
-    self.cardId = ko.observable();
-    self.tagName = ko.observable();
+    self.boardId = null;
+    self.cardId = null;
+    self.tagName = null;
 
     self.create = function () {
         return $.ajax({
-            url: '/api/tag',
+            url: apiUrl.format(self.boardId, self.cardId),
             type: 'post',
             data: {
-                CardId: self.cardId(),
-                TagName: self.tagName()
+                CardId: self.cardId,
+                TagName: self.tagName
             }
         });
     }
 
     self.remove = function () {
         return $.ajax({
-            url: '/api/tag',
+            url: apiUrl.format(self.boardId, self.cardId),
             type: 'delete',
             data: {
-                CardId: self.cardId(),
-                TagName: self.tagName()
+                CardId: self.cardId,
+                TagName: self.tagName
             }
         });
     }

@@ -1,4 +1,4 @@
-﻿app.modules.add('users', function () {
+﻿app.views.add('users', function () {
 
     // register route
     app.router.registerRoute('#/users', function (context) {

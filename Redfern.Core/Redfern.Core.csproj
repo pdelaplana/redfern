@@ -111,12 +111,13 @@
     <Compile Include="Migrations\201405191028349_AddIsPublicToBoard.Designer.cs">
       <DependentUpon>201405191028349_AddIsPublicToBoard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\ActivityConstructor.cs" />
     <Compile Include="Models\CardAttachment.cs" />
     <Compile Include="Models\CardType.cs" />
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
     <Compile Include="Models\Configuration\CardConfiguration.cs" />
     <Compile Include="Models\Configuration\BoardColumnConfiguration.cs" />
+    <Compile Include="Models\RedfernDbExtensions.cs" />
+    <Compile Include="Repository\CommandResult.cs" />
     <Compile Include="Repository\Commands\AddCardAttachmentCommand.cs" />
     <Compile Include="Repository\Commands\AssignCardCommand.cs" />
     <Compile Include="Repository\Commands\ChangeBoardVisibilityCommand.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Repository\Commands\DeleteCardTagCommand.cs" />
     <Compile Include="Repository\Commands\DeleteCardCommand.cs" />
     <Compile Include="Repository\Commands\ArchiveCardCommand.cs" />
+    <Compile Include="Repository\Commands\ChangeCardColorCommand.cs" />
     <Compile Include="Repository\Commands\UpdateCardWikiCommand.cs" />
     <Compile Include="Repository\Commands\UpdateCardCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardColumnCommand.cs" />
@@ -160,6 +162,7 @@
     <Compile Include="Repository\RedfernRepository.cs" />
     <Compile Include="Repository\RedfernRepositoryExtensions.cs" />
     <Compile Include="Repository\Commands\UpdateCardTypeCommand.cs" />
+    <Compile Include="Repository\RepositoryCommandExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

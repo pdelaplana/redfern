@@ -13,5 +13,11 @@ namespace Redfern.Core.Repository
         {
             return source.Where(b => b.Owner == userName || b.Members.Where(m => m.UserName == userName).Count() > 0).ToList();
         }
+
+        public static IQueryable<Activity> OfBoard(this IQueryable<Activity> source, int boardId)
+        {
+            string idAsString = boardId.ToString();
+            return source.Where(a => (a.ObjectType == "board" && a.ObjectId == idAsString) || (a.ContextType == "board" && a.ContextId == idAsString)).OrderByDescending(a => a.ActivityDate);
+        }
     }
 }

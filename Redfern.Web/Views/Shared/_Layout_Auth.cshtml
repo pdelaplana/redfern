@@ -8,9 +8,10 @@
 
 @section Scripts{
     @RenderSection("Scripts", false)
-    @Scripts.Render("~/bundles/knockout", "~/bundles/sammy")
+    @Scripts.Render("~/bundles/signalr", "~/bundles/knockout", "~/bundles/sammy")
     @Scripts.Render("~/bundles/app")
     @Scripts.Render("~/bundles/modules")
+    <script src="~/signalr/hubs" type="text/javascript"></script>
     @if (Request.IsAuthenticated)
     {
         <script type="text/javascript" src="@Url.Action("update", "clienttimezone", new { area = "" })"></script>

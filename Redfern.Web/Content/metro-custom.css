@@ -22,6 +22,7 @@
  */
 textarea {
   font-family: sans-serif;
+  resize:none;
 }
 
 /*********************************** 

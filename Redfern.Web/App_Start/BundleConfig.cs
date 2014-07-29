@@ -41,8 +41,14 @@ namespace Redfern.Web
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/scripts/bootstrap.js",
-                      "~/scripts/respond.js"));
+                        "~/scripts/bootstrap.js",
+                        "~/scripts/respond.js"
+                        ));
+
+            bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
+                        "~/Scripts/jquery.signalR-{version}.js",
+                        "~/Scripts/hubs/boardhubclient.js"
+                        ));
 
 
             //bundles.Add(new ScriptBundle("~/bundles/metro").IncludeDirectory(
@@ -95,6 +101,7 @@ namespace Redfern.Web
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                         "~/scripts/knockout-{version}.js",
                         "~/scripts/knockout.mapping-latest.js",
+                        "~/scripts/knockout.functions.js",
                         "~/scripts/knockout.bindings.js",
                         "~/scripts/knockout.bindings.markdowndeep.js",
                         "~/scripts/knockout.bindings.sortable.js",
@@ -109,6 +116,7 @@ namespace Redfern.Web
                         "~/scripts/app/router.js",
                         "~/scripts/app/ui.js",
                         "~/scripts/app/app.js",
+                        "~/scripts/common.js",
                         "~/scripts/main.js"
                         ));
 
@@ -127,6 +135,7 @@ namespace Redfern.Web
                         "~/scripts/repositories/cardtyperepository.js",
                         "~/scripts/repositories/cardattachmentrepository.js",
                         "~/scripts/repositories/userrepository.js",
+                        "~/scripts/repositories/boardactivityrepository.js",
                         "~/scripts/widgets/appnavigationbar.js",
                         "~/scripts/widgets/createboarddialog.js",
                         "~/scripts/widgets/cardpropertiesdialog.js",

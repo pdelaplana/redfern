@@ -16,7 +16,7 @@ namespace Redfern.Core.Repository.Commands
         public string Name { get; set; }
         public bool IsPublic { get; set; }
 
-        public Board Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<Board> Execute(RedfernDb db)
         {
             Board board = db.Boards.Create();
             board.Name = this.Name;
@@ -48,8 +48,8 @@ namespace Redfern.Core.Repository.Commands
 
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;
-            activity.SetVerb("create");
-            activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
+            activity.SetVerb("created");
+            activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
             activity.SetObject("board", board.BoardId.ToString(), board.Name, String.Format(@"/board/{0}", board.BoardId));
             activity.SetDescription(String.Format(@"<a href=""{0}"">{1}</a> created new board <a href=""{2}"">{3}</a>.",
                     activity.ActorUrl,
@@ -60,7 +60,8 @@ namespace Redfern.Core.Repository.Commands
             activity = db.Activities.Add(activity);
             db.SaveChanges();
 
-            return board;
+            return this.CommandResult<Board>(board, db, activity: activity);
+
         }
 
         

@@ -13,15 +13,15 @@ namespace Redfern.Core.Repository.Commands
     public class DeleteCardCommentCommand : IRepositoryCommand<bool>
     {
         public int CardCommentId { get; set; }
-        
-        public bool Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+
+        public CommandResult<bool> Execute(RedfernDb db)
         {
             CardComment comment = db.CardComments.Find(this.CardCommentId);
             
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;
             activity.SetVerb("deleted");
-            activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
+            activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
             activity.SetObject("comment", comment.CommentId.ToString(), "", "");
             activity.SetSource("card", comment.CardId.ToString(), comment.Card.Title, "");
             activity.SetContext("board", comment.Card.BoardId.ToString(), comment.Card.Board.Name, String.Format(@"/board/{0}", comment.Card.BoardId));
@@ -31,7 +31,7 @@ namespace Redfern.Core.Repository.Commands
             db.CardComments.Remove(comment);
             db.SaveChanges();
 
-            return true;
+            return this.CommandResult<bool>(true, db, activity);   
         }
     }
 }

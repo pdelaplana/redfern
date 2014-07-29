@@ -14,13 +14,37 @@ namespace Redfern.Core.Repository.Commands
     {
         public int ColumnId { get; set; }
         
-        public bool Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<bool> Execute(RedfernDb db)
         {
             BoardColumn column = db.BoardColumns.Find(this.ColumnId);
-            db.BoardColumns.Remove(column);
-            db.SaveChanges();
 
-            return true;
+            try
+            {
+                Activity activity = db.Activities.Create();
+                activity.ActivityDate = DateTime.UtcNow;
+                activity.SetVerb("deleted");
+                activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
+                activity.SetObject("column", column.ColumnId.ToString(), column.Name, "");
+                activity.SetContext("board", column.BoardId.ToString(), column.Board.Name, String.Format(@"/board/{0}", column.BoardId));
+                activity.SetDescription("{actorlink} deleted column {object} in {context}");
+                activity = db.Activities.Add(activity);
+                db.SaveChanges();
+
+                db.BoardColumns.Remove(column);
+                db.SaveChanges();
+
+                return this.CommandResult<bool>(true, db, activity);
+
+            }
+            catch
+            {
+                return this.CommandResult<bool>(false, db);
+            }
+          
+
+            
+           
+            
         }
     }
 }

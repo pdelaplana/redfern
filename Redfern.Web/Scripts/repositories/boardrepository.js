@@ -1,45 +1,45 @@
 ﻿function BoardRepository() {
     var self = this;
 
-    self.boardId = ko.observable();
-    self.name = ko.observable();
-    self.isPublic = ko.observable();
+    self.boardId = null;
+    self.name = null;
+    self.isPublic = null;
 
     self.getBoardsOfUser = function (userName) {
         return $.ajax({
-            url: '/api/board/'+userName,
+            url: '/api/boards/list/'+userName,
             type: 'get'
         });
     }
 
     self.create = function () {
         return $.ajax({
-            url: '/api/board',
+            url: '/api/boards',
             type: 'post',
-            data: { Name: self.name() }
+            data: { Name: self.name }
         });
     }
 
     self.update = function () {
         return $.ajax({
-            url: '/api/board/'+self.boardId(),
+            url: '/api/boards/'+self.boardId,
             type: 'put',
-            data: { BoardId : self.boardId(), Name: self.name() }
+            data: { BoardId : self.boardId, Name: self.name }
         });
     }
     
     self.remove = function () {
         return $.ajax({
-            url: '/api/board/' + self.boardId(),
+            url: '/api/boards/' + self.boardId,
             type: 'delete'
         });
     }
 
     self.changeVisibility = function () {
         return $.ajax({
-            url: '/api/board/' + self.boardId(),
-            type: 'changevisibility',
-            data: { BoardId: self.boardId(), IsPublic: self.isPublic() }
+            url: '/api/boards/' + self.boardId+'/changevisibility',
+            type: 'post',
+            data: { BoardId: self.boardId, IsPublic: self.isPublic }
         });
     }
 

@@ -1,66 +1,69 @@
-﻿function CardPropertiesDialog(elementId, source) {
+﻿function CommentListItem(data) {
+    var self = this;
+    self.boardId = ko.observable(data.boardId);
+    self.cardId = ko.observable(data.cardId);
+    self.commentId = ko.observable(data.commentId);
+    self.comment = ko.observable(data.comment);
+    self.commentByUser = ko.observable(data.commentByUser);
+    self.commentByUserFullName = ko.observable(data.commentByUserFullName);
+    self.commentDate = ko.observable(data.commentDate);
+    self.commentDateInLocalTimezone = ko.computed(function () {
+        return moment(moment.utc(self.commentDate()).toDate()).format('llll');
+    })
+    self.commentDateFromNow = ko.computed(function () {
+        return moment.utc(self.commentDate()).fromNow();
+    })
+}
 
-    function CommentListItem(data) {
-        var self = this;
-        self.commentId = ko.observable(data.CommentId);
-        self.comment = ko.observable(data.Comment);
-        self.commentByUser = ko.observable(data.CommentByUser);
-        self.commentByUserFullName = ko.observable(data.CommentByUserFullName);
-        self.commentDate = ko.observable(data.CommentDate);
-        self.commentDateInLocalTimezone = ko.computed(function () {
-            return moment(moment.utc(self.commentDate()).toDate()).format('llll');
-        })
-        self.commentDateFromNow = ko.computed(function () {
-            return moment.utc(self.commentDate()).fromNow();
-        })
-    }
+function ActivityListItem(data) {
+    var self = this;
+    self.activityId = ko.observable(data.activityId);
+    self.actorId = ko.observable(data.actorId);
+    self.actorDisplayName = ko.observable(data.actorDisplayName);
+    self.activityDate = ko.observable(data.activityDate);
+    self.verb = ko.observable(data.verb);
+    self.objectDisplayName = ko.observable(data.objectDisplayName);
+    self.sourceDisplayName = ko.observable(data.sourceDisplayName);
+    self.targetDisplayName = ko.observable(data.targetDisplayName);
 
-    function ActivityListItem(data) {
-        var self = this;
-        self.activityId = ko.observable(data.ActivityId);
-        self.actorId = ko.observable(data.ActorId);
-        self.actorDisplayName = ko.observable(data.ActorDisplayName);
-        self.activityDate = ko.observable(data.ActivityDate);
-        self.verb = ko.observable(data.Verb);
-        self.objectDisplayName = ko.observable(data.ObjectDisplayName);
-        self.sourceDisplayName = ko.observable(data.SourceDisplayName);
-        self.targetDisplayName = ko.observable(data.TargetDisplayName);
+    self.description = ko.computed(function () {
+        var description = "";
+        switch (self.verb()) {
+            case "moved":
+                description = "<b>" + self.actorDisplayName() + "</b> moved this card from <b>" + self.sourceDisplayName() + "</b> to <b>" + self.targetDisplayName() + "</b>."
+                break;
+            case "added":
+                description = "<b>" + self.actorDisplayName() + "</b> added this card to <b>" + self.targetDisplayName() + "</b>."
+                break;
+            default:
+                description = "<b>" + self.actorDisplayName() + "</b>  " + self.verb() + " this card.";
+                break;
+        }
+        return description;
+    });
 
-        self.description = ko.computed(function () {
-            var description = "";
-            switch (self.verb()) {
-                case "moved":
-                    description = "<b>" + self.actorDisplayName() + "</b> moved this card from <b>" + self.sourceDisplayName() + "</b> to <b>" + self.targetDisplayName() + "</b>."
-                    break;
-                case "added":
-                    description = "<b>" + self.actorDisplayName() + "</b> added this card to <b>" + self.targetDisplayName() + "</b>."
-                    break;
-                default:
-                    description = "<b>" + self.actorDisplayName() + "</b>  " + self.verb() + " this card.";
-                    break;
-            }
-            return description;
-        });
+    self.activityDateInLocalTimezone = ko.computed(function () {
+        return moment(moment.utc(self.activityDate()).toDate()).format('llll');
+    })
+}
 
-        self.activityDateInLocalTimezone = ko.computed(function () {
-            return moment(moment.utc(self.activityDate()).toDate()).format('llll');
-        })
-    }
+function AttachmentListItem(data) {
+    var self = this;
+    self.cardAttachmentId = ko.observable(data.cardAttachmentId);
+    self.fileName = ko.observable(data.fileName);
+    self.uploadDate = ko.observable(data.uploadDate);
+    self.uploadedByUserFullName = ko.observable(data.uploadedByUserFullName);
+    self.uploadDateInLocalTimezone = ko.computed(function () {
+        return moment(moment.utc(self.uploadDate()).toDate()).format('llll');
+    })
+    self.uploadDateFromNow = ko.computed(function () {
+        return moment.utc(self.uploadDate()).fromNow();
+    })
+}
 
-    function AttachmentListItem(data) {
-        var self = this;
-        self.cardAttachmentId = ko.observable(data.CardAttachmentId);
-        self.fileName = ko.observable(data.FileName);
-        self.uploadDate = ko.observable(data.UploadDate);
-        self.uploadedByUserFullName = ko.observable(data.uploadedByUserFullName);
-        self.uploadDateInLocalTimezone = ko.computed(function () {
-            return moment(moment.utc(self.uploadDate()).toDate()).format('llll');
-        })
-        self.uploadDateFromNow = ko.computed(function () {
-            return moment.utc(self.uploadDate()).fromNow();
-        })
-    }
+function CardPropertiesDialog(elementId, source) {
 
+    
     var elementId = elementId,
         self = this;
 
@@ -96,15 +99,12 @@
     self.update = source.update;
     self.remove = source.remove;
 
-
     self.selectedColumn = ko.observable(source.parent);
 
     // subscriptions
 
     self.selectedColumn.subscribe(function (newValue) {
 
-      
-       
     });
 
 
@@ -113,41 +113,42 @@
     })
 
     self.assignedToUser.subscribe(function (newValue) {
-        self.assign().done(function () {
-            self.assignedToUserFullName();
-        });
+        
     })
 
-    self.color.subscribe(function (newValue) {
-        var cardType = ko.utils.arrayFirst(self.cardTypes(), function (cardType) {
-            return cardType.color() == newValue;
-        });
-        self.cardTypeId(cardType.cardTypeId());
-        self.changed = true;
-    });
-
-    self.tags.subscribe(function (changes) {
-
-        $.each(changes, function (index, change) {
-            if (change.status == 'added') {
-                var repository = new CardTagRepository();
-                repository.cardId(self.cardId());
-                repository.tagName(change.value);
-                repository.create().done(function () {
-                    //self.tags.push(tagName);
-                });
-
-            } else if (change.status == 'deleted') {
-                var repository = new CardTagRepository();
-                repository.cardId(self.cardId());
-                repository.tagName(change.value);
-                repository.remove().done(function () {
-                    //self.tags.pop(tagName)
-                });
-            }
+    self.changeColor = function (newColor) {
+        var repository = new CardRepository();
+        repository.cardId = self.cardId();
+        repository.boardId = self.boardId();
+        repository.color = newColor;
+        repository.changeColor().done(function (result) {
+            self.cardTypeId(result.data.cardTypeId)
+            self.column.board.hub.notify.onCardColorChanged(result.data.boardId, result.data.cardId, result.data.cardTypeId, result.data.color, result.activityContext);
         })
-        
-    }, null, "arrayChange")
+    }
+
+ 
+    
+    self.tags.add = function (tag) {
+        var repository = new CardTagRepository();
+        repository.boardId = self.boardId();
+        repository.cardId = self.cardId();
+        repository.tagName = tag;
+        repository.create().done(function (result) {
+            self.column.board.hub.notify.onCardTagAdded(self.boardId(), self.cardId(), result.data.tagName, result.activityContext);
+        });
+    }
+
+    self.tags.delete = function (tag) {
+        var repository = new CardTagRepository();
+        repository.boardId = self.boardId();
+        repository.cardId = self.cardId();
+        repository.tagName = tag;
+        repository.remove().done(function (result) {
+            self.column.board.hub.notify.onCardTagRemoved(self.boardId(), self.cardId(), result.data, result.activityContext);
+        });
+    }
+
 
     
     self.members = function () {
@@ -169,10 +170,11 @@
     self.wiki = {
         save: function () {
             var repository = new CardRepository();
-            repository.cardId(self.cardId());
-            repository.description(self.description());
-            repository.update().done(function () {
-                
+            repository.boardId = self.boardId();
+            repository.cardId = self.cardId();
+            repository.description = self.description();
+            repository.update().done(function (result) {
+                self.column.board.hub.notify.onCardUpdated(result.data, result.activityContext);
             })
         }
     }
@@ -184,27 +186,33 @@
         add: function () {
             if (self.commentThread.newComment() != null) {
                 var repository = new CardCommentRepository();
-                repository.cardId(self.cardId());
-                repository.comment(self.commentThread.newComment());
+                repository.boardId = self.boardId();
+                repository.cardId = self.cardId();
+                repository.comment = self.commentThread.newComment();
                 repository.create().done(function (result) {
-                    self.commentThread.comments.splice(0, 0, new CommentListItem(result));
+                    self.commentThread.comments.splice(0, 0, new CommentListItem(result.data));
                     self.commentThread.newComment('');
                     self.commentCount(self.commentThread.comments().length);
+                    self.column.board.hub.notify.onCardCommentAdded(self.boardId(), result.data, result.activityContext);
                 });
             }
         },
         remove: function (comment) {
             var repository = new CardCommentRepository();
-            repository.commentId(comment.commentId());
-            repository.remove().done(function () {
+            repository.boardId = comment.boardId();
+            repository.cardId = comment.cardId();
+            repository.commentId = comment.commentId();
+            repository.remove().done(function (result) {
                 self.commentThread.comments.remove(comment);
                 self.commentCount(self.commentThread.comments().length);
+                self.column.board.hub.notify.onCardCommentRemoved(comment.boardId(), comment.cardId(), comment.commentId(), result.activityContext);
             });
         },
         loading: ko.observable(true),
         load: function () {
             var repository = new CardCommentRepository();
-            repository.cardId(self.cardId());
+            repository.boardId = self.boardId();
+            repository.cardId = self.cardId();
             repository.getComments().done(function (result) {
                 $.each(result, function (index, value) {
                     self.commentThread.comments.push(new CommentListItem(value));
@@ -234,7 +242,7 @@
         attachments : ko.observableArray(),
         load: function () {
             var repository = new CardAttachmentRepository();
-            repository.cardId(self.cardId());
+            repository.cardId = self.cardId();
             repository.getAll().done(function (result) {
                 $.each(result, function (index, value) {
                     self.attachmentsList.attachments.push(new AttachmentListItem(value));
@@ -243,14 +251,15 @@
         },
         remove: function (attachment) {
             var repository = new CardAttachmentRepository();
-            repository.cardAttachmentId(attachment.cardAttachmentId());
-            repository.remove().done(function () {
+            repository.cardId = self.cardId(),
+            repository.cardAttachmentId = attachment.cardAttachmentId();
+            repository.remove().done(function (result) {
+                self.column.board.hub.notify.onCardAttachmentRemoved(self.boardId(), self.cardId(), attachment.cardAttachmentId(), result.activityContext);
                 self.attachmentsList.attachments.remove(attachment);
                 self.attachmentCount(self.attachmentsList.attachments().length);
             });
         }
     }
-
 
     self.removeCard = function () {
         $.Dialog.close();
@@ -272,6 +281,8 @@
         });
 
         if (targetColumn != null) {
+
+            // move the card
             var clonedCard = self.column.cards.remove(function (card) { return card.cardId() == self.cardId(); })[0];
             if (clonedCard == null) return;
             clonedCard.parent = targetColumn;
@@ -279,23 +290,15 @@
             clonedCard.show(true);
             targetColumn.cards.push(clonedCard);
 
-            var ids = new Array();
-            $.each(targetColumn.cards(), function (index, value) {
-                ids.push(value.cardId());
-            })
-            $.ajax({
-                url: '/api/card',
-                type: 'resequence',
-                data: {
-                    ColumnId: targetColumn.columnId(),
-                    CardIds: ids
-                },
-                success: function () {
-                    //self.columnName(targetColumn.name());
-                    //self.column
-
-                }
-            });
+            // send the update 
+            var repository = new CardRepository();
+            repository.boardId = self.boardId();
+            repository.cardId = self.cardId();
+            repository.columnId = targetColumn.columnId();
+            repository.resequence(targetColumn.cards.getArrayOfProperty('cardId'))
+                .done(function (result) {
+                    targetColumn.board.hub.notify.onCardMoved(result.data, result.activityContext);
+                });
         }
 
 
@@ -325,12 +328,12 @@
             //position: { top: 50, left: 10 },
             onShow: function (dialog) {
 
-                
                 $('[data-role=datepicker]', dialog).datepicker();
                 $('[data-role=dropdown]', dialog).dropdown();
                 $('.tab-control', dialog).tabcontrol();
                 $(dialog).dropzone({
-                    url: '/api/cardattachment/' + self.cardId(),
+                    url: '/api/card/'+self.cardId()+'/attachments/',
+                    method:'post',
                     previewsContainer: "#previews",
                     clickable: "#uploadfile",
                     dictResponseError: 'test error',
@@ -341,9 +344,10 @@
                         this.on('complete', function (file) {
                             this.removeFile(file);
                         })
-                        this.on('success', function (file, response) {
-                            self.attachmentsList.attachments.splice(0, 0, new AttachmentListItem(response));
+                        this.on('success', function (file, result) {
+                            self.attachmentsList.attachments.splice(0, 0, new AttachmentListItem(result.data));
                             self.attachmentCount(self.attachmentsList.attachments().length);
+                            self.column.board.hub.notify.onCardAttachmentAdded(self.boardId(), result.data, result.activityContext);
                         })
                     },
                 });
@@ -377,8 +381,6 @@
                     event.stopPropagation();
 
                 })
-
-
 
                 self.commentThread.load();
                 self.activityStream.load();

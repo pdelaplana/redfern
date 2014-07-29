@@ -16,6 +16,12 @@ namespace Redfern.Core
             set;
         }
 
+        public string ClientUserFullName
+        {
+            get;
+            set;
+        }
+
         public string ClientIpAddress
         {
             get;

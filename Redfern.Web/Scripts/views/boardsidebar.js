@@ -13,11 +13,13 @@
     self.viewOnly = boardUI.viewOnly;
     self.hasAccess = boardUI.hasAccess;
 
+    self.activities = boardUI.activities;
     self.columns = boardUI.columns;
     self.members = boardUI.members;
     self.cardTypes = boardUI.cardTypes
-    self.resequence = boardUI.resequenceAllColumns;
+    self.resequence = boardUI.columns.resequenceAll;
     
+
     // computed observables
     self.canChangeSettings = ko.computed(function () {
         return (self.owner() == app.user.userName) || !self.viewOnly();
@@ -38,24 +40,35 @@
     // operations
     self.changeBoardName = function () {
         var repository = new BoardRepository();
-        repository.boardId(self.boardId());
-        repository.name(self.name());
-        repository.update().done(function () {
+        repository.boardId=self.boardId();
+        repository.name=self.name();
+        repository.update().done(function (result) {
             $.Notify.show('Board name has been changed.');
+            BoardContext.current.hub.notify.onBoardNameChanged(result.data.boardId, result.data.name, result.activityContext);
             app.ui.appNavigationBar.updateBoardName(self.boardId(), self.name());
             app.ui.appNavigationBar.selectedMenu(self.name());
         });
     }
 
     self.changeVisibility = function () {
-
         self.isPublic(!self.isPublic());
         var repository = new BoardRepository();
-        repository.boardId(self.boardId());
-        repository.isPublic(self.isPublic());
-        repository.changeVisibility().done(function () {
+        repository.boardId=self.boardId();
+        repository.isPublic=self.isPublic();
+        repository.changeVisibility().done(function (result) {
             $.Notify.show('Board visibility has been changed.');
-            //self.isPublic(!self.isPublic());
+            BoardContext.current.hub.notify.onBoardVisibilityChanged(result.data.boardId, result.data.isPublic, result.activityContext);
+        });
+    }
+
+    self.changeColumnVisibility = function (column) {
+        column.show(!column.show());
+        var repository = new BoardColumnRepository();
+        repository.boardId = column.boardId();
+        repository.columnId = column.columnId();
+        repository.hidden = !column.show();
+        repository.toggle().done(function (result) {
+            BoardContext.current.hub.notify.onColumnVisibilityChanged(result.data.boardId, result.data.columnId, !result.data.hidden, result.activityContext);
         });
     }
 
@@ -180,11 +193,12 @@
         add: function () {
             if (self.newMember.userName() != null && self.newMember.userName() != '') {
                 var repository = new BoardMemberRepository();
-                repository.boardId(self.boardId());
-                repository.userName(self.newMember.userName());
+                repository.boardId = self.boardId();
+                repository.userName = self.newMember.userName();
                 repository.create().done(function (result) {
-                    if (self.getMember(result.BoardMemberId) == null) {
-                        self.members.push(new BoardMember(result, boardUI));
+                    if (self.getMember(result.data.boardMemberId) == null) {
+                        self.members.push(new BoardMember(result.data));
+                        BoardContext.current.hub.notify.onCollaboratorAdded(BoardContext.current.boardId(), result.data, result.activityContext);
                     }
                     self.newMember.userName('');
                 });
@@ -202,7 +216,6 @@
         $.each(self.members(), function (index, value) {
             if (value.selected())
                 value.remove().done(function () {
-                    self.members.remove(value);
                     self.selectedMember.boardMemberId(0);
                     self.selectedMember.fullName('');
                     self.selectedMember.userName('');
@@ -275,6 +288,7 @@
         $('.slide-out-div').height($(this).outerHeight());
         // resize the height columns div when window resizes 
         $('#Sidebar_columns').find('ul li:nth-child(2) > div').height($(this).outerHeight() - 180);
+        $('#Sidebar_activities').find('ul li:nth-child(2) > div').height($(this).outerHeight() - 180);
     });
 
     // trigger the resize
@@ -285,7 +299,7 @@
         triggerKeys: ['enter', 'tab'],
         tagSource: function (request, response) {
             $.ajax({
-                url: '/api/tag/',
+                url: '/api/{0}/tags/'.format(self.boardId()),
                 type: 'GET',
                 dataType: 'json',
                 data: { name: request.term, boardId: self.boardId() },

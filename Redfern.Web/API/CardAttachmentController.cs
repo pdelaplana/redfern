@@ -18,6 +18,8 @@ using Redfern.Web.Models;
 
 namespace Redfern.Web.API
 {
+    [RoutePrefix("api/card/{cardId:int}/attachments")]
+    [Authorize]
     public class CardAttachmentController : ApiController
     {
 
@@ -28,7 +30,8 @@ namespace Redfern.Web.API
             _repository = repository;
         }
 
-        // GET api/cardattachment/?cardid=1
+        // GET api/card/1/attachments
+        [Route("")]
         public IEnumerable<CardAttachmentListItem> GetAttachments(int cardid)
         {
             var card = this._repository.Get<Card>(cardid);
@@ -36,18 +39,18 @@ namespace Redfern.Web.API
             
         }
 
-        // GET api/cardattachment/?cardid=1
-        public HttpResponseMessage GetThumbnail(int thumbid)
+        // GET api/card/1/attachments/1/thumbnail
+        [Route("{id:int}/thumbnail")]
+        public HttpResponseMessage GetThumbnail(int id)
         {
             WebImage webImage;
-            var attachment = this._repository.Get<CardAttachment>(thumbid);
+            var attachment = this._repository.Get<CardAttachment>(id);
 
             if (attachment.ContentType.Split('/')[0] == "image")
             {
                 webImage = new WebImage(attachment.FileContent)
                             .Resize(150, 150, false, true)
                             .Crop(1, 1);
-                        
             }
             else
             {
@@ -65,7 +68,8 @@ namespace Redfern.Web.API
         }
 
 
-        // GET api/cardattachment
+        // GET api/card/1/attachments/at
+        [Route("{id:int}")]
         public HttpResponseMessage GetAttachment(int id)
         {
             HttpResponseMessage response = null;
@@ -86,18 +90,19 @@ namespace Redfern.Web.API
 
         }
 
-        // POST api/cardattachment
-        public CardAttachmentListItem Post(int id, [ModelBinder(typeof(FileUploadDTOModelBinder))]FileUploadDTO dto)
+        // POST api/card/1/attachments
+        [Route("")]
+        public WebApiResult<CardAttachmentListItem> Post(int cardId, [ModelBinder(typeof(FileUploadDTOModelBinder))]FileUploadDTO dto)
         {
-            var attachment = _repository.ExecuteCommand(new AddCardAttachmentCommand
+            var result = _repository.ExecuteCommand(new AddCardAttachmentCommand
             {
-                CardId = id,
+                CardId = cardId,
                 ContentType = dto.ContentType,
                 FileContent = dto.Contents,
                 FileName =  dto.FileName.Length > 49 ? dto.FileName.Substring(0,46) + dto.FileExtension : dto.FileName,
                 FileExtension = dto.FileExtension
             });
-            return AutoMapper.Mapper.Map<CardAttachment, CardAttachmentListItem>(attachment);
+            return AutoMapper.Mapper.Map<CommandResult<CardAttachment>, WebApiResult<CardAttachmentListItem>>(result);
         }
 
         // PUT api/<controller>/5
@@ -105,10 +110,13 @@ namespace Redfern.Web.API
         {
         }
 
+
         // DELETE api/cardattachment/5
-        public void Delete(int id)
+        [Route("{id:int}")]
+        public WebApiResult<bool>  Delete(int id)
         {
-            _repository.ExecuteCommand(new DeleteCardAttachmentCommand { CardAttachmentId = id });
+            var result = _repository.ExecuteCommand(new DeleteCardAttachmentCommand { CardAttachmentId = id });
+            return AutoMapper.Mapper.Map<CommandResult<bool>, WebApiResult<bool>>(result);
         }
     }
 }

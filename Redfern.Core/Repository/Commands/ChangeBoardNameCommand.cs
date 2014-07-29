@@ -17,7 +17,7 @@ namespace Redfern.Core.Repository.Commands
         public int BoardId { get; set; }
         public string Name { get; set; }
 
-        public Board Execute(RedfernDb db, IUserCache<RedfernUser> userCache)
+        public CommandResult<Board> Execute(RedfernDb db)
         {
             string oldName = "";
             Board board = db.Boards.Find(this.BoardId);
@@ -27,20 +27,16 @@ namespace Redfern.Core.Repository.Commands
 
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;
-            activity.SetVerb("chnage");
-            activity.SetActor(db.Context.ClientUserName, userCache.GetFullName(db.Context.ClientUserName));
+            activity.SetVerb("renamed");
+            activity.SetActor(db.Context.ClientUserName, db.Context.ClientUserFullName);
             activity.SetObject("board", board.BoardId.ToString(), board.Name, String.Format(@"/board/{0}", board.BoardId));
-            activity.SetDescription(String.Format(@"<a href=""{0}"">{1}</a> changed name of board <b>{2}</b> to <a href=""{3}"">{4}</a>.",
-                    activity.ActorUrl,
-                    activity.ActorDisplayName,
-                    oldName,
-                    activity.ObjectUrl,
-                    activity.ObjectDisplayName
-                ));
+            activity.SetDescription("{actorlink} renamed {object}.");
             activity = db.Activities.Add(activity);
             db.SaveChanges();
+            
+            return this.CommandResult<Board>(board, db, activity);
 
-            return board;
+            
         }
 
         
