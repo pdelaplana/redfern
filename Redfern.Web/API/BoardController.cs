@@ -29,7 +29,7 @@ namespace Redfern.Web.API
             return AutoMapper.Mapper.Map<IList<Board>, IList<BoardListItem>>(list);
         }
 
-        [Route("{id:int}")]
+        [Route("")]
         public BoardListItem Post([FromBody]CreateBoardCommand command)
         {
             return AutoMapper.Mapper.Map<Board, BoardListItem>(_repository.ExecuteCommand(command).Data as Board);

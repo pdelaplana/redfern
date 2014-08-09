@@ -5215,6 +5215,11 @@ a.thumbnail:focus {
 .media-body {
   overflow: hidden;
   zoom: 1;
+  float:left;
+}
+
+.media-body{
+    display:inline-block;
 }
 
 .media,
@@ -5227,7 +5232,8 @@ a.thumbnail:focus {
 }
 
 .media-object {
-  display: block;
+  display: inline-block;
+  float:left;
 }
 
 .media-heading {

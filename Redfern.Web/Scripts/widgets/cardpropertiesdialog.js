@@ -13,6 +13,7 @@
     self.commentDateFromNow = ko.computed(function () {
         return moment.utc(self.commentDate()).fromNow();
     })
+    self.editing = ko.observable(false);
 }
 
 function ActivityListItem(data) {
@@ -135,7 +136,7 @@ function CardPropertiesDialog(elementId, source) {
         repository.cardId = self.cardId();
         repository.tagName = tag;
         repository.create().done(function (result) {
-            self.column.board.hub.notify.onCardTagAdded(self.boardId(), self.cardId(), result.data.tagName, result.activityContext);
+            $.boardcontext.current.hub.notify.onCardTagAdded(self.boardId(), self.cardId(), result.data.tagName, result.activityContext);
         });
     }
 
@@ -145,12 +146,10 @@ function CardPropertiesDialog(elementId, source) {
         repository.cardId = self.cardId();
         repository.tagName = tag;
         repository.remove().done(function (result) {
-            self.column.board.hub.notify.onCardTagRemoved(self.boardId(), self.cardId(), result.data, result.activityContext);
+            $.boardcontext.current.hub.notify.onCardTagRemoved(self.boardId(), self.cardId(), result.data, result.activityContext);
         });
     }
 
-
-    
     self.members = function () {
         var members = $.map(self.boardMembers(), function (value) {
             return {
@@ -174,7 +173,7 @@ function CardPropertiesDialog(elementId, source) {
             repository.cardId = self.cardId();
             repository.description = self.description();
             repository.update().done(function (result) {
-                self.column.board.hub.notify.onCardUpdated(result.data, result.activityContext);
+                $.boardcontext.current.hub.notify.onCardUpdated(result.data, result.activityContext);
             })
         }
     }
@@ -193,7 +192,7 @@ function CardPropertiesDialog(elementId, source) {
                     self.commentThread.comments.splice(0, 0, new CommentListItem(result.data));
                     self.commentThread.newComment('');
                     self.commentCount(self.commentThread.comments().length);
-                    self.column.board.hub.notify.onCardCommentAdded(self.boardId(), result.data, result.activityContext);
+                    $.boardcontext.current.hub.notify.onCardCommentAdded(self.boardId(), result.data, result.activityContext);
                 });
             }
         },
@@ -205,7 +204,17 @@ function CardPropertiesDialog(elementId, source) {
             repository.remove().done(function (result) {
                 self.commentThread.comments.remove(comment);
                 self.commentCount(self.commentThread.comments().length);
-                self.column.board.hub.notify.onCardCommentRemoved(comment.boardId(), comment.cardId(), comment.commentId(), result.activityContext);
+                $.boardcontext.current.hub.notify.onCardCommentRemoved(comment.boardId(), comment.cardId(), comment.commentId(), result.activityContext);
+            });
+        },
+        update: function(comment){
+            var repository = new CardCommentRepository();
+            repository.boardId = comment.boardId();
+            repository.cardId = comment.cardId();
+            repository.commentId = comment.commentId();
+            repository.comment = comment.comment();
+            repository.update().done(function (result) {
+                $.boardcontext.current.hub.notify.onCardCommentUpdated(result.data.boardId, result.data, result.activityContext);
             });
         },
         loading: ko.observable(true),
@@ -247,7 +256,11 @@ function CardPropertiesDialog(elementId, source) {
                 $.each(result, function (index, value) {
                     self.attachmentsList.attachments.push(new AttachmentListItem(value));
                 })
+               
             })
+        },
+        add: function(){
+
         },
         remove: function (attachment) {
             var repository = new CardAttachmentRepository();
@@ -262,9 +275,9 @@ function CardPropertiesDialog(elementId, source) {
     }
 
     self.removeCard = function () {
-        $.Dialog.close();
         self.remove().done(function () {
             self.changed = false;
+            $.Dialog.close();
         })
     }
 
@@ -331,7 +344,7 @@ function CardPropertiesDialog(elementId, source) {
                 $('[data-role=datepicker]', dialog).datepicker();
                 $('[data-role=dropdown]', dialog).dropdown();
                 $('.tab-control', dialog).tabcontrol();
-                $(dialog).dropzone({
+                $('none').dropzone({
                     url: '/api/card/'+self.cardId()+'/attachments/',
                     method:'post',
                     previewsContainer: "#previews",
@@ -390,6 +403,7 @@ function CardPropertiesDialog(elementId, source) {
                 //if (self.description() == null || self.description() == '')
                 //    self.wiki.editing(true);
 
+   
                 ko.applyBindings(self, $(dialog).get(0));
 
             },

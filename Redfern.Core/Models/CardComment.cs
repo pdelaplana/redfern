@@ -16,7 +16,7 @@ namespace Redfern.Core.Models
         public int CardId { get; set; }
         public virtual Card Card { get; set; }
 
-        [MaxLength(250)]
+        [MaxLength]
         public string Comment { get; set; }
 
         [MaxLength(20)]

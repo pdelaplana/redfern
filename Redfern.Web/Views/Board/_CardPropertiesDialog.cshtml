@@ -21,34 +21,38 @@
                     <div style="height:100%" data-bind="wikiEditor: description, enable: hasAccess('ChangeCardDescription'), save: wiki.save">
                     </div>
                 </div>
-                <div class="row push-down-40">
-                    <span class="subheader-secondary">Attachments</span>
-                    <div style="margin-top:20px; margin-bottom:20px;width:100%" data-bind="visible:hasAccess('UploadFile')">
-                        <span id="uploadfile" class="fg-grayLight fg-gray fg-hover-grayDarker cursor-pointer"><i class="icon-upload-2"></i> Click to upload a file or drag and drop a file anywhere on the dialog...</span>
-                        <div id="previews" class="dropzone-previews"></div>
-                    </div>
-                    <div class="listview small" id="attachmentslist" data-bind="template:'attachmentsListTemplate'" style="">
-                    </div>
-                </div>
 
                 <div class="row push-down-40">
                     <span class="subheader-secondary">Conversations</span>
-                    <div class="row" style="margin-top:10px; margin-bottom:5px;width:100%" data-bind="visible: hasAccess('AddComment')">
-                        <div class="span11">
-                            <div class="input-control textarea">
-                                <textarea placeholder="leave a comment..." maxlength="250" style="min-height:50px;width:100%" data-bind="value: commentThread.newComment"></textarea>
+                    <div class="listview" style="width:100%" >
+                        <div class="list no-border ol-transparent" style="width:100%">
+                            <div class="list-content">
+                                <img class="icon" data-bind="attr: { src: '/api/avatar/'+app.user.userName }" />
+                                <div class="data">
+                                    <div class="border fg-grayLight bd-grayLight padding10 cursor-pointer" style="min-height:45px;width:100%;" data-bind="newCommentOnClick: commentThread.newComment, save: commentThread.add">
+                                        Click here to leave a comment or drop a file to attach...
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="span1">
-                            <button data-bind="click:commentThread.add" class="bg-darker fg-white place-left" style="height:50px"><i class="icon-comments"></i></button>
                         </div>
                     </div>
                     <div style="text-align:center" data-bind="visible:commentThread.loading">
                         <img src="/content/images/ajax-loader.gif" />
                     </div>
-                    <div class="listview" id="commentslist" data-bind="template:'commentsListTemplate'">
+                    <div class="listview" style="width:100%" id="commentslist" data-bind="template:'commentsListTemplate'">
                     </div>
                 </div>
+
+                <!-- ko if: (attachmentsList.attachments().length > 0) -->
+                <div class="row push-down-40">
+                    <span class="subheader-secondary">Attachments</span>
+                    <div style="margin-top:20px; margin-bottom:20px;width:100%" data-bind="visible:hasAccess('UploadFile')">
+                        <div id="previews" class="dropzone-previews"></div>
+                    </div>
+                    <div class="listview small" id="attachmentslist" data-bind="template:'attachmentsListTemplate'" style="">
+                    </div>
+                </div>
+                <!-- /ko -->
 
                 <div class="row push-down-40" style="height:20px">&nbsp;</div>
 
@@ -76,8 +80,7 @@
                         <input type="text" placeholder="Unassigned" data-bind="assignCard: assignedToUser, assignCardOptions: { members: members(), displayValue: assignedToUserFullName, updateValue: assign }, enable: hasAccess('ChangeCardAssignment')" />
                     </div>
                 </div>
-              
-                
+
                 <div style="bottom:0;margin-top:85%">
                     <a href="" data-bind="click: removeCard, visible: hasAccess('DeleteCard')"><i class="icon-remove" ></i> Delete</a>
                 </div>
@@ -88,16 +91,22 @@
 
 <script id="attachmentsListTemplate" type="text/html">
     <!-- ko foreach: attachmentsList.attachments -->
-    <div class="list no-border no-border-all" style="width:100%">
+    <div class="list no-border ol-transparent" style="width:100%">
         <div class="list-content">
-            <img class="icon" src="" data-bind="attr: { src: '/api/card/'+$parent.cardId()+'/attachments/'+cardAttachmentId()+'/thumbnail' }" style="width:80px;height:80px" />
+            <a href="" data-bind="colorbox: cardAttachmentId, href: '/api/image/'+cardAttachmentId()">
+                <img class="icon" src="" data-bind="attr: { src: '/api/card/'+$parent.cardId()+'/attachments/'+cardAttachmentId()+'/thumbnail' }" style="width:80px;height:80px" />
+            </a>
             <div class="data">
                 <p>
-                    <span class="list-title item-title" data-bind="text: fileName"></span>
+                    <span class="list-title item-title" data-bind="text: fileName() + ' ('+cardAttachmentId()+')'"></span>
                     <span class="list-remark text-muted" style="margin-top:10px" data-bind="text: uploadDateFromNow, attr: { title: uploadDateInLocalTimezone }">Uploaded 10 days ago</span>
                 </p>
                 <p>
-                    <a href="" class="text-muted span2" data-bind="attr: { href:'/api/card/'+$parent.cardId()+'/attachment/'+cardAttachmentId() }"><i class="icon-download"></i> Download</a> <a href="" class="text-muted span2" data-bind="click: $parent.attachmentsList.remove"><i class="icon-remove"></i> Remove</a>
+                    <small>
+                        <a href="" class="text-muted span2" data-bind="colorbox: cardAttachmentId, href: '/api/image/'+cardAttachmentId()"><i class="icon-monitor"></i> Open</a>
+                       <a href="" class="text-muted span2" data-bind="attr: { href:'/api/card/'+$parent.cardId()+'/attachments/'+cardAttachmentId() }"><i class="icon-download"></i> Download</a> 
+                        <a href="" class="text-muted span2" data-bind="click: $parent.attachmentsList.remove"><i class="icon-remove"></i> Remove</a>
+                    </small>
                 </p>
             </div>
         </div>
@@ -109,14 +118,17 @@
 
 <script id="commentsListTemplate" type="text/html">
     <!-- ko foreach: commentThread.comments-->
-    <div class="list no-border" style="width:100%">
+    <div class="list no-border ol-transparent" style="width:100%">
         <div class="list-content">
             <img class="icon" data-bind="attr: { src: '/api/avatar/'+commentByUser() }" />
             <div class="data">
-                <span class="list-title item-title" data-bind="text: commentByUserFullName"></span>
-                <span class="list-subtitle" data-bind="text: comment"></span>
+                <span class="list-title item-title" style="margin-bottom:10px" data-bind="text: commentByUserFullName"></span>
+                <span class="list-subtitle" data-bind="commentEditor: comment, save: $parent.commentThread.update, editing: editing, card: $parent"></span>
                 <span class="list-remark fg-grayLight" style="margin-top:10px" data-bind="text: commentDateFromNow, attr: { title: commentDateInLocalTimezone }"></span>
-                <span class="place-top-right" data-bind="visible: commentByUser() == app.user.userName"><a href="" data-bind="click: $parent.commentThread.remove"><i class="icon-cancel-2 fg-grayLight fg-hover-grayDark" style="font-size:xx-small;font-weight:100" ></i></a></span>
+                <span class="place-top-right" data-bind="visible: commentByUser() == app.user.userName">
+                    <a href="" data-bind="click: function(){ editing(true); }"><i class="icon-pencil fg-grayLight fg-hover-grayDark" style="font-size:x-small;font-weight:100"></i></a>
+                    <a href="" data-bind="click: $parent.commentThread.remove"><i class="icon-cancel-2 fg-grayLight fg-hover-grayDark" style="font-size:xx-small;font-weight:100"></i></a>
+                </span>
             </div>
         </div>
     </div>
@@ -129,7 +141,7 @@
         <div class="list-content">
             <img class="icon" data-bind="attr: { src: '/api/avatar/'+actorId() }" />
             <div class="data">
-                <span class="list-subtitle" data-bind="html: description"></span>
+                <span class="list-subtitle" data-bind="text: description"></span>
                 <span class="list-remark fg-grayLight" style="margin-top:10px" data-bind="text: activityDateInLocalTimezone"></span>
             </div>
         </div>
@@ -143,9 +155,7 @@
             <i class="" data-bind="css: { 'icon-checkbox': $parent.selectedColumn().columnId() == columnId(),   'icon-checkbox-unchecked': $parent.selectedColumn().columnId() != columnId()}"></i>
             <a href="" data-bind="text:name, click: function(){ $parent.selectedColumn($data); $parent.moveCard() }"></a>
         </div>
-        
      </div>
-    
 </script>
 
 

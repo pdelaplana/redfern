@@ -97,7 +97,7 @@ namespace Redfern.Core.Models
         [MaxLength(100)]
         public string ContextImageUrl { get; set; }
 
-        [MaxLength(500)]
+        [MaxLength]
         public string AdditionalData { get; set; }
 
         

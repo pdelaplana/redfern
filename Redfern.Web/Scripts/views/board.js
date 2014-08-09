@@ -28,17 +28,17 @@
         // define event handlers for signalr hub
         boardUI.hub.addToActivityStream = function (activityListItem) {
             var activity = new BoardActivity(activityListItem);
-            ui.boardUI.activities.insert(activity, 0);
+            $.boardcontext.current.activities.insert(activity, 0);
         }
 
         boardUI.hub.onBoardNameChanged = function (name) {
-            BoardContext.current.name(name);
+            $.boardcontext.current.name(name);
             app.ui.appNavigationBar.updateBoardName(BoardContext.current.boardId(), BoardContext.current.name());
             app.ui.appNavigationBar.selectedMenu(BoardContext.current.name());
         }
 
         boardUI.hub.onBoardVisibilityChanged = function (isPublic) {
-            BoardContext.current.isPublic(isPublic);
+            $.boardcontext.current.isPublic(isPublic);
             app.ui.appNavigationBar.updateBoardName(BoardContext.current.boardId(), BoardContext.current.name());
             app.ui.appNavigationBar.selectedMenu(BoardContext.current.name());
         }
@@ -125,6 +125,10 @@
             card.onCommentRemoved(commentId);
             card.commentCount(card.commentCount() - 1);
         }
+        boardUI.hub.onCardCommentUpdated = function (cardComment) {
+            var card = ui.boardUI.findCardById(cardComment.cardId);
+            card.onCommentUpdated(cardComment);
+        }
         boardUI.hub.onCardAttachmentAdded = function (attachment) {
             var card = ui.boardUI.findCardById(attachment.cardId);
             card.onAttachmentAdded(attachment);
@@ -180,14 +184,7 @@
         boardUI.hub.start(model.boardId);
 
 
-        $('.board-column').mousemove(function (e) {
-            width = $(this).width();
-            limit = width - 20;
-            if (e.offsetX < width && e.offsetX > limit)
-                $('.board').sortable('disable');
-            else
-                $('.board').sortable('enable');
-        });
+    
     }
 
     

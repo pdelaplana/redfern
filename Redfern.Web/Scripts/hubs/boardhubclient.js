@@ -3,8 +3,9 @@
     var self = this;
 
     self.notify = null;
-    
+    self.connected = false;
     self.connectionId = '';
+    self.boardId = 0;
 
     // handle events from peers
     self.addToActivityStream = function (activityListItem) { };
@@ -28,6 +29,7 @@
     self.onCardAttachmentRemoved = function (cardAttachment) { }
     self.onCardCommentAdded = function (cardComment) { }
     self.onCardCommentRemoved = function (cardId, commentId) { }
+    self.onCardCommentUpdated = function (cardComment) { }
     self.onCardColorChanged = function (cardId, cardTypeId, color) { }
     self.onCardTagAdded = function (cardId, tagName) { }
     self.onCardTagRemoved = function (cardId, tagName) { }
@@ -45,14 +47,14 @@
     }
 
     self.start = function (boardId) {
+
+        self.boardId = boardId;
+
         // start signalr
         $.connection.hub.logging = true;
         boardHub = $.connection.boardHub;
 
-        boardHub.client.hello = function () {
-            alert('hello');
-        }
-
+        // declare event handlers
         boardHub.client.displayMessage = self.displayMessage;
         boardHub.client.addToActivityStream = self.addToActivityStream;
 
@@ -65,7 +67,6 @@
         boardHub.client.onCollaboratorRemoved = self.onCollaboratorRemoved;
 
         boardHub.client.onColorLabelChanged = self.onColorLabelChanged;
-
 
         boardHub.client.onColumnAdded = self.onColumnAdded;
         boardHub.client.onColumnDeleted = self.onColumnDeleted;
@@ -82,6 +83,7 @@
         boardHub.client.onCardAttachmentRemoved = self.onCardAttachmentRemoved;
         boardHub.client.onCardCommentAdded = self.onCardCommentAdded;
         boardHub.client.onCardCommentRemoved = self.onCardCommentRemoved;
+        boardHub.client.onCardCommentUpdated = self.onCardCommentUpdated;
         boardHub.client.onCardColorChanged = self.onCardColorChanged;
         boardHub.client.onCardTagAdded = self.onCardTagAdded;
         boardHub.client.onCardTagRemoved = self.onCardTagRemoved;
@@ -91,11 +93,47 @@
         $.connection.hub.start()
             .done(function () {
                 // Subscribe to changes to this board
-                boardHub.server.subscribe(boardId);
+                self.connected = true;
+                boardHub.server.subscribe(self.boardId);
             })
             .fail(function () {
                 console.log("Could not Connect!");
             });
+
+        $.connection.hub.connectionSlow(function () {
+            $.Notify.show('Hub connection slow');
+            console.log('Hub connection slow');
+        });
+
+        $.connection.hub.reconnecting(function () {
+            $.Notify.show('Reconnecting to hub.');
+            console.log('Reconnecting to hub.');
+        });
+
+        $.connection.hub.reconnected(function () {
+            $.Notify.show('Reconnected to hub.');
+            console.log('Reconnected to hub.');
+        });
+
+        $.connection.hub.disconnected(function () {
+            $.Notify.show('Disconnected from hub.');
+            console.log('Disconnected from hub.');
+            self.connected = false;
+            setTimeout(function () {
+                $.connection.hub.start()
+                    .done(function () {
+                        self.connected = true;
+                        // Subscribe to changes to this board
+                        boardHub.server.subscribe(self.boardId);
+                    })
+                    .fail(function () {
+                        console.log("Could not Connect!");
+                    });
+            }, 5000); // Restart connection after 5 seconds.
+            
+        });
+
+       
 
     }
     

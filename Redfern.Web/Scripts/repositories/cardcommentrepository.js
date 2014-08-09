@@ -30,5 +30,16 @@
         });
     }
 
+    self.update = function () {
+        return $.ajax({
+            url: '/api/board/{0}/card/{1}/comments/{2}'.format(self.boardId, self.cardId, self.commentId),
+            type: 'put',
+            data: {
+                CardCommentId: self.commentId,
+                CardId: self.cardId,
+                Comment: self.comment
+            }
+        });
+    }
 
 }

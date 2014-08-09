@@ -261,7 +261,7 @@
         }
         if (confirm('This will delete all cards on this board.  Continue?')) {
             var repository = new BoardRepository();
-            repository.boardId(self.boardId());
+            repository.boardId = self.boardId();
             repository.remove().done(function () {
                 app.ui.appNavigationBar.removeBoardMenuItem(self.boardId());
                 app.router.go('/#/boards');       
@@ -293,6 +293,8 @@
 
     // trigger the resize
     $(window).resize();
+
+   
 
     $('#tags-container-filter').tagit({
         allowNewTags: false,

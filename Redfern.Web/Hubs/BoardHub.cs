@@ -131,6 +131,13 @@ namespace Redfern.Web.Hubs
             Clients.OthersInGroup(boardId.ToString()).onCardCommentRemoved(cardId, commentId);
         }
 
+        public void OnCardCommentUpdated(int boardId, CardCommentModel cardComment, ActivityListItem activity)
+        {
+            Clients.Group(boardId.ToString()).addToActivityStream(activity);
+            Clients.OthersInGroup(boardId.ToString()).displayMessage(activity.Description);
+            Clients.OthersInGroup(boardId.ToString()).onCardCommentUpdated(cardComment);
+        }
+
         public void OnCardAttachmentAdded(int boardId, CardAttachmentListItem cardAttachmentListItem, ActivityListItem activity)
         {
             Clients.Group(boardId.ToString()).addToActivityStream(activity);

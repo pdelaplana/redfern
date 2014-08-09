@@ -242,6 +242,7 @@
     <Compile Include="API\DTO\BoardColumnDTO.cs" />
     <Compile Include="API\CommentController.cs" />
     <Compile Include="API\DTO\FileUploadDTO.cs" />
+    <Compile Include="API\FileController.cs" />
     <Compile Include="API\ProfileController.cs" />
     <Compile Include="API\Providers\InMemoryMultipartFormDataStreamProvider.cs" />
     <Compile Include="API\TagController.cs" />
@@ -299,6 +300,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\colorbox.css" />
     <Content Include="Content\fileinput.css" />
     <Content Include="Content\images\about-grey-64.png" />
     <Content Include="Content\images\about.png" />
@@ -308,9 +310,12 @@
     <Content Include="Content\images\bg-scrollbar-thumb-y.png" />
     <Content Include="Content\images\bg-scrollbar-track-y.png" />
     <Content Include="Content\images\bg-scrollbar-trackend-y.png" />
+    <Content Include="Content\images\border.png" />
+    <Content Include="Content\images\controls.png" />
     <Content Include="Content\images\Default.png" />
     <Content Include="Content\images\file-upload-greylight.png" />
     <Content Include="Content\images\grey-box.png" />
+    <Content Include="Content\images\loading_background.png" />
     <Content Include="Content\images\public\all-boards.png" />
     <Content Include="Content\images\public\board-cards-all.png" />
     <Content Include="Content\images\public\board-collaborators.png" />
@@ -365,8 +370,11 @@
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\jquery.autosize-min.js" />
     <Content Include="Scripts\jquery.autosize.js" />
+    <Content Include="Scripts\jquery.colorbox-min.js" />
+    <Content Include="Scripts\jquery.colorbox.js" />
     <Content Include="Scripts\jquery.ddslick.js" />
     <Content Include="Scripts\jquery.fileinput.js" />
+    <Content Include="Scripts\jquery.helpers.js" />
     <Content Include="Scripts\jquery.signalR-2.1.0.js" />
     <Content Include="Scripts\jquery.signalR-2.1.0.min.js" />
     <Content Include="Scripts\jquery.tabslideout.js" />
@@ -391,6 +399,8 @@
     <Content Include="Scripts\metro-ui\js\metro-notify-custom.js" />
     <Content Include="Scripts\modernizr-2.7.2.js" />
     <Content Include="Scripts\popModal.js" />
+    <Content Include="Scripts\rangyinputs-jquery-1.1.2.js" />
+    <Content Include="Scripts\rangyinputs-jquery-1.1.2.min.js" />
     <Content Include="Scripts\repositories\boardactivityrepository.js" />
     <Content Include="Scripts\repositories\boardmemberrepository.js" />
     <Content Include="Scripts\repositories\cardactivityrepository.js" />
@@ -703,7 +713,6 @@
     <Content Include="Views\Account\EmailConfirmation.cshtml" />
     <Content Include="Views\Shared\_Credits.cshtml" />
     <Content Include="Views\Users\_Index.cshtml" />
-    <Content Include="Views\Board\_CardPropertiesDialog - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

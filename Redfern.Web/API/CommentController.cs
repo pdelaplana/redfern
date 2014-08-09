@@ -35,13 +35,16 @@ namespace Redfern.Web.API
         [Route("")]
         public WebApiResult<CardCommentModel> Post([FromBody]CreateCardCommentCommand command)
         {
-            var cardComment = _repository.ExecuteCommand(command);
-            return AutoMapper.Mapper.Map<CommandResult<CardComment>, WebApiResult<CardCommentModel>>(cardComment);
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<CardComment>, WebApiResult<CardCommentModel>>(result);
         }
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        // PUT api/board/5/card/1/comments/1
+        [Route("{id:int}")]
+        public WebApiResult<CardCommentModel> Put(int id, [FromBody]UpdateCardCommentCommand command)
         {
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<CardComment>, WebApiResult<CardCommentModel>>(result);
         }
 
         // DELETE api/board/1/card/1/comments/5

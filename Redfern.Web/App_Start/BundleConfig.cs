@@ -19,11 +19,9 @@ namespace Redfern.Web
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/plugins").Include(
+                        "~/Scripts/jquery.helpers.js",
                         "~/Scripts/jquery.cookie.js",
                         "~/Scripts/jquery.blockui.js",
-                        "~/Scripts/jquery.flippy.js",
-                        "~/Scripts/jquery.nanoscroller.js",
-                        "~/Scripts/jquery.tinyscrollbar.js",
                         "~/Scripts/jquery.tagit.js",
                         "~/Scripts/jquery.fileinput.js",
                         "~/Scripts/moment.js",
@@ -32,7 +30,9 @@ namespace Redfern.Web
                         "~/scripts/markdowndeeplib.min.js",
                         "~/scripts/dropzone/dropzone.js",
                         "~/scripts/jquery.autosize.js",
-                        "~/scripts/popModal.js"
+                        "~/scripts/popModal.js",
+                        "~/scripts/jquery.colorbox.js",
+                        "~/scripts/rangyinputs-jquery-1.1.2.js"
                         ));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -166,6 +166,7 @@ namespace Redfern.Web
                       "~/content/mdd_styles.css",
                       "~/scripts/dropzone/css/basic.css",
                       "~/scripts/dropzone/css/dropzone.css",
+                      "~/content/colorbox.css",
                       "~/content/popModal.css",
                       "~/content/site.css"));
         }

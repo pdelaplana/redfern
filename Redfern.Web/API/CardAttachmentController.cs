@@ -67,6 +67,34 @@ namespace Redfern.Web.API
 
         }
 
+        // GET api/card/1/attachments/1/image
+        [Route("{id:int}/image")]
+        public HttpResponseMessage GetImage(int id, int height = 150, int width = 150)
+        {
+            WebImage webImage;
+            var attachment = this._repository.Get<CardAttachment>(id);
+
+            if (attachment.ContentType.Split('/')[0] == "image")
+            {
+                webImage = new WebImage(attachment.FileContent)
+                            //.Resize(height, width, false, true)
+                            .Crop(1, 1);
+            }
+            else
+            {
+                webImage = new WebImage(HostingEnvironment.MapPath(@"~/content/images/grey-box.png"))
+                            .Resize(100, 100, false, true)
+                            .Crop(1, 1)
+                            .AddTextWatermark(attachment.FileExtension.Substring(1).ToUpper(), fontColor: "White", horizontalAlign: "Center", verticalAlign: "Middle");
+            }
+
+            HttpResponseMessage response = new HttpResponseMessage();
+            response.Content = new StreamContent(new MemoryStream(webImage.GetBytes())); // this file stream will be closed by lower layers of web api for you once the response is completed.
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
+            return response;
+
+        }
+
 
         // GET api/card/1/attachments/at
         [Route("{id:int}")]

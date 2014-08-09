@@ -111,6 +111,14 @@
     <Compile Include="Migrations\201405191028349_AddIsPublicToBoard.Designer.cs">
       <DependentUpon>201405191028349_AddIsPublicToBoard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201408030241568_IncreaseCommentMaxLength.cs" />
+    <Compile Include="Migrations\201408030241568_IncreaseCommentMaxLength.Designer.cs">
+      <DependentUpon>201408030241568_IncreaseCommentMaxLength.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201408090943220_IncreaseAddtionalDataToMaxLength.cs" />
+    <Compile Include="Migrations\201408090943220_IncreaseAddtionalDataToMaxLength.Designer.cs">
+      <DependentUpon>201408090943220_IncreaseAddtionalDataToMaxLength.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\CardAttachment.cs" />
     <Compile Include="Models\CardType.cs" />
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
@@ -121,6 +129,7 @@
     <Compile Include="Repository\Commands\AddCardAttachmentCommand.cs" />
     <Compile Include="Repository\Commands\AssignCardCommand.cs" />
     <Compile Include="Repository\Commands\ChangeBoardVisibilityCommand.cs" />
+    <Compile Include="Repository\Commands\UpdateCardCommentCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardMemberCommand.cs" />
     <Compile Include="Repository\Commands\AddBoardMemberCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardCommand.cs" />
@@ -220,6 +229,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405191028349_AddIsPublicToBoard.resx">
       <DependentUpon>201405191028349_AddIsPublicToBoard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408030241568_IncreaseCommentMaxLength.resx">
+      <DependentUpon>201408030241568_IncreaseCommentMaxLength.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408090943220_IncreaseAddtionalDataToMaxLength.resx">
+      <DependentUpon>201408090943220_IncreaseAddtionalDataToMaxLength.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

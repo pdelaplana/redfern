@@ -606,3 +606,53 @@ ul.ui-autocomplete{
     margin-left: -250px;
 }
 
+/*********************************** 
+ * Media List ()
+ ********************************* */
+
+.media,
+.media-body {
+  overflow: hidden;
+  zoom: 1;
+  
+}
+
+.media-body{
+    width:50%!important;
+}
+
+li.media{
+    width:100%!important;
+}
+
+.media,
+.media .media {
+  margin-top: 15px;
+}
+
+.media:first-child {
+  margin-top: 0;
+}
+
+.media-object {
+  display: block;
+  
+}
+
+.media-heading {
+  margin: 0 0 5px;
+}
+
+.media > .pull-left {
+  margin-right: 10px;
+}
+
+.media > .pull-right {
+  margin-left: 10px;
+}
+
+.media-list {
+  padding-left: 0!important;
+  list-style: none;
+}
+

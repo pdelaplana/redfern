@@ -1,4 +1,234 @@
-﻿ko.bindingHandlers.addCard = {
+﻿$.redfern = {
+    utils: {
+        handleAttachments: function (textarea, result, observable, viewModel) {
+
+            var height = 100, width = 100;
+            var selection = $(textarea).data('selection') || $(textarea).focus().getSelection();
+
+            height = (height == undefined) ? 0 : height;
+            width = (width == undefined) ? 0 : width;
+
+            var str = '';
+            if (selection.text != '') {
+                str = '[' + selection.text + ']';
+            } else {
+                str = '[' + result.data.fileName + ']';
+            }
+            if (result.data.contentType.split('/')[0] == 'image')
+                str = '!' + str + '(/api/image/' + result.data.cardAttachmentId + ')';
+            else
+                str = str + '(/api/file/' + result.data.cardAttachmentId + ')';
+
+            $(textarea).setSelection(selection.start, selection.end);
+            $(textarea).replaceSelectedText(str);
+            observable($(textarea).val());
+
+            //
+            viewModel.attachmentsList.attachments.splice(0, 0, new AttachmentListItem(result.data));
+            viewModel.attachmentCount(viewModel.attachmentsList.attachments().length);
+            $.boardcontext.current.hub.notify.onCardAttachmentAdded(viewModel.boardId(), result.data, result.activityContext);
+
+
+        }
+    }
+}
+
+
+function AttachDropZone(element, cardId, clickableElement) {
+    $(element).dropzone({
+        url: '/api/card/' + cardid + '/attachments/',
+        method: 'post',
+        previewsContainer: "#previews",
+        clickable: clickableElement || false,
+        dictResponseError: 'test error',
+        init: function () {
+            this.on('addedfile', function (file) {
+                textarea.attr('disabled', 'disabled');
+            })
+            this.on('complete', function (file) {
+                this.removeFile(file);
+            })
+            this.on('success', function (file, result) {
+                textarea.removeAttr('disabled');
+                textarea.focus();
+
+                var height = 100, width = 100;
+                var selection = $(textarea).data('selection') || $(textarea).focus().getSelection();
+
+                height = (height == undefined) ? 0 : height;
+                width = (width == undefined) ? 0 : width;
+
+                var str = '';
+                if (selection.text != '') {
+                    str = '[' + selection.text + ']';
+                } else {
+                    str = '[' + result.data.fileName + ']';
+                }
+                if (result.data.contentType.split('/')[0] == 'image')
+                    str = '!' + str + '(/api/image/' + result.data.cardAttachmentId + ')';
+                else
+                    str = str + '(/api/file/' + result.data.cardAttachmentId + ')';
+
+                $(textarea).setSelection(selection.start, selection.end);
+                $(textarea).replaceSelectedText(str);
+                observable($(textarea).val());
+
+                //
+                viewModel.attachmentsList.attachments.splice(0, 0, new AttachmentListItem(result.data));
+                viewModel.attachmentCount(viewModel.attachmentsList.attachments().length);
+                $.boardcontext.current.hub.notify.onCardAttachmentAdded(viewModel.boardId(), result.data, result.activityContext);
+
+            })
+            this.on('drop', function (event) {
+                var e = event;
+            });
+        },
+    });
+}
+
+function MarkdownEditor(observable, viewModel) {
+    var markdown = new MarkdownDeep.Markdown(),
+        editorContainer = $('<div/>').addClass('markdown-editor').hide(),
+        preview = $('<div/>').addClass('mdd_preview').hide(),
+        toolbar = $('<div/>').addClass('mdd_toolbar'),
+        textarea = $('<textarea/>').addClass('mdd_editor'),
+        saveButton = $('<button/>').addClass('primary push-down-10').text('Save'),
+        editButton = $('<button/>').addClass('push-down-10').text('Edit').hide(),
+        previewButton = $('<button/>').addClass('push-down-10').text('Preview'),
+        cancelButton = $('<button/>').addClass('link push-down-10').text('Cancel');
+
+            
+    // create the editor , with markdown and autosize
+    editorContainer
+        .append(preview)
+        .append(toolbar)
+        .append(textarea)
+        .append(saveButton).append('&nbsp;')
+        .append(editButton).append('&nbsp;')
+        .append(previewButton).append('&nbsp;')
+        .append(cancelButton);
+
+    $(textarea)
+        .val(observable())
+        .MarkdownDeep({
+            SafeMode: true,
+            ExtraMode:true,
+            help_location: "/Content/mdd_help.html",
+            disableTabHandling: true,
+            disableAutoIndent: true,
+            resizebar: false,
+            cmd_img: function (ctx) {
+                //alert('to be implemented');
+            },
+            cmd_link: function (ctx) {
+                alert('to be implemented');
+            },
+            onPreTransform: function (editor, markdown) {
+                observable(markdown);
+            }
+        })
+        .autosize();
+
+    previewButton.click(function (event) {
+        preview.html(markdown.Transform(observable()));
+        textarea.fadeOut('slow', function () {
+            preview.fadeIn();
+            toolbar.hide();
+            previewButton.hide();
+            cancelButton.hide();
+            editButton.show();
+        });
+    });
+
+    editButton.click(function (event) {
+        preview.fadeOut('slow', function () {
+            toolbar.show();
+            textarea.fadeIn().trigger('autosize.resize');
+            previewButton.show();
+            cancelButton.show();
+            editButton.hide();
+        });
+    });
+
+    // make the text area a dropzone
+    var dropzone = new Dropzone($(textarea).get(0),{
+        url: '/api/card/' + viewModel.cardId() + '/attachments/',
+        method: 'post',
+        previewsContainer: "#previews",
+        clickable: $(toolbar).find('#mdd_img').get(0),
+        dictResponseError: 'test error',
+        init: function () {
+            this.on('addedfile', function (file) {
+
+            })
+            this.on('complete', function (file) {
+                this.removeFile(file);
+            })
+            this.on('success', function (file, result) {
+
+                textarea.focus();
+
+                var height = 100, width = 100;
+                var selection = $(textarea).data('selection') || $(textarea).focus().getSelection();
+
+                height = (height == undefined) ? 0 : height;
+                width = (width == undefined) ? 0 : width;
+
+                var str = '';
+                if (selection.text != '') {
+                    str = '[' + selection.text + ']';
+                } else {
+                    str = '[' + result.data.fileName + ']';
+                }
+                if (result.data.contentType.split('/')[0] == 'image')
+                    str = '!' + str + '(/api/image/' + result.data.cardAttachmentId + ')';
+                else
+                    str = str + '(/api/file/' + result.data.cardAttachmentId + ')';
+
+                $(textarea).setSelection(selection.start, selection.end);
+                $(textarea).replaceSelectedText(str);
+                observable($(textarea).val());
+
+                //
+                viewModel.attachmentsList.attachments.splice(0, 0, new AttachmentListItem(result.data));
+                viewModel.attachmentCount(viewModel.attachmentsList.attachments().length);
+                $.boardcontext.current.hub.notify.onCardAttachmentAdded(viewModel.boardId(), result.data, result.activityContext);
+
+            })
+            this.on('drop', function (event) {
+                var e = event;
+            });
+        },
+    });
+
+    // assign current text selection to textarea so we canget access to it later
+    $(textarea).click(function () {
+        $(textarea).data('selection', $(this).getSelection());
+    }).keyup(function () {
+        $(textarea).data('selection', $(this).getSelection());
+    })
+
+    return {
+        editor: editorContainer,
+        textArea: textarea,
+        button: {
+            edit: editButton,
+            save: saveButton,
+            cancel: cancelButton
+        },
+        destroy: function () {
+            dropzone.destroy();
+            editorContainer.remove();
+        }
+    }
+
+}
+
+/**
+ * add new card to column
+ * 
+ */
+ko.bindingHandlers.addCard = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var column = $(element).parents('div.board-column'),
             bindings = allBindings();
@@ -260,7 +490,7 @@ ko.bindingHandlers.userLookup = {
 }
 
 /**
- * Lookup user with jquery ui autocomplete
+ * Assign card to user
  * 
  */
 ko.bindingHandlers.assignCard = {
@@ -429,7 +659,7 @@ ko.bindingHandlers.cardTitleEditor = {
 };
 
 /**
- * card wiki editor
+ * card wiki (description) editor
  * 
  */
 ko.bindingHandlers.wikiEditor = {
@@ -437,22 +667,16 @@ ko.bindingHandlers.wikiEditor = {
         var bindings = allBindings(),
             observable = valueAccessor(),
             markdown = new MarkdownDeep.Markdown(),
-            contentContainer = $('<div/>').addClass('markdown-content bd-hover-grayDarker ' + (bindings.enable ? 'cursor-pointer' : '')),
-            editorContainer = $('<div/>').addClass('markdown-editor').hide(),
-            preview = $('<div/>').addClass('mdd_preview').hide(),
-            toolbar = $('<div/>').addClass('mdd_toolbar'),
-            textarea = $('<textarea/>').addClass('mdd_editor'),
-            saveButton = $('<button/>').addClass('primary push-down-10').text('Save'),
-            editButton = $('<button/>').addClass('push-down-10').text('Edit').hide(),
-            previewButton = $('<button/>').addClass('push-down-10').text('Preview'),
-            cancelButton = $('<button/>').addClass('link push-down-10').text('Cancel');
+            contentContainer = $('<div/>').addClass('markdown-content');
+
+        
 
         // create the content
         var content = observable();
         if (content == null || content == '') {
             if (bindings.enable)
                 // create content to prompt user to enter a description
-                content = $('<span/>').addClass('fg-grayLight fg-gray fg-hover-grayDarker cursor-pointer').append('<i class="icon-plus-2"></i> Add a description...');
+                content = $('<span/>').addClass('fg-grayLight fg-gray').append('<i class=""></i> Use the pencil on the right to enter a description for this card...');
             else
                 content = '';
         } else {
@@ -460,90 +684,46 @@ ko.bindingHandlers.wikiEditor = {
         }
         contentContainer.html(content);
 
-        // allow the user to click on content to edit
-        contentContainer.click(function (event) {
+        // create edit icon if enabled
+        var enableEditing = function () {
             if (bindings.enable) {
-                contentContainer.fadeOut(function () {
-                    editButton.click();
-                    editorContainer.fadeIn(function () {
-                        textarea.trigger('autosize.resize');
+                var pencilIcon = $('<div class="place-right" ><a href=""><i class="icon-pencil fg-grayLight fg-hover-grayDark cursor-pointer"  ></i></a></div>');
+                pencilIcon.find('a').click(function (event) {
+                    contentContainer.fadeOut(function () {
+                        var editorContainer = new MarkdownEditor(observable, viewModel);
+                        editorContainer.button.edit.click();
+                        editorContainer.editor.fadeIn(function () { });
+                        //textarea.trigger('autosize.resize');
+                        editorContainer.textArea.trigger('autosize.resize');
+                        editorContainer.button.save.click(function (event) {
+                            observable(editorContainer.editor.find('textarea').val());
+                            contentContainer.html(markdown.Transform(observable()));
+                            enableEditing();
+                            editorContainer.editor.fadeOut('slow', function () {
+                                editorContainer.destroy();
+                                contentContainer.fadeIn();
+                            });
+                            if (bindings.save != undefined)
+                                bindings.save();
+                        });
+                        editorContainer.button.cancel.click(function () {
+                            editorContainer.editor.fadeOut('slow', function () {
+                                editorContainer.destroy();
+                                contentContainer.fadeIn();
+                            });
+                        });
+
+                        $(contentContainer).after(editorContainer.editor);
                     });
-
+                    event.preventDefault();
                 });
-                
+                contentContainer.prepend(pencilIcon);
             }
-            event.preventDefault();
-        })
+        };
+        enableEditing();
 
-        // create the editor , with markdown and autosize
-
-        editorContainer
-            .append(preview)
-            .append(toolbar)
-            .append(textarea)
-            .append(saveButton).append('&nbsp;')
-            .append(editButton).append('&nbsp;')
-            .append(previewButton).append('&nbsp;')
-            .append(cancelButton);
-
-        $(textarea)
-            .val(observable())
-            .MarkdownDeep({
-                help_location: "/Content/mdd_help.html",
-                disableTabHandling: true,
-                disableAutoIndent: true,
-                resizebar: false,
-                cmd_img: function (ctx) {
-                    alert('to be implemented');
-                },
-                cmd_link: function (ctx) {
-                    alert('to be implemented');
-                },
-                onPreTransform: function (editor, markdown) {
-                    observable(markdown);
-                }
-            })
-            .autosize();
-
-        saveButton.click(function (event) {
-            observable(textarea.val());
-            contentContainer.html(markdown.Transform(observable()));
-            editorContainer.fadeOut('slow', function () {
-                contentContainer.fadeIn();
-            });
-            if (bindings.save != undefined)
-                bindings.save();
-        });
-
-        previewButton.click(function (event) {
-            preview.html(markdown.Transform(observable()));
-            textarea.fadeOut('slow', function () {
-                preview.fadeIn();
-                toolbar.hide();
-                previewButton.hide();
-                editButton.show();
-            });
-        });
-
-        editButton.click(function (event) {
-            preview.fadeOut('slow', function () {
-                toolbar.show();
-                textarea.fadeIn().trigger('autosize.resize');
-                previewButton.show();
-                editButton.hide();
-            });
-        });
-
-        cancelButton.click(function () {
-            editorContainer.fadeOut('slow', function () {
-                contentContainer.fadeIn();
-            });
-        })
-
-
-
-
-        $(element).after(contentContainer).after(editorContainer);
+        
+        $(element).after(contentContainer);
 
     },
     update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -554,6 +734,177 @@ ko.bindingHandlers.wikiEditor = {
 
     }
 }
+
+/**
+ * new comment (description) editor
+ * 
+ */
+ko.bindingHandlers.newCommentOnClick = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            observable = valueAccessor(),
+            markdown = new MarkdownDeep.Markdown();
+        
+        function CreateNewEditor() {
+            var editorContainer = new MarkdownEditor(observable, viewModel);
+
+            editorContainer.button.save.click(function (event) {
+                if (editorContainer.textArea.val().length > 0) {
+                    observable(editorContainer.textArea.val());
+                    editorContainer.editor.fadeOut('slow', function () {
+                        editorContainer.destroy();
+                        $(element).fadeIn();
+                        editorContainer.textArea.val('');
+                        if (bindings.save != undefined)
+                            bindings.save();
+                    });
+                }
+            });
+
+            editorContainer.button.cancel.click(function () {
+                editorContainer.editor.fadeOut('slow', function () {
+                    editorContainer.destroy();
+                    $(element).fadeIn();
+                });
+            })
+
+            return editorContainer;
+
+        }
+
+        $(element).click(function () {
+            
+            $(element).fadeOut('slow', function () {
+                var editorContainer = CreateNewEditor();
+                $(element).after(editorContainer.editor);
+
+                editorContainer.editor.fadeIn(function () {
+                    editorContainer.textArea.focus();
+                    editorContainer.textArea.trigger('autosize.resize');
+                });
+            });
+            //editorContainer.textArea.focus();
+            
+            
+        })
+
+        
+        // make the element a dropzone
+        $(element).dropzone({
+            url: '/api/card/' + viewModel.cardId() + '/attachments/',
+            method: 'post',
+            previewsContainer: "#previews",
+            clickable: false,
+            dictResponseError: 'test error',
+            init: function () {
+                this.on('addedfile', function (file) {
+
+                })
+                this.on('complete', function (file) {
+                    this.removeFile(file);
+                })
+                this.on('success', function (file, result) {
+                    var editorContainer = CreateNewEditor();
+                    $(element).after(editorContainer.editor);
+                    editorContainer.editor.fadeIn(function () {
+                        editorContainer.textArea.focus();
+                        editorContainer.textArea.trigger('autosize.resize');
+                    });
+
+                    $.redfern.utils.handleAttachments(editorContainer.textArea, result, observable, viewModel);
+                })
+                this.on('drop', function (event) {
+                    var e = event;
+                });
+            },
+        });
+
+        
+        
+
+    },
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var observable = valueAccessor(),
+            content = observable();
+        //if (content != '')
+        //    $(element).val(content);
+
+    }
+}
+
+
+/**
+ * comment editor
+ * 
+ */
+ko.bindingHandlers.commentEditor = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            card = bindings.card,
+            editing = bindings.editing,
+            observable = valueAccessor(),
+            markdown = new MarkdownDeep.Markdown(),
+            contentContainer = $('<div/>').addClass('markdown-content');
+
+
+        // create the content
+        var content = observable();
+        content = markdown.Transform(content);
+        contentContainer.html(content);
+
+        editing.subscribe(function (newValue) {
+            if (newValue) {
+                var editorContainer = new MarkdownEditor(observable, card);
+
+                editorContainer.button.save.click(function (event) {
+                    if (editorContainer.textArea.val().length > 0) {
+                        observable(editorContainer.textArea.val());
+                        editorContainer.editor.fadeOut('slow', function () {
+                            contentContainer.html(markdown.Transform(observable()));
+                            contentContainer.fadeIn();
+                            editorContainer.destroy();
+                        });
+                        editing(false);
+                        if (bindings.save != undefined)
+                            bindings.save(viewModel);
+                    }
+                });
+
+                editorContainer.button.cancel.click(function () {
+                    editorContainer.editor.fadeOut('slow', function () {
+                        contentContainer.fadeIn();
+                        editorContainer.destroy();
+                    });
+                   
+                    editing(false);
+                })
+
+                $(contentContainer).after(editorContainer.editor);
+
+                contentContainer.fadeOut('slow', function () {
+                    editorContainer.editor.fadeIn(function () {
+                        editorContainer.textArea.val(observable());
+                        editorContainer.textArea.focus();
+                        editorContainer.textArea.trigger('autosize.resize');
+                    });
+                });
+            }
+        })
+
+        $(element).after(contentContainer);
+
+    },
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var observable = valueAccessor(),
+            content = observable();
+        //if (content != '')
+        //    $(element).val(content);
+
+    }
+}
+
+
+
 
 /**
  * column properties 

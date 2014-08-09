@@ -1,5 +1,9 @@
 ﻿var $board = $board || { context: null, utils: null }
 
+$.boardcontext = {
+    current : null
+}
+
 var BoardContext = {
     current : null
 }
@@ -85,12 +89,16 @@ function Card(data, column) {
     self.attachmentCount = ko.observable(data.attachmentCount);
     self.show = ko.observable(true);
 
+    self.createdDateInLocalTimezone = ko.computed(function () {
+        return moment(moment.utc(self.createdDate()).toDate()).format('llll');
+    })
     self.isArchived.subscribe(function (newValue) {
         self.show(!newValue);
     })
 
     // event handlers, used by the hub
     self.onCommentAdded = function (cardComment) { };
+    self.onCommentUpdated = function (cardComment) { };
     self.onCommentRemoved = function (cardCommentId) { };
     self.onAttachmentAdded = function (attachment) { };
     self.onAttachmentRemoved = function (attachmentId) { };
@@ -104,6 +112,11 @@ function Card(data, column) {
         }
         self.onCommentRemoved = function (commentId) {
             dialog.commentThread.comments.remove(dialog.commentThread.comments.findByProperty('commentId', commentId));
+        }
+        self.onCommentUpdated = function (cardComment) {
+            var comment = dialog.commentThread.comments.findByProperty('commentId', cardComment.commentId);
+            comment.comment(cardComment.comment);
+            comment.commentDate(cardComment.commentDate);
         }
         self.onAttachmentAdded = function (attachment) {
             dialog.attachmentsList.attachments.insert(new AttachmentListItem(attachment),0);
@@ -127,7 +140,7 @@ function Card(data, column) {
         repository.assignedToUser = self.assignedToUser();
         repository.dueDate = self.dueDate();
         return repository.update().done(function (result) {
-            self.parent.board.hub.notify.onCardUpdated(result.data, result.activityContext);
+            $.boardcontext.current.hub.notify.onCardUpdated(result.data, result.activityContext);
         });
     }
 
@@ -138,8 +151,8 @@ function Card(data, column) {
             repository.cardId = self.cardId();
             app.ui.block({ message: 'Please wait, deleting this card...' })
             return repository.remove().done(function (result) {
+                $.boardcontext.current.hub.notify.onCardDeleted(self.boardId(), self.columnId(), self.cardId(), result.activityContext);
                 self.parent.cards.remove(self);
-                self.parent.board.hub.notify.onCardDeleted(self.boardId(), self.columnId(), self.cardId(), result.activityContext);
                 app.ui.unblock();
             });
         }
@@ -426,11 +439,16 @@ function BoardViewModel(data) {
         }) != null;
     }
 
+    self.options = {
+        showCardAge : ko.observable(false)
+    }
+
 
     //*** Do initialization stuff here ****
 
     // assign this to global BoardContext object
     BoardContext.current = self;
+    $.boardcontext.current = self;
 
     // add sidebar UI
     self.sidebar = new BoardSidebar(self);

@@ -37,6 +37,8 @@ ko.bindingHandlers.markdownEditor = {
             }
         });
 
+     
+
         //$(element).autosize();
 
     },

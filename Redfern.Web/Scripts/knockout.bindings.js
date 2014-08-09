@@ -400,6 +400,19 @@ ko.bindingHandlers.popModal = {
     }
 };
 
+ko.bindingHandlers.colorbox = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            observable= valueAccessor();
+
+        //$(document).delegate(element, "click", function (e) {
+        $(element).click(function(e){
+            $.colorbox({ photo: true, href: bindings.href, opacity:1, width:'95%', height:'95%' });
+            return false;
+        });
+    }
+};
+
 
 ko.bindingHandlers.truncatedText = {
     update: function (element, valueAccessor, allBindingsAccessor) {
