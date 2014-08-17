@@ -39,9 +39,14 @@ function BoardActivity(data) {
     self.actorDisplayName = ko.observable(data.actorDisplayName);
     self.activityDate = ko.observable(data.activityDate);
     self.verb = ko.observable(data.verb);
+    self.attribute = ko.observable(data.attribute);
+    self.objectId = ko.observable(data.objectId);
     self.objectType = ko.observable(data.objectType);
     self.objectDisplayName = ko.observable(data.objectDisplayName);
+    self.sourceId = ko.observable(data.sourceId);
+    self.sourceType = ko.observable(data.sourceType);
     self.sourceDisplayName = ko.observable(data.sourceDisplayName);
+    self.targetId = ko.observable(data.targetId);
     self.targetType = ko.observable(data.targetType);
     self.targetDisplayName = ko.observable(data.targetDisplayName);
 
@@ -51,7 +56,9 @@ function BoardActivity(data) {
         } else if (self.targetDisplayName() != null){
             return '<b>{0}</b> {1} {2} "<b>{3}</b>" to <b>{4}</b>.'.format(self.actorDisplayName(), self.verb(), self.objectType(), self.objectDisplayName(), self.targetDisplayName());
         } else if (self.sourceDisplayName() != null){
-            return '<b>{0}</b> {1} {2} "<b>{3}</b>" from <b>{4}</b>.'.format(self.actorDisplayName(), self.verb(), self.objectType(), self.objectDisplayName(), self.sourceDisplayName());
+            return '<b>{0}</b> {1} {2} "<b>{3}</b>" in <b>{4}</b>.'.format(self.actorDisplayName(), self.verb(), self.objectType(), self.objectDisplayName(), self.sourceDisplayName());
+        } else if (self.attribute() != null) {
+            return '<b>{0}</b> {1} {2} of {3} "<b>{4}</b>".'.format(self.actorDisplayName(), self.verb(), self.attribute(), self.objectType(), self.objectDisplayName());
         } else {
             return '<b>{0}</b> {1} {2} "<b>{3}</b>".'.format(self.actorDisplayName(), self.verb(), self.objectType(), self.objectDisplayName());
         }
@@ -60,6 +67,17 @@ function BoardActivity(data) {
     self.activityDateInLocalTimezone = ko.computed(function () {
         return moment(moment.utc(self.activityDate()).toDate()).format('llll');
     })
+
+    self.openCard = function () {
+        if (self.objectType() == 'card')
+            $.boardcontext.current.openCardById(self.objectId());
+        else if (self.sourceType() == 'card')
+            $.boardcontext.current.openCardById(self.sourceId());
+        else if (self.targetType() == 'card')
+            $.boardcontext.current.openCardById(self.targetId());
+
+
+    }
 
 }
 
@@ -77,7 +95,7 @@ function Card(data, column) {
     self.createdDate = ko.observable(data.createdDate);
     self.assignedToUser = ko.observable(data.assignedToUser);
     self.assignedToUserFullName = ko.observable(data.assignedToUserFullName);
-    self.dueDate = ko.observable();
+    self.dueDate = ko.observable( data.dueDate != null ? moment.utc(data.dueDate).toDate() : null);
     self.archivedDate = ko.observable(data.archivedDate);
     self.isArchived = ko.observable(data.isArchived);
     self.boardId = ko.observable(data.boardId);
@@ -105,6 +123,9 @@ function Card(data, column) {
     self.onDeleted = function () { };
   
     self.open = function () {
+        // close the dialog if one is open
+        $.Dialog.close();
+
         var dialog = new CardPropertiesDialog('#CardPropertiesDialog', self);
         // add event handler hooks to dialog
         self.onCommentAdded = function (cardComment) {
@@ -129,6 +150,7 @@ function Card(data, column) {
             $.Dialog.close();
         }
         dialog.open();
+        
     }
 
     self.update = function () {
@@ -187,7 +209,8 @@ function Card(data, column) {
         repository.cardId =self.cardId();
         repository.assignedToUser = self.assignedToUser();
         return repository.assign().done(function (result) {
-            self.parent.board.hub.notify.onCardAssigned(result.data, result.activityContext);
+            self.assignedToUserFullName(result.data.assignedToUserFullName);
+            $.boardcontext.current.hub.notify.onCardAssigned(result.data, result.activityContext);
         });
     }
 
@@ -430,6 +453,18 @@ function BoardViewModel(data) {
             })
         })
         return found;
+    }
+
+    self.openCardById = function (cardId) {
+        $.each(self.columns(), function (index, column) {
+            $.each(column.cards(), function (index, card) {
+                if (card.cardId() == cardId) {
+                    card.open();
+                    return false;
+                }
+            })
+        })
+        
     }
 
     

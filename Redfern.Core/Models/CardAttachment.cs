@@ -19,7 +19,7 @@ namespace Redfern.Core.Models
         [StringLength(50)]
         public string FileName { get; set; }
 
-        [StringLength(5)]
+        [StringLength(10)]
         public string FileExtension { get; set;}
 
         [StringLength(40)]

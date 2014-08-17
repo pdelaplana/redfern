@@ -12,7 +12,8 @@ namespace Redfern.Web
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
-                        "~/scripts/jquery-ui-{version}.js",
+                        //"~/scripts/jquery-ui-{version}.js",
+                        "~/scripts/jquery-ui-1.11.1.js",
                         "~/scripts/jquery.datepicker.localization.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -64,7 +65,7 @@ namespace Redfern.Web
                         "~/scripts/metro-ui/js/metro-carousel.js",
                         "~/scripts/metro-ui/js/metro-countdown.js",
                         "~/scripts/metro-ui/js/metro-date-format.js",
-                        "~/scripts/metro-ui/js/metro-datepicker.js",
+                        //"~/scripts/metro-ui/js/metro-datepicker.js",
                         "~/scripts/metro-ui/js/metro-dialog-custom.js",
                         "~/scripts/metro-ui/js/metro-drag-tile.js",
                         "~/scripts/metro-ui/js/metro-dropdown.js",
@@ -158,6 +159,7 @@ namespace Redfern.Web
             bundles.Add(new StyleBundle("~/content/css").Include(
                       "~/content/metro-ui/css/metro-bootstrap.css",
                       "~/content/metro-ui/css/metro-bootstrap-responsive.css",
+                      "~/content/metro-ui/css/iconFont.min.css",
                       "~/content/metro-custom.css",
                       "~/content/themes/metro/jquery-ui.css",
                       "~/content/nanoscroller.css",

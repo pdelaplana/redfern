@@ -145,8 +145,9 @@ input[type=text]:disabled{
 .scrollbar1 .disable { display: none; }
 .noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
 
+/*
 .ui-state-highlight { height: 90px; }
-
+*/
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
@@ -457,4 +458,15 @@ ul.ui-autocomplete li a:hover
     padding-left:0;
     padding-right:0;
     padding:0;
+}
+.popModal_content {
+    margin-bottom:10px!important;
+}
+
+.popModal_content .ui-datepicker{
+    /*
+    margin:5% 0 0 5%;
+    width:90%;
+        */
+     width:100%;
 }

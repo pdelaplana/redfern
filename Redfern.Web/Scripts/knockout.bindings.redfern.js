@@ -92,10 +92,10 @@ function MarkdownEditor(observable, viewModel) {
         preview = $('<div/>').addClass('mdd_preview').hide(),
         toolbar = $('<div/>').addClass('mdd_toolbar'),
         textarea = $('<textarea/>').addClass('mdd_editor'),
-        saveButton = $('<button/>').addClass('primary push-down-10').text('Save'),
-        editButton = $('<button/>').addClass('push-down-10').text('Edit').hide(),
-        previewButton = $('<button/>').addClass('push-down-10').text('Preview'),
-        cancelButton = $('<button/>').addClass('link push-down-10').text('Cancel');
+        saveButton = $('<button/>').addClass('primary push-down-15').text('Save'),
+        editButton = $('<button/>').addClass('push-down-15').text('Edit').hide(),
+        previewButton = $('<button/>').addClass('push-down-15').text('Preview'),
+        cancelButton = $('<button/>').addClass('link push-down-15').text('Cancel');
 
             
     // create the editor , with markdown and autosize
@@ -290,19 +290,20 @@ ko.bindingHandlers.addCard = {
 		container.append(div);
 
 		$(element).attr('style', 'cursor:pointer');
-        /*
+        
 		$(textarea).blur(function (event) {
-			if (preventBlurEvent) {
-				preventBlurEvent = false;
-			}
-			else {
-			    container.detach();
-				event.stopPropagation();
-				event.stopImmediatePropagation();
-			}
-
+		    if (preventBlurEvent) {
+		        event.stopPropagation();
+		        event.stopImmediatePropagation();
+		        preventBlurEvent = false;
+		    } else {
+		        
+		        cancel.click();
+		    }
 		})
-        */
+
+
+	
 	}
 };
 
@@ -669,15 +670,44 @@ ko.bindingHandlers.wikiEditor = {
             markdown = new MarkdownDeep.Markdown(),
             contentContainer = $('<div/>').addClass('markdown-content');
 
-        
+        var edit = function (event) {
+            contentContainer.fadeOut(function () {
+                var editorContainer = new MarkdownEditor(observable, viewModel);
+                editorContainer.button.edit.click();
+                editorContainer.editor.fadeIn(function () { });
+                //textarea.trigger('autosize.resize');
+                editorContainer.textArea.trigger('autosize.resize');
+                editorContainer.button.save.click(function (event) {
+                    observable(editorContainer.editor.find('textarea').val());
+                    contentContainer.html(markdown.Transform(observable()));
+                    enableEditing();
+                    editorContainer.editor.fadeOut('slow', function () {
+                        editorContainer.destroy();
+                        contentContainer.fadeIn();
+                    });
+                    if (bindings.save != undefined)
+                        bindings.save();
+                });
+                editorContainer.button.cancel.click(function () {
+                    editorContainer.editor.fadeOut('slow', function () {
+                        editorContainer.destroy();
+                        contentContainer.fadeIn();
+                    });
+                });
+
+                $(contentContainer).after(editorContainer.editor);
+            });
+            event.preventDefault();
+        }
 
         // create the content
         var content = observable();
         if (content == null || content == '') {
-            if (bindings.enable)
+            if (bindings.enable) {
                 // create content to prompt user to enter a description
-                content = $('<span/>').addClass('fg-grayLight fg-gray').append('<i class=""></i> Use the pencil on the right to enter a description for this card...');
-            else
+                content = $('<span/>').addClass('fg-grayLight fg-gray').append('<i class=""></i> Enter a description for this card...');
+                content.click(edit);
+            } else
                 content = '';
         } else {
             content = markdown.Transform(content);
@@ -687,37 +717,17 @@ ko.bindingHandlers.wikiEditor = {
         // create edit icon if enabled
         var enableEditing = function () {
             if (bindings.enable) {
-                var pencilIcon = $('<div class="place-right" ><a href=""><i class="icon-pencil fg-grayLight fg-hover-grayDark cursor-pointer"  ></i></a></div>');
-                pencilIcon.find('a').click(function (event) {
-                    contentContainer.fadeOut(function () {
-                        var editorContainer = new MarkdownEditor(observable, viewModel);
-                        editorContainer.button.edit.click();
-                        editorContainer.editor.fadeIn(function () { });
-                        //textarea.trigger('autosize.resize');
-                        editorContainer.textArea.trigger('autosize.resize');
-                        editorContainer.button.save.click(function (event) {
-                            observable(editorContainer.editor.find('textarea').val());
-                            contentContainer.html(markdown.Transform(observable()));
-                            enableEditing();
-                            editorContainer.editor.fadeOut('slow', function () {
-                                editorContainer.destroy();
-                                contentContainer.fadeIn();
-                            });
-                            if (bindings.save != undefined)
-                                bindings.save();
-                        });
-                        editorContainer.button.cancel.click(function () {
-                            editorContainer.editor.fadeOut('slow', function () {
-                                editorContainer.destroy();
-                                contentContainer.fadeIn();
-                            });
-                        });
-
-                        $(contentContainer).after(editorContainer.editor);
-                    });
-                    event.preventDefault();
-                });
+                var pencilIcon = $('<div class="place-right controls" style="display:none"><a href=""><i class="icon-pencil fg-grayLight fg-hover-grayDark cursor-pointer"  ></i></a></div>');
+                pencilIcon.find('a').click(edit);
                 contentContainer.prepend(pencilIcon);
+                // hover
+                $(contentContainer).hover(
+                    function () {
+                        $(this).find('.controls').show();
+                    },
+                    function () {
+                        $(this).find('.controls').hide();
+                });
             }
         };
         enableEditing();
@@ -938,23 +948,48 @@ ko.bindingHandlers.columnProperties = {
     }
 }
 
+
 /**
- * column properties 
+ * user select menu
  * 
  */
-ko.bindingHandlers.timeago = {
+ko.bindingHandlers.userSelectMenu = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var bindings = allBindings(),
-            observable = valueAccessor();
+            options = bindings.users,
+            value = valueAccessor();
 
-        function updateTimeAgo() {
-            $(element).text(moment.utc(ko.utils.unwrapObservable(observable())).fromNow())
-        }
         
-        setInterval(updateTimeAgo, 1000);
+        $.widget("custom.userselectmenu", $.ui.selectmenu, {
+            _renderItem: function (ul, item) {
+                var li = $("<li>", { text: item.label });
 
-        $(element).attr('title', ko.utils.unwrapObservable(observable()));
-        updateTimeAgo();
+                if (item.disabled) {
+                    li.addClass("ui-state-disabled");
+                }
+
+                $("<img>", {
+                    style: item.element.attr("data-style"),
+                    src: '/api/avatar/' + item.value +'?height=25'
+                }).prependTo(li);
+
+                return li.appendTo(ul);
+            }
+        });
+        
+
+        var optionStr;
+        $.each(options, function (index, item) {
+            optionStr += '<option>' + item.label + '</option>'
+
+            $(element).append($('<option/>', { value: item.id, text: item.label }));
+            //$(element).append($('<option/>').attr('value', item.id).text(item.label));
+            //$('<option>Patrick</option>').appendTo($(element));
+        })
+        //$(element).html(optionStr);
+        $(element).userselectmenu();
+
+
         
     }
 }

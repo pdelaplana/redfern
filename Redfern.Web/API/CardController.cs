@@ -52,6 +52,14 @@ namespace Redfern.Web.API
             return AutoMapper.Mapper.Map<CommandResult<Card>, WebApiResult<CardItem>>(result);
         }
 
+        // PUT api/board/1/card/5/duedate
+        [Route("{id:int}/duedate")]
+        public WebApiResult<CardItem> PutDueDate(int id, [FromBody]SetCardDueDateCommand command)
+        {
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<Card>, WebApiResult<CardItem>>(result);
+        }
+
         // DELETE api/board/1/card/5
         [Route("{id:int}")]
         public WebApiResult<bool> Delete(int id)

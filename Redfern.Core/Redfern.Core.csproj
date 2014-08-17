@@ -119,6 +119,14 @@
     <Compile Include="Migrations\201408090943220_IncreaseAddtionalDataToMaxLength.Designer.cs">
       <DependentUpon>201408090943220_IncreaseAddtionalDataToMaxLength.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201408162324226_AddAttributeToActivity.cs" />
+    <Compile Include="Migrations\201408162324226_AddAttributeToActivity.Designer.cs">
+      <DependentUpon>201408162324226_AddAttributeToActivity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201408170414427_IncreaseFieldLengthOfFileExtension.cs" />
+    <Compile Include="Migrations\201408170414427_IncreaseFieldLengthOfFileExtension.Designer.cs">
+      <DependentUpon>201408170414427_IncreaseFieldLengthOfFileExtension.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\CardAttachment.cs" />
     <Compile Include="Models\CardType.cs" />
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
@@ -129,6 +137,7 @@
     <Compile Include="Repository\Commands\AddCardAttachmentCommand.cs" />
     <Compile Include="Repository\Commands\AssignCardCommand.cs" />
     <Compile Include="Repository\Commands\ChangeBoardVisibilityCommand.cs" />
+    <Compile Include="Repository\Commands\SetCardDueDateCommand.cs" />
     <Compile Include="Repository\Commands\UpdateCardCommentCommand.cs" />
     <Compile Include="Repository\Commands\DeleteBoardMemberCommand.cs" />
     <Compile Include="Repository\Commands\AddBoardMemberCommand.cs" />
@@ -235,6 +244,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201408090943220_IncreaseAddtionalDataToMaxLength.resx">
       <DependentUpon>201408090943220_IncreaseAddtionalDataToMaxLength.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408162324226_AddAttributeToActivity.resx">
+      <DependentUpon>201408162324226_AddAttributeToActivity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408170414427_IncreaseFieldLengthOfFileExtension.resx">
+      <DependentUpon>201408170414427_IncreaseFieldLengthOfFileExtension.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

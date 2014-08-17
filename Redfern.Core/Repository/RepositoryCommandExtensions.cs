@@ -19,6 +19,7 @@ namespace Redfern.Core.Repository
                     Description = activity.Description,
                     ActivityDate = activity.ActivityDate,
                     Verb = activity.Verb,
+                    Attribute = activity.Attribute,
                     ActorId = activity.ActorId,
                     ActorDisplayName = activity.ActorDisplayName,
                     ObjectId = activity.ObjectId,

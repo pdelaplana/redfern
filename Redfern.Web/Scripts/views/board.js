@@ -1,11 +1,37 @@
 ﻿app.views.add('board', function () {
-    var dialog,
-        self = this;
-
+    var self = this;
+        
+    var cardId;
     // register routes
-    app.router.registerRoute('#/board/:id', function (context) {
-        context.loadLocation('/board/'+this.params['id'], initialize);
+
+    app.router.registerRoute('#/board/:id/card/:cardid', function (context) {
+        var id = this.params['id'];
+        cardId = this.params['cardid'];
+
+        if (($.boardcontext.current != null) && ($.boardcontext.current.boardId() == id)) {
+            $.boardcontext.current.openCardById(cardId);
+            cardId = null;
+            return;
+        } else {
+            //else 
+            context.loadLocation('/board/' + this.params['id'], initialize);
+
+        }
+        
     });
+
+    app.router.registerRoute('#/board/:id', function (context) {
+        var id = this.params['id'];
+        if ($.boardcontext.current != null && $.boardcontext.current.boardId() == id) {
+            // do nothing
+            return;
+        } 
+        //else 
+        context.loadLocation('/board/' + this.params['id'], initialize);
+        
+    });
+
+    self.init = false;
 
     self.view = ko.observable('board');
     
@@ -145,6 +171,12 @@
             card.cardTypeId(cardTypeId);
             card.color(color);
         }
+
+        boardUI.hub.onCardDueDateChanged = function (cardId, dueDate) {
+            var card = ui.boardUI.findCardById(cardId);
+            card.dueDate(dueDate);
+        }
+
         boardUI.hub.onCardTagAdded = function (cardId, tagName) {
             var card = ui.boardUI.findCardById(cardId);
             card.tags.disableUpdates = true;
@@ -183,7 +215,10 @@
 
         boardUI.hub.start(model.boardId);
 
-
+        if (cardId != null) {
+            $.boardcontext.current.openCardById(cardId);
+            cardId = null;
+        }
     
     }
 

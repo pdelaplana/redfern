@@ -19,6 +19,8 @@ namespace Redfern.Core.Repository
         public DateTime ActivityDate;
         public string Verb;
 
+        public string Attribute;
+
         public string ActorId;
 
         public string ActorDisplayName;

@@ -73,7 +73,7 @@ namespace Redfern.Web.API
             
             if (webimage == null)
             {
-                webimage = new WebImage(unknown);
+                webimage = new WebImage(nopic);
                 contentType = "image/png";
                 webimage.Resize(width, height, true);
                 CropImage(webimage);

@@ -10,3 +10,20 @@ if (!String.prototype.format) {
         });
     };
 }
+
+//
+// moment extensions
+//
+if (!Date.prototype.toLocalDate) {
+    Date.prototype.toLocalDate = function () {
+        return moment(moment.utc(this).toDate()).format('ll')
+    };
+}
+
+if (!String.prototype.toLocalDate) {
+    String.prototype.toLocalDate = function () {
+        return moment(moment.utc(new Date(this)).toDate()).format('ll')
+    };
+}
+
+

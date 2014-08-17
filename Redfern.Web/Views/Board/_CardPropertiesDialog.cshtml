@@ -13,8 +13,15 @@
                         <textarea maxlength="100" rows="1" id="title" data-bind="value: title, enable:hasAccess('ChangeCardTitle'), autosize:true"></textarea>
                     </span>
                     <small class="text-muted">
-                        Created by <span data-bind="text: createdByUserFullName"></span>, <span data-bind="text:moment(moment.utc(createdDate()).toDate()).format('ll')"></span> 
-                        - <b data-bind="text: selectedColumn().name()"></b> <a href="" data-bind="popModal: selectedColumn, popModalOptions: { html: $('#ChangeParentColumn').html()  }, visible: hasAccess('RearrangeCards')">(Change)</a> </small>
+                        Created by <span data-bind="text: createdByUserFullName"></span>, <span data-bind="text:createdDate().toLocalDate()"></span>
+                        - <b data-bind="text: selectedColumn().name()"></b> <a href="" style="font-size:x-small" data-bind="popModal: selectedColumn, popModalOptions: { html: $('#ChangeParentColumn').html()  }, visible: hasAccess('RearrangeCards')">(Change)</a>
+                        <!-- ko if: dueDate() != null -->
+                        - Due <b data-bind="text: dueDate() != null ? dueDate().toLocalDate() : 'None'"></b> <a href="" data-bind="popModalCalendar: dueDate, saveValue: setDueDate" style="font-size:x-small">(Change)</a>
+                        <!-- /ko -->
+                        <!-- ko if: dueDate() == null -->
+                        - <a href="" data-bind="popModalCalendar: dueDate, saveValue: setDueDate" style="font-size:x-small">Set Due Date</a>
+                        <!-- /ko -->
+                    </small>
                 </div>
                
                 <div class="row push-down-20">
@@ -70,19 +77,27 @@
                     
                 </div>
                 <h5>Tags</h5>
-                <div class="">
+                <div class="padding5">
                     <ul data-bind="tagit: tags, tagitOptions: { enabled: hasAccess('AddTag'), initialTags: tags(), addTag: tags.add, removeTag: tags.delete  }"></ul>
                 </div>
-                <h5 class="">Assignee</h5>
-                <div class="inline-block push-down-5" style="width:100%!important">
-                    <img class="span2" data-bind="attr: { src: userPhotoUrl() }" />
-                    <div class="input-control text span10">
-                        <input type="text" placeholder="Unassigned" data-bind="assignCard: assignedToUser, assignCardOptions: { members: members(), displayValue: assignedToUserFullName, updateValue: assign }, enable: hasAccess('ChangeCardAssignment')" />
+                
+                
+                <h5 class="">Assigned to</h5>
+                <div class="padding5 cursor-pointer  fg-transparent fg-hover-grayLight inline-block" style="width:100%" data-bind="popModal: assignedToUser, popModalOptions: { html: $('#Members').html(), placement:'bottomLeft'  }, enabled: hasAccess('ChangeCardAssignment')">
+                    <!-- ko if: isAssigned -->
+                    <img class="inline-block cursor-pointer" data-bind="attr: { src: userPhotoUrl() }" />
+                    <span class="place-right "><i class="icon-cancel-2" data-bind="click: function(){ assignCard(''); }"></i> </span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: isAssigned -->
+                    <img class="inline-block cursor-pointer" src="~/content/images/grey-box.png" style="height:35px" />
+                    <!-- /ko -->
+                    <div class="inline-block fg-black cursor-pointer">
+                        <span data-bind="text: assignee" style="width:100%"></span>
                     </div>
                 </div>
-
-                <div style="bottom:0;margin-top:85%">
-                    <a href="" data-bind="click: removeCard, visible: hasAccess('DeleteCard')"><i class="icon-remove" ></i> Delete</a>
+                
+                <div class="push-down-15 as-block padding5">
+                    <a href="" data-bind="click: removeCard, visible: hasAccess('DeleteCard')"><i class="icon-remove"></i> Delete Card</a>
                 </div>
             </div>
         </div>
@@ -121,13 +136,13 @@
     <div class="list no-border ol-transparent" style="width:100%">
         <div class="list-content">
             <img class="icon" data-bind="attr: { src: '/api/avatar/'+commentByUser() }" />
-            <div class="data">
+            <div class="data" data-bind="hover: '.controls'">
                 <span class="list-title item-title" style="margin-bottom:10px" data-bind="text: commentByUserFullName"></span>
                 <span class="list-subtitle" data-bind="commentEditor: comment, save: $parent.commentThread.update, editing: editing, card: $parent"></span>
                 <span class="list-remark fg-grayLight" style="margin-top:10px" data-bind="text: commentDateFromNow, attr: { title: commentDateInLocalTimezone }"></span>
-                <span class="place-top-right" data-bind="visible: commentByUser() == app.user.userName">
-                    <a href="" data-bind="click: function(){ editing(true); }"><i class="icon-pencil fg-grayLight fg-hover-grayDark" style="font-size:x-small;font-weight:100"></i></a>
-                    <a href="" data-bind="click: $parent.commentThread.remove"><i class="icon-cancel-2 fg-grayLight fg-hover-grayDark" style="font-size:xx-small;font-weight:100"></i></a>
+                <span class="place-top-right controls" style="display:none" data-bind="if: commentByUser() == app.user.userName">
+                    <a href="" data-bind="click: function(){ editing(true); }"><i class="icon-pencil fg-grayLight" style="font-size:small;font-weight:100"></i></a>
+                    <a href="" data-bind="click: $parent.commentThread.remove"><i class="icon-cancel-2 fg-grayLight" style="font-size:small;font-weight:100"></i></a>
                 </span>
             </div>
         </div>
@@ -150,12 +165,41 @@
 </script>
 
 <script id="ChangeParentColumn" type="text/html">
-    <div class=""  data-bind="foreach: columns">
-        <div class="padding10 border-bottom bg-hover-grayLighter" >
-            <i class="" data-bind="css: { 'icon-checkbox': $parent.selectedColumn().columnId() == columnId(),   'icon-checkbox-unchecked': $parent.selectedColumn().columnId() != columnId()}"></i>
-            <a href="" data-bind="text:name, click: function(){ $parent.selectedColumn($data); $parent.moveCard() }"></a>
+    <div class="" style="max-height:300px;overflow:auto">
+        <div class="listview-outlook small" data-bind="foreach: columns">
+            <div class="list" >
+                <div class="list-content" style="padding-left:10px">
+                    <div style="min-width:130px">
+                        <i class="" data-bind="css: { 'icon-checkbox': $parent.selectedColumn().columnId() == columnId(),   'icon-checkbox-unchecked': $parent.selectedColumn().columnId() != columnId()}"></i>
+
+                        <a href="" data-bind="text:name, click: function(){ $parent.selectedColumn($data); $parent.moveCard() }"></a>
+                    </div>
+
+                </div>
+            </div>
+            
         </div>
-     </div>
+    </div>
 </script>
 
+<script id="Members" type="text/html">
+    <div class="" style="max-height:300px;overflow:auto">
+        <div class="listview-outlook small">
+            <!--ko foreach: members()-->
+            <div class="list">
+                <div class="list-content" style="padding-left:8px">
+                    <img class="icon" data-bind="attr:{src:'/api/avatar/'+id+'?height=35'}" />
+                    <div class="data" style="min-width:120px">
+                        <a href="#" data-bind="text:value, click: function(){ $parent.assignCard(id) }"></a>
+                    </div>
+                </div>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+</script>
 
+<script id="DatePicker" type="text/html">
+    <div class="" style="max-height:300px;overflow:auto">
+    </div>
+</script>

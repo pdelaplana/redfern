@@ -166,9 +166,16 @@
 						}
 					});
 
+					$('html').on('click', function (event) {
+					    popModalClose();
+					});
+
                     // pdp: close popModal if clicking anywhere on the 
 					elemObj.parents('*').on('click', function (event) {
 					   popModalClose();
+					});
+					elemObj.on('click', function (event) {
+					    event.stopPropagation();
 					});
 				}
 				

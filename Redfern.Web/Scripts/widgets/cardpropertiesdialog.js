@@ -81,6 +81,7 @@ function CardPropertiesDialog(elementId, source) {
     self.createdDate = source.createdDate;
     self.assignedToUser = source.assignedToUser;
     self.assignedToUserFullName = source.assignedToUserFullName;
+    self.dueDate = source.dueDate;
     self.cardTypeId = source.cardTypeId;
     self.color = source.color;
     self.tags = source.tags;
@@ -104,19 +105,23 @@ function CardPropertiesDialog(elementId, source) {
 
     // subscriptions
 
-    self.selectedColumn.subscribe(function (newValue) {
-
-    });
+    self.selectedColumn.subscribe(function (newValue) {});
 
 
     self.title.subscribe(function (newValue) {
         self.changed = true;
     })
 
-    self.assignedToUser.subscribe(function (newValue) {
-        
+
+
+    self.isAssigned = ko.computed(function () {
+        return (self.assignedToUser() != null) && (self.assignedToUser().length > 0);
     })
 
+    self.assignee = ko.computed(function () {
+        return self.assignedToUserFullName() || 'Unassigned';
+    })
+    
     self.changeColor = function (newColor) {
         var repository = new CardRepository();
         repository.cardId = self.cardId();
@@ -128,8 +133,6 @@ function CardPropertiesDialog(elementId, source) {
         })
     }
 
- 
-    
     self.tags.add = function (tag) {
         var repository = new CardTagRepository();
         repository.boardId = self.boardId();
@@ -259,9 +262,6 @@ function CardPropertiesDialog(elementId, source) {
                
             })
         },
-        add: function(){
-
-        },
         remove: function (attachment) {
             var repository = new CardAttachmentRepository();
             repository.cardId = self.cardId(),
@@ -272,6 +272,21 @@ function CardPropertiesDialog(elementId, source) {
                 self.attachmentCount(self.attachmentsList.attachments().length);
             });
         }
+    }
+
+    self.setDueDate = function () {
+        var repository = new CardRepository();
+        repository.boardId = self.boardId();
+        repository.cardId = self.cardId();
+        repository.dueDate = self.dueDate() != null ? self.dueDate().toJSON() : null;
+        repository.changeDueDate().done(function (result) {
+            $.boardcontext.current.hub.notify.onCardDueDateChanged(self.boardId(), result.data.cardId, result.data.dueDate, result.activityContext);
+        });
+    }
+
+    self.assignCard = function (userName) {
+        self.assignedToUser(userName);
+        self.assign();
     }
 
     self.removeCard = function () {
@@ -314,16 +329,16 @@ function CardPropertiesDialog(elementId, source) {
                 });
         }
 
-
     }
 
     self.userPhotoUrl = function () {
+
         var assignedToUser = self.assignedToUser();
-        if (assignedToUser != null && assignedToUser.length > 0) {
-            return '/api/avatar/'+assignedToUser+'?height=25'
-        } else {
-            return '/content/images/grey-box.png';
-        }
+        
+        if (assignedToUser == null || assignedToUser.length == 0) {
+            assignedToUser = 'unknown';
+        } 
+        return '/api/avatar/' + assignedToUser + '?height=35'    
         
     }
 
@@ -336,7 +351,7 @@ function CardPropertiesDialog(elementId, source) {
             icon: false,
             title: '<strong>Card Properties</strong>',
             content: content,
-            width: '70%',
+            width: '85%',
             height: '92%',
             //position: { top: 50, left: 10 },
             onShow: function (dialog) {
@@ -399,17 +414,20 @@ function CardPropertiesDialog(elementId, source) {
                 self.activityStream.load();
                 self.attachmentsList.load();
 
-                // if description is empty , open for editing
-                //if (self.description() == null || self.description() == '')
-                //    self.wiki.editing(true);
-
-   
+                
                 ko.applyBindings(self, $(dialog).get(0));
+
+                // set address bar location
+                app.router.go('#/board/' + $.boardcontext.current.boardId() + '/card/' + self.cardId());
 
             },
             onClose: function () {
                 if (self.changed)
                     self.update();
+
+                // set address bar location
+                app.router.go('#/board/' + $.boardcontext.current.boardId());
+                
             },
             onResize: function (dialog) {
                 //var height = $(dialog).height() - 180;

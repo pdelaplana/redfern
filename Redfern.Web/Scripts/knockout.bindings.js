@@ -17,7 +17,8 @@
 ko.bindingHandlers.datepicker = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         //initialize datepicker with some optional options
-        var options = allBindingsAccessor().datepickerOptions || 
+        var bindings = allBindingsAccessor(),
+            options = allBindingsAccessor().datepickerOptions ||
             {  };
         $(element).datepicker(options);
 
@@ -31,6 +32,10 @@ ko.bindingHandlers.datepicker = {
                     observable(current);
                 else
                     observable(null);
+
+                if (bindings.saveValue != undefined)
+                    bindings.saveValue(observable());
+
             }
         }
         options.onSelect = funcOnSelectdate;
@@ -47,12 +52,24 @@ ko.bindingHandlers.datepicker = {
         });
         */
 
-        funcOnSelectdate();
+        //funcOnSelectdate();
 
         //handle disposal (if KO removes by the template binding)
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
             $(element).datepicker("destroy");
         });
+
+        //handle date data coming via json from Microsoft
+        var value = ko.utils.unwrapObservable(valueAccessor());
+        if (String(value).indexOf('/Date(') == 0) {
+            value = new Date(parseInt(value.replace(/\/Date\((.*?)\)\//gi, "$1")));
+        }
+        $(element).datepicker("setDate", value);
+
+        // allow  
+        $(element).next('.btn-date').click(function () {
+            $(element).datepicker('show');
+        })
 
     },
     update: function (element, valueAccessor) {
@@ -69,7 +86,7 @@ ko.bindingHandlers.datepicker = {
             return;
         } 
         */
-        $(element).datepicker("setDate", value);
+        //$(element).datepicker("setDate", value);
     }
 };
 
@@ -272,18 +289,6 @@ ko.bindingHandlers.file = {
     }
 };
 
-ko.bindingHandlers.timeago = {
-    update: function (element, valueAccessor) {
-        var value = valueAccessor();
-        var date = value();
-        if (date != null) {
-            var strDate = moment(date).fromNow();
-            $(element).text(strDate);
-        } else {
-            $(element).text('');
-        }
-    }
-};
 
 ko.bindingHandlers.clientAutocomplete = {
     init: function (element, params) {
@@ -368,18 +373,93 @@ ko.bindingHandlers.autosize = {
 ko.bindingHandlers.popModal = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var bindings = allBindings(),
-            enable = ko.utils.unwrapObservable(valueAccessor()),
+            value = ko.utils.unwrapObservable(valueAccessor()),
+            enabled = bindings.enabled || true,
             options = $.extend({
                 html: '',
                 placement: 'bottomLeft',
-                showCloseBut: false,
+                showCloseBut: true,
                 onDocumentClickClose: false,
                 onOkBut: function () { },
                 onCancelBut: function () { },
                 onLoad: function () { },
-                onClose: function () { }
+                onClose: function () {
+                    $(element).removeClass('popModalOpen');
+                }
             }, bindings.popModalOptions);
-            
+        
+        if (enabled) {
+            $(element).click(function (event) {
+                if ($(this).hasClass('popModalOpen')) {
+                    $(this).removeClass('popModalOpen');
+                    $(this).popModal('hide');
+
+                } else {
+                    $(this).popModal(options);
+
+                    ko.applyBindings(bindingContext.$data, $(element).next('.popModal').get(0));
+                    $(this).addClass('popModalOpen');
+
+                }
+                event.preventDefault();
+                event.stopPropagation();
+            })
+        }
+        
+    }
+};
+
+ko.bindingHandlers.popModalCalendar = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            enable = ko.utils.unwrapObservable(valueAccessor()),
+            observable = valueAccessor(),
+            options = $.extend({
+                html: '<div class="popModal_calendar"></div><div class="padding10 nbp"><a href="" class="button">Clear</a></div>',
+                //html: div.get(0),
+                placement: 'bottomLeft',
+                showCloseBut: true,
+                onDocumentClickClose: true,
+                onOkBut: function () { },
+                onCancelBut: function () { },
+                onLoad: function (event) {
+
+                    var calendar = $('.popModal_calendar').datepicker();
+                    var clearBtn = $(calendar).next('div').find('.button');
+                    
+                    var funcOnClear = function (event) {
+                        observable(null);
+                        if (bindings.saveValue != null)
+                            bindings.saveValue(observable());
+                        event.preventDefault();
+                    };
+
+                    var funcOnSelectdate = function () {
+
+                        if (observable != null) {
+
+                            var current = $(calendar).datepicker("getDate");
+                            if (current != null)
+                                observable(current);
+                            else
+                                observable(null);
+
+                            if (bindings.saveValue != null)
+                                bindings.saveValue(observable());
+
+                        }
+                    }
+                    //options.onSelect = funcOnSelectdate;
+                    ko.utils.registerEventHandler(calendar, 'change', funcOnSelectdate);
+                    ko.utils.registerEventHandler(clearBtn, 'click', funcOnClear);
+                    
+                },
+                onClose: function () {
+                    $(element).removeClass('popModalOpen');
+                }
+            }, bindings.popModalOptions);
+
+        
         $(element).click(function (event) {
             if ($(this).hasClass('popModalOpen')) {
                 $(this).removeClass('popModalOpen');
@@ -387,14 +467,14 @@ ko.bindingHandlers.popModal = {
 
             } else {
                 $(this).popModal(options);
+
                 
-                ko.applyBindings(bindingContext.$data, $(element).next('.popModal').get(0));
                 $(this).addClass('popModalOpen');
 
             }
             event.preventDefault();
             event.stopPropagation();
-            
+
         })
 
     }
@@ -428,4 +508,84 @@ ko.bindingHandlers.truncatedText = {
 };
 
 
+
+/**
+ * timeago 
+ * 
+ */
+ko.bindingHandlers.timeago = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            observable = valueAccessor();
+
+        function updateTimeAgo() {
+            $(element).text(moment.utc(ko.utils.unwrapObservable(observable())).fromNow())
+        }
+
+        setInterval(updateTimeAgo, 1000);
+
+        $(element).attr('title', ko.utils.unwrapObservable(observable()));
+        updateTimeAgo();
+
+    }
+}
+
+/*
+ko.bindingHandlers.timeago = {
+    update: function (element, valueAccessor) {
+        var value = valueAccessor();
+        var date = value();
+        if (date != null) {
+            var strDate = moment(date).fromNow();
+            $(element).text(strDate);
+        } else {
+            $(element).text('');
+        }
+    }
+};
+*/
+
+/**
+ * droppable 
+ * 
+ */
+ko.bindingHandlers.droppable = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            observable = valueAccessor();
+
+        $(element).droppable({
+            accept: bindings.accept,
+            activeClass: "ui-state-hover",
+            hoverClass: 'ol-red',
+            drop: function (event, ui) {
+                alert('dropped');
+
+            }
+        });
+
+    }
+}
+
+/**
+ * hover 
+ * 
+ */
+ko.bindingHandlers.hover = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            value = valueAccessor();
+
+        $(this).find(ko.utils.unwrapObservable(value)).hide();
+
+        $(element).hover(
+            function () {
+                $(this).find(ko.utils.unwrapObservable(value)).show();
+            },
+            function () {
+                $(this).find(ko.utils.unwrapObservable(value)).hide();
+            });
+
+    }
+}
 

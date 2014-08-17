@@ -25,6 +25,7 @@
     self.onCardMoved = function (cardId, columnId, sequence) { }
     self.onCardUpdated = function (card) { }
     self.onCardAssigned = function (card) { }
+    self.onCardDueDateChanged = function (cardId, dueDate) { }
     self.onCardAttachmentAdded = function (cardAttachment) { }
     self.onCardAttachmentRemoved = function (cardAttachment) { }
     self.onCardCommentAdded = function (cardComment) { }
@@ -78,6 +79,7 @@
         boardHub.client.onCardDeleted = self.onCardDeleted;
         boardHub.client.onCardMoved = self.onCardMoved;
         boardHub.client.onCardUpdated = self.onCardUpdated;
+        boardHub.client.onCardDueDateChanged = self.onCardDueDateChanged;
         boardHub.client.onCardAssigned = self.onCardAssigned;
         boardHub.client.onCardAttachmentAdded = self.onCardAttachmentAdded;
         boardHub.client.onCardAttachmentRemoved = self.onCardAttachmentRemoved;

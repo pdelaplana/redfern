@@ -301,7 +301,8 @@
         triggerKeys: ['enter', 'tab'],
         tagSource: function (request, response) {
             $.ajax({
-                url: '/api/{0}/tags/'.format(self.boardId()),
+                //url: '/api/{0}/tags/'.format(self.boardId()),
+                url: '/api/tag',
                 type: 'GET',
                 dataType: 'json',
                 data: { name: request.term, boardId: self.boardId() },

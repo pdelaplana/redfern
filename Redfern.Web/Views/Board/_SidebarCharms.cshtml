@@ -192,7 +192,7 @@
             <li>
                 <div id="activities_wrapper" class="padding20" style="overflow-y:auto;overflow-x:hidden">
                 <div class="listview small" data-bind="foreach: activities  ">
-                    <div class="list bg-dark" style="width:100%">
+                    <div class="list bg-dark" style="width:100%" data-bind="click:openCard">
                         <div class="list-content">
                             <img class="icon push-down-5" data-bind="attr: { src: '/api/avatar/'+actorId() }" />
                             <div class="data fg-white">

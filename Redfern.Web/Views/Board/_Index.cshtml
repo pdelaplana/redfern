@@ -18,7 +18,7 @@
                             </h4>
                         </div>
                         <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled:sortable() && $parent.hasAccess('RearrangeCards') , options: { placeholder: CardPlaceHolder, items: ' div.tile:not(.pinned)', scroll: true} }">
-                            <div class="tile double" data-bind="visible: show, event: { click: open }, setTileColor: color, archived : $parent.isArchiveColumn() ">
+                            <div class="tile double" data-bind="visible: show, event: { click: open }, setTileColor: color, archived : $parent.isArchiveColumn()">
                                 <div class="tile-content">
                                     <div class="padding10">
                                         <p class="fg-white" data-bind="text: title"></p>
@@ -27,13 +27,13 @@
                                 <div class="brand">
                                     <div class="label">
                                         <span class="no-margin icon-locked fg-white" data-bind="visible: $parent.sortable() == false"></span>
-                                        <!-- ko ifnot: BoardContext.current.options.showCardAge -->
-                                        <span class="no-margin fg-white icon-calendar" data-bind="visible:dueDate()!=null"></span>
+                                        <!-- ko ifnot: $.boardcontext.current.options.showCardAge -->
+                                        <span class="no-margin fg-white icon-calendar" data-bind="visible:dueDate()!=null, attr:{ title: dueDate()!=null ? dueDate().toLocalDate() : '' }"></span>
                                         <span class="no-margin fg-white icon-comments-4" data-bind="visible: commentCount()>0"> <small data-bind="text: commentCount"></small></span>
                                         <span class="no-margin fg-white icon-tag" data-bind="visible: tags().length >0"> <small data-bind="text: tags().length"></small></span>
                                         <span class="no-margin fg-white icon-attachment" data-bind="visible: attachmentCount() >0"> <small data-bind="text: attachmentCount"></small></span>
                                         <!-- /ko -->
-                                        <!--ko if: BoardContext.current.options.showCardAge -->
+                                        <!--ko if: $.boardcontext.current.options.showCardAge -->
                                         <span class="no-margin fg-white"> <small data-bind="timeago: createdDateInLocalTimezone"></small></span>
                                         <!-- /ko -->
                                     </div>

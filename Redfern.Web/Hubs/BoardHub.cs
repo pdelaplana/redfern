@@ -174,6 +174,13 @@ namespace Redfern.Web.Hubs
             Clients.OthersInGroup(boardId.ToString()).onCardColorChanged(cardId, cardTypeId, color);
         }
 
+        public void OnCardDueDateChanged(int boardId, int cardId, DateTime? dueDate, ActivityListItem activity)
+        {
+            Clients.Group(boardId.ToString()).addToActivityStream(activity);
+            Clients.OthersInGroup(boardId.ToString()).displayMessage(activity.Description);
+            Clients.OthersInGroup(boardId.ToString()).onCardDueDateChange(cardId, dueDate);
+        }
+
 
         public void OnColumnAdded(BoardColumnItem column, ActivityListItem activity)
         {

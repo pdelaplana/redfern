@@ -31,6 +31,9 @@ $(function () {
     $.blockUI.defaults.overlayCSS.opacity = .80;
     $.blockUI.defaults.overlayCSS.backgroundColor = '#eeeeee';
 
+    //
+    //
+    $.datepicker.setDefaults($.datepicker.regional['en-GB']);
     
     // get authenticated user details from cookie
     var authenticatedUser = $.cookie("AuthenticatedUser");

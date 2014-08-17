@@ -14,6 +14,7 @@ namespace Redfern.Web.Models
         public string Description { get; set; }
 
         public string Verb { get; set; }
+        public string Attribute { get; set; }
 
         public string ActorId { get; set; }
         public string ActorDisplayName { get; set; }

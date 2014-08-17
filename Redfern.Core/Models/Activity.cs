@@ -38,6 +38,9 @@ namespace Redfern.Core.Models
         public string ActorImageUrl { get; set; }
 
         [MaxLength(20)]
+        public string Attribute { get; set; }
+
+        [MaxLength(20)]
         public string ObjectId { get; set; }
 
         [MaxLength(50)]
@@ -117,6 +120,12 @@ namespace Redfern.Core.Models
             this.ActorImageUrl = String.Format(@"/app/profile/{0}/photo", this.ActorId);
         }
 
+        public void SetAtrribute(string attributeName)
+        {
+            // attribute of object
+            this.Attribute = attributeName;
+        }
+
         public void SetObject(string objectType, string objectId, string displayName, string url)
         {
             // object
@@ -167,6 +176,7 @@ namespace Redfern.Core.Models
 
             description = description.Replace("{actor}", this.ActorDisplayName);
             description = description.Replace("{verb}", this.Verb);
+            description = description.Replace("{attribute}", this.Attribute);
             description = description.Replace("{object}", this.ObjectDisplayName);
             description = description.Replace("{source}",this.SourceDisplayName);
             description = description.Replace("{target}", this.TargetDisplayName);
@@ -175,10 +185,6 @@ namespace Redfern.Core.Models
             this.Description = description;
         }
 
-        public void SetDescription()
-        {
-
-        }
-
+        
     }
 }

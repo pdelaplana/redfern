@@ -72,6 +72,17 @@
         });
     }
 
+    self.changeDueDate = function () {
+        var postData = {};
+        postData.CardId = self.cardId;
+        postData.DueDate = self.dueDate;
+        return $.ajax({
+            url: '/api/board/' + self.boardId + '/cards/' + self.cardId+'/duedate',
+            type: 'put',
+            data: postData
+        });
+    }
+
     self.changeColor = function () {
         return $.ajax({
             url: '/api/board/{0}/cards/{1}/color'.format(self.boardId, self.cardId),
