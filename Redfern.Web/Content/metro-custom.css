@@ -552,6 +552,27 @@ ul.ui-autocomplete{
 /************************************** 
  *   spacing elements
  *************************************/
+.pull-right-5{
+    margin-left:5px;
+}
+.pull-right-10 {
+    margin-left:10px;
+}
+.pull-right-15 {
+    margin-left:15px;
+}
+.pull-right-20 {
+    margin-left:20px;
+}
+.pull-right-25{
+    margin-left:25px;
+}
+.pull-right-30{
+    margin-left:30px;
+}
+
+
+
 .push-down-5
 {
     margin-top:5px;

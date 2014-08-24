@@ -15,14 +15,16 @@ if (!String.prototype.format) {
 // moment extensions
 //
 if (!Date.prototype.toLocalDate) {
-    Date.prototype.toLocalDate = function () {
-        return moment(moment.utc(this).toDate()).format('ll')
+    Date.prototype.toLocalDate = function (formatStr) {
+        if (formatStr == undefined) formatStr = 'll';
+        return moment(moment.utc(this).toDate()).format(formatStr)
     };
 }
 
 if (!String.prototype.toLocalDate) {
-    String.prototype.toLocalDate = function () {
-        return moment(moment.utc(new Date(this)).toDate()).format('ll')
+    String.prototype.toLocalDate = function (formatStr) {
+        if (formatStr == undefined) formatStr = 'll';
+        return moment(moment.utc(new Date(this)).toDate()).format(formatStr)
     };
 }
 

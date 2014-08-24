@@ -238,9 +238,10 @@
     <Compile Include="API\CardAttachmentController.cs" />
     <Compile Include="API\CardController.cs" />
     <Compile Include="API\CardTagController.cs" />
+    <Compile Include="API\CardTaskController.cs" />
     <Compile Include="API\CardTypeController.cs" />
     <Compile Include="API\DTO\BoardColumnDTO.cs" />
-    <Compile Include="API\CommentController.cs" />
+    <Compile Include="API\CardCommentController.cs" />
     <Compile Include="API\DTO\FileUploadDTO.cs" />
     <Compile Include="API\FileController.cs" />
     <Compile Include="API\ProfileController.cs" />
@@ -290,6 +291,7 @@
     <Compile Include="Models\BoardViewModel.cs" />
     <Compile Include="Models\BoardListViewModel.cs" />
     <Compile Include="Models\CardAttachmentListViewModel.cs" />
+    <Compile Include="Models\CardTaskViewModel.cs" />
     <Compile Include="Models\EmailModels.cs" />
     <Compile Include="Models\ProfileViewModel.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
@@ -356,6 +358,7 @@
     <Content Include="Content\nanoscroller.css" />
     <Content Include="Content\popModal.css" />
     <Content Include="Content\tagit-stylish-yellow.css" />
+    <Content Include="fonts\metroSysIcons.svg" />
     <Content Include="Scripts\app\ui.js" />
     <Content Include="Content\images\public\redfern-demo.ogg" />
     <Content Include="Content\metro-ui\fonts\metroSysIcons.woff" />
@@ -364,6 +367,8 @@
     <Content Include="Content\metro-ui\fonts\iconFont.ttf" />
     <Content Include="Content\metro-ui\fonts\iconFont.json" />
     <Content Include="Content\metro-ui\fonts\iconFont.eot" />
+    <Content Include="fonts\metroSysIcons.ttf" />
+    <Content Include="fonts\metroSysIcons.woff" />
     <None Include="Properties\PublishProfiles\redfernapp.com - Web Deploy.pubxml" />
     <Content Include="Scripts\common.js" />
     <Content Include="Scripts\dropzone\css\basic.css" />
@@ -422,6 +427,7 @@
     <Content Include="Scripts\repositories\boardmemberrepository.js" />
     <Content Include="Scripts\repositories\cardactivityrepository.js" />
     <Content Include="Scripts\repositories\cardattachmentrepository.js" />
+    <Content Include="Scripts\repositories\cardtaskrepository.js" />
     <Content Include="Scripts\repositories\cardtyperepository.js" />
     <Content Include="Scripts\repositories\tagrepository.js" />
     <Content Include="Scripts\repositories\useravatarrepository.js" />

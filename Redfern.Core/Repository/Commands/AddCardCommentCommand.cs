@@ -10,7 +10,7 @@ using Redfern.Security;
 
 namespace Redfern.Core.Repository.Commands
 {
-    public class CreateCardCommentCommand : IRepositoryCommand<CardComment>
+    public class AddCardCommentCommand : IRepositoryCommand<CardComment>
     {
         public int CardId { get; set; }
         public string Comment { get; set; }

@@ -18,9 +18,11 @@ namespace Redfern.Core.Models
         public virtual Board Board { get; set; }
 
         [Required]
+        [MaxLength(20)]
         public string Name { get; set; }
 
         [Required]
+        [MaxLength(15)]
         public string ColorCode { get; set; }
         
     }

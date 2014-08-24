@@ -117,7 +117,7 @@ namespace Redfern.Web.Hubs
             Clients.OthersInGroup(card.BoardId.ToString()).onCardAssigned(card);
         }
 
-        public void OnCardCommentAdded(int boardId, CardCommentModel cardComment, ActivityListItem activity)
+        public void OnCardCommentAdded(int boardId, CardCommentViewModel cardComment, ActivityListItem activity)
         {
             Clients.Group(boardId.ToString()).addToActivityStream(activity);
             Clients.OthersInGroup(boardId.ToString()).displayMessage(activity.Description);
@@ -131,7 +131,7 @@ namespace Redfern.Web.Hubs
             Clients.OthersInGroup(boardId.ToString()).onCardCommentRemoved(cardId, commentId);
         }
 
-        public void OnCardCommentUpdated(int boardId, CardCommentModel cardComment, ActivityListItem activity)
+        public void OnCardCommentUpdated(int boardId, CardCommentViewModel cardComment, ActivityListItem activity)
         {
             Clients.Group(boardId.ToString()).addToActivityStream(activity);
             Clients.OthersInGroup(boardId.ToString()).displayMessage(activity.Description);
@@ -167,11 +167,11 @@ namespace Redfern.Web.Hubs
             Clients.OthersInGroup(boardId.ToString()).onCardTagRemoved(cardId, tagName);
         }
 
-        public void OnCardColorChanged(int boardId, int cardId, int cardTypeId, string color, ActivityListItem activity)
+        public void OnCardColorChanged(int boardId, int cardId, int cardTypeId, string label, string color, ActivityListItem activity)
         {
             Clients.Group(boardId.ToString()).addToActivityStream(activity);
             Clients.OthersInGroup(boardId.ToString()).displayMessage(activity.Description);
-            Clients.OthersInGroup(boardId.ToString()).onCardColorChanged(cardId, cardTypeId, color);
+            Clients.OthersInGroup(boardId.ToString()).onCardColorChanged(cardId, cardTypeId, label, color);
         }
 
         public void OnCardDueDateChanged(int boardId, int cardId, DateTime? dueDate, ActivityListItem activity)
@@ -181,6 +181,40 @@ namespace Redfern.Web.Hubs
             Clients.OthersInGroup(boardId.ToString()).onCardDueDateChange(cardId, dueDate);
         }
 
+        public void OnCardTaskAdded(int boardId, int cardId, CardTaskViewModel task, ActivityListItem activity)
+        {
+            Clients.Group(boardId.ToString()).addToActivityStream(activity);
+            Clients.OthersInGroup(boardId.ToString()).displayMessage(activity.Description);
+            Clients.OthersInGroup(boardId.ToString()).onCardTaskAdded(cardId, task);
+        }
+
+        public void OnCardTaskUpdated(int boardId, int cardId, CardTaskViewModel task, ActivityListItem activity)
+        {
+            Clients.Group(boardId.ToString()).addToActivityStream(activity);
+            Clients.OthersInGroup(boardId.ToString()).displayMessage(activity.Description);
+            Clients.OthersInGroup(boardId.ToString()).onCardTaskUpdated(cardId, task);
+        }
+
+        public void OnCardTaskDeleted(int boardId, int cardId, int cardTaskId, ActivityListItem activity)
+        {
+            Clients.Group(boardId.ToString()).addToActivityStream(activity);
+            Clients.OthersInGroup(boardId.ToString()).displayMessage(activity.Description);
+            Clients.OthersInGroup(boardId.ToString()).onCardTaskDeleted(cardId, cardTaskId);
+        }
+
+        public void OnCardTaskCompleted(int boardId, int cardId, CardTaskViewModel task, ActivityListItem activity)
+        {
+            Clients.Group(boardId.ToString()).addToActivityStream(activity);
+            Clients.OthersInGroup(boardId.ToString()).displayMessage(activity.Description);
+            Clients.OthersInGroup(boardId.ToString()).onCardTaskCompleted(cardId, task);
+        }
+
+        public void OnCardTaskUncompleted(int boardId, int cardId, int cardTaskId, ActivityListItem activity)
+        {
+            Clients.Group(boardId.ToString()).addToActivityStream(activity);
+            Clients.OthersInGroup(boardId.ToString()).displayMessage(activity.Description);
+            Clients.OthersInGroup(boardId.ToString()).onCardTaskUncompleted(cardId, cardTaskId);
+        }
 
         public void OnColumnAdded(BoardColumnItem column, ActivityListItem activity)
         {

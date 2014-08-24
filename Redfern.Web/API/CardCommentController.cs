@@ -13,38 +13,38 @@ namespace Redfern.Web.API
 {
     [RoutePrefix("api/board/{boardid:int}/card/{cardid:int}/comments")]
     [Authorize]
-    public class CommentController : ApiController
+    public class CardCommentController : ApiController
     {
         private IRedfernRepository _repository;
 
-        public CommentController(IRedfernRepository repository)
+        public CardCommentController(IRedfernRepository repository)
         {
             _repository = repository;
         }
 
         // GET api/board/1/card/2/comments
         [Route("")]
-        public IEnumerable<CardCommentModel> Get(int cardid)
+        public IEnumerable<CardCommentViewModel> Get(int cardid)
         {
             Card card = _repository.Get<Card>(cardid);
-            return AutoMapper.Mapper.Map<IList<CardComment>, IList<CardCommentModel>>(card.Comments.OrderByDescending(c => c.CommentDate).ToList());
+            return AutoMapper.Mapper.Map<IList<CardComment>, IList<CardCommentViewModel>>(card.Comments.OrderByDescending(c => c.CommentDate).ToList());
         }
 
         
         // POST api/board/1/card/1/comments
         [Route("")]
-        public WebApiResult<CardCommentModel> Post([FromBody]CreateCardCommentCommand command)
+        public WebApiResult<CardCommentViewModel> Post([FromBody]AddCardCommentCommand command)
         {
             var result = _repository.ExecuteCommand(command);
-            return AutoMapper.Mapper.Map<CommandResult<CardComment>, WebApiResult<CardCommentModel>>(result);
+            return AutoMapper.Mapper.Map<CommandResult<CardComment>, WebApiResult<CardCommentViewModel>>(result);
         }
 
         // PUT api/board/5/card/1/comments/1
         [Route("{id:int}")]
-        public WebApiResult<CardCommentModel> Put(int id, [FromBody]UpdateCardCommentCommand command)
+        public WebApiResult<CardCommentViewModel> Put(int id, [FromBody]UpdateCardCommentCommand command)
         {
             var result = _repository.ExecuteCommand(command);
-            return AutoMapper.Mapper.Map<CommandResult<CardComment>, WebApiResult<CardCommentModel>>(result);
+            return AutoMapper.Mapper.Map<CommandResult<CardComment>, WebApiResult<CardCommentViewModel>>(result);
         }
 
         // DELETE api/board/1/card/1/comments/5

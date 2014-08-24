@@ -111,7 +111,7 @@ function MarkdownEditor(observable, viewModel) {
     $(textarea)
         .val(observable())
         .MarkdownDeep({
-            SafeMode: true,
+            SafeMode: false,
             ExtraMode:true,
             help_location: "/Content/mdd_help.html",
             disableTabHandling: true,
@@ -121,7 +121,13 @@ function MarkdownEditor(observable, viewModel) {
                 //alert('to be implemented');
             },
             cmd_link: function (ctx) {
-                alert('to be implemented');
+                var selection = $(textarea).data('selection') || $(textarea).focus().getSelection();
+                var str = '';
+                if (selection.text != '') {
+                    str = '<' + selection.text + '>';
+                } 
+                $(textarea).setSelection(selection.start, selection.end);
+                $(textarea).replaceSelectedText(str);
             },
             onPreTransform: function (editor, markdown) {
                 observable(markdown);
@@ -950,7 +956,7 @@ ko.bindingHandlers.columnProperties = {
 
 
 /**
- * user select menu
+ * custom bindinghandler to select a user from a jquery selectmenu widget
  * 
  */
 ko.bindingHandlers.userSelectMenu = {
@@ -988,9 +994,213 @@ ko.bindingHandlers.userSelectMenu = {
         })
         //$(element).html(optionStr);
         $(element).userselectmenu();
+   
+    }
+}
 
+/**
+ * bindinghandler to add a new card task
+ * 
+ */
+ko.bindingHandlers.taskInput_deprecated = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            options = bindings.users,
+            value = valueAccessor(),
+            container = $('<div />', { 'class': '' }),
+            inputControl = $('<div />', { 'class': 'input-control text' }),
+            input = $('<input />', { 'type' :  'text' }),
+            addButton = $('<button/>', { 'class': 'primary', text:'Add'}),
+            cancelLink = $('<button/>', { 'class': 'link', text: 'Done' });
+
+
+        var preventBlurEvent;
+        addButton.mousedown(function () {
+            preventBlurEvent = true;
+        }).click(function () {
+            var save = ko.utils.unwrapObservable(value),
+                data = {
+                    description: input.val(),
+                    assignedToUser: bindingContext.$data.assignedToUser() || null,
+                    assignedDate: moment(new Date()).utc().toJSON(),
+                    dueDate:''
+                };
+            preventDefault = true;
+            save(data);
+            input.val('');
+        })
+
+        cancelLink.click(function (event) {
+            $(element).show();
+            container.hide();
+        })
+
+        input.blur(function (event) {
+            if (preventBlurEvent) {
+                preventBlurEvent = false;
+                event.preventDefault();
+            } else {
+                cancelLink.click();
+            }
+        })
+
+
+        $(element).click(function (event) {
+            container.append(inputControl.append(input)).append(addButton).append(cancelLink);
+            $(this).before(container.show());
+            input.focus();
+            $(this).hide();
+            event.preventDefault();
+        });
+
+    }
+}
+
+/**
+ * bindinghandler to add a new card task
+ * 
+ */
+ko.bindingHandlers.taskInput = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            options = bindings.users,
+            value = valueAccessor(),
+            inputControlCheckbox = $('<div/>', { 'class': 'input-control checkbox', style:'width:100%'}),
+            label = $('<label/>'),
+            checkbox = $('<input/>', {type:'checkbox', disabled: 'disabled'}),
+            spanCheckbox = $('<span/>', { 'class': 'check inline-block', style: 'vertical-align:top;margin-top:2px;' }),
+            spanInput = $('<input />', { type:'text', 'class': 'inline-block', style: 'border:0;width:80%' , placeholder:'Add task...'});
+
+        function saveValue() {
+            if (spanInput.val() != null && spanInput.val().length > 0) {
+                var save = ko.utils.unwrapObservable(value),
+                data = {
+                    description: spanInput.val(),
+                    assignedToUser: bindingContext.$data.assignedToUser() || null,
+                    assignedDate: moment(new Date()).utc().toJSON(),
+                    dueDate: ''
+                };
+                preventDefault = true;
+                save(data);
+                spanInput.val(null);
+            }
+        }
+
+        spanInput.blur(function () {
+            saveValue();
+        }).keyup(function (event) {
+            if (event.which == 13) saveValue();
+        })
+
+        inputControlCheckbox.append(label.append(checkbox).append(spanCheckbox).append(spanInput));
+        $(element).append(inputControlCheckbox);
+
+    }
+}
+
+
+/**
+ * bindinghandler to edit a card task
+ * 
+ */
+ko.bindingHandlers.taskEdit = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            task = valueAccessor(),
+            inputControlCheckbox = $('<div/>', { 'class': 'input-control checkbox', style:'width:100%'}),
+            label = $('<label/>'),
+            checkbox = $('<input/>', {type:'checkbox'}),
+            spanCheckbox = $('<span/>', { 'class': 'check inline-block', style: 'vertical-align:top;margin-top:2px;' }),
+            spanInput = $('<input />', { type:'text', 'class': 'inline-block', style: 'border:0;width:80%' });
+
+        var descriptionChanged = false;
+        function saveDescription() {
+            if (spanInput.val() != null && spanInput.val().length > 0 && descriptionChanged) {
+                task.description(spanInput.val());
+                bindingContext.$parent.taskList.update(task);        
+            } else {
+                
+            }
+            descriptionChanged = false;
+        }
 
         
+        // output task item
+        inputControlCheckbox.append(label.append(checkbox).append(spanCheckbox).append(spanInput.val(task.description())));
+        $(element).append(inputControlCheckbox);
+       
+        
+        // handle events
+        spanInput.change(function () {
+            descriptionChanged = true;
+        }).blur(function (event) {
+            saveDescription();
+        }).keyup(function (event) {
+           if (event.keyCode == 8 || event.keyCode == 46) {
+                if (spanInput.val() == null || spanInput.val().length == 0) {
+                    bindingContext.$parent.taskList.remove(task);
+                    
+                }
+            }
+            else if (event.which == 13) {
+                saveDescription();
+            }
+        })
+
+        checkbox.click(function () {
+            if ($(this).prop('checked')) {
+                bindingContext.$parent.taskList.complete(task).done(function (result) {
+                    //spanInput.css({ 'text-decoration': 'line-through' });
+                    //spanInput.prop('disabled', 'disabled');
+                });
+            } else {
+                bindingContext.$parent.taskList.uncomplete(task).done(function (result) {
+                    //spanInput.css({ 'text-decoration': '' });
+                    //spanInput.prop('disabled', '');
+                })
+            }
+
+        });
+    },
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var checkbox = $(element).find('input[type=checkbox]'),
+            spanInput = $(element).find('input[type=text]'),
+            task = valueAccessor();
+
+        if (task.completedDate() != null) {
+            checkbox.prop('checked', 'checked');
+            spanInput.css({ 'text-decoration': 'line-through' });
+            spanInput.prop('disabled', 'disabled');
+            
+        } else {
+            checkbox.prop('checked', '');
+            spanInput.css({ 'text-decoration': '' });
+            spanInput.prop('disabled', '');
+        }
+
+        spanInput.val(task.description());
+        
+
+    }
+}
+
+/**
+ * bindinghandler to show a card label if label has been changed from the default value
+ * 
+ */
+ko.bindingHandlers.cardLabelDisplay = {
+    
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var observable = valueAccessor(),
+            defaultCardNames = ['Amber', 'Yellow','Red','Blue','Magenta','Cobalt','Emerald','Mauve'];
+
+        ko.bindingHandlers.html.update(element, function () {
+            if ($.inArray(observable(), defaultCardNames) == -1)
+                return '<span class="label">' + observable() + '</span>';
+            else
+                return '';
+        });
+
     }
 }
 

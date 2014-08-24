@@ -1,38 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace Redfern.Core.Models
+namespace Redfern.Web.Models
 {
-    public class CardTask : Auditable
+    public class CardTaskViewModel
     {
-        [Key]
         public int CardTaskId { get; set; }
-
         public int CardId { get; set; }
-        public virtual Card Card { get; set; }
-
-        [Required, MaxLength(200)]
         public string Description { get; set; }
-
-        [MaxLength(20)]
         public string AssignedToUser { get; set; }
-
+        public string AssignedToUserFullName { get; set; }
         public DateTime? AssignedDate { get; set; }
-
         public DateTime? DueDate { get; set; }
-
-        public DateTime? CompletedDate { get; set; }
-
-        [MaxLength(20)]
         public string CompletedByUser { get; set; }
-
-        [MaxLength]
+        public string CompletedByUserFullName { get; set; }
+        public DateTime? CompletedDate { get; set; }
         public string TaskNotes { get; set; }
-
-
     }
 }

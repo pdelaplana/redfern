@@ -108,14 +108,14 @@
         applyFilter: function () {
             if (self.filters.noSelection()) {
                 ko.utils.arrayForEach(self.columns(), function (column) {
-                    column.sortable(true);
+                    $.boardcontext.current.enableSorting($.boardcontext.current.hasAccess('RearrangeCards'));
                     ko.utils.arrayForEach(column.cards(), function (card) {
                         card.show(true);
                     })
                 });
             } else {
                 ko.utils.arrayForEach(self.columns(), function (column) {
-                    column.sortable(false);
+                    $.boardcontext.current.enableSorting(false);
                     ko.utils.arrayForEach(column.cards(), function (card) {
                         card.show(false);
                         if (self.filters.title() != null && self.filters.title().length > 0) {

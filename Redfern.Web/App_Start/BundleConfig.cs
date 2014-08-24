@@ -135,6 +135,7 @@ namespace Redfern.Web
                         "~/scripts/repositories/cardactivityrepository.js",
                         "~/scripts/repositories/cardtyperepository.js",
                         "~/scripts/repositories/cardattachmentrepository.js",
+                        "~/scripts/repositories/cardtaskrepository.js",
                         "~/scripts/repositories/userrepository.js",
                         "~/scripts/repositories/boardactivityrepository.js",
                         "~/scripts/widgets/appnavigationbar.js",

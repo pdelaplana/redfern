@@ -59,14 +59,14 @@
 
         boardUI.hub.onBoardNameChanged = function (name) {
             $.boardcontext.current.name(name);
-            app.ui.appNavigationBar.updateBoardName(BoardContext.current.boardId(), BoardContext.current.name());
-            app.ui.appNavigationBar.selectedMenu(BoardContext.current.name());
+            app.ui.appNavigationBar.updateBoardName($.boardcontext.current.boardId(), $.boardcontext.current.name());
+            app.ui.appNavigationBar.selectedMenu($.boardcontext.current.name());
         }
 
         boardUI.hub.onBoardVisibilityChanged = function (isPublic) {
             $.boardcontext.current.isPublic(isPublic);
-            app.ui.appNavigationBar.updateBoardName(BoardContext.current.boardId(), BoardContext.current.name());
-            app.ui.appNavigationBar.selectedMenu(BoardContext.current.name());
+            app.ui.appNavigationBar.updateBoardName($.boardcontext.current.boardId(), $.boardcontext.current.name());
+            app.ui.appNavigationBar.selectedMenu($.boardcontext.current.name());
         }
 
         boardUI.hub.onBoardArchived = function () {
@@ -80,12 +80,12 @@
         }
 
         boardUI.hub.onCollaboratorAdded = function (boardMember) {
-            BoardContext.current.members.push(new BoardMember(boardMember))
+            $.boardcontext.current.members.push(new BoardMember(boardMember))
         }
 
         boardUI.hub.onCollaboratorRemoved = function (userName) {
-            var member = BoardContext.current.members.findByProperty('userName', userName);
-            BoardContext.current.members.remove(member);
+            var member = $.boardcontext.current.members.findByProperty('userName', userName);
+            $.boardcontext.current.members.remove(member);
             // current user has been remomved, so boot him out of the board
             if (app.user.userName == userName) {
                 app.ui.appNavigationBar.removeBoardMenuItem(self.boardId());
@@ -94,8 +94,11 @@
         }
 
         boardUI.hub.onColorLabelChanged = function (cardTypeData) {
-            var cardType = BoardContext.current.cardTypes.findByProperty('cardTypeId', cardTypeData.cardTypeId);
+            var cardType = $.boardcontext.current.cardTypes.findByProperty('cardTypeId', cardTypeData.cardTypeId);
             cardType.name(cardTypeData.name);
+            // update all cards where name of cardtype may have changed
+            $.boardcontext.utils.changeCardLabels(cardTypeData.cardTypeId, cardTypeData.name);
+
         }
 
         boardUI.hub.onCardAdded = function (card) {
@@ -166,9 +169,10 @@
             card.attachmentCount(card.attachmentCount() - 1);
         }
 
-        boardUI.hub.onCardColorChanged = function (cardId, cardTypeId, color) {
+        boardUI.hub.onCardColorChanged = function (cardId, cardTypeId, label, color) {
             var card = ui.boardUI.findCardById(cardId);
             card.cardTypeId(cardTypeId);
+            card.cardLabel(label);
             card.color(color);
         }
 
@@ -189,8 +193,30 @@
             card.tags.remove(tagName);
             card.tags.disableUpdates = false;
         }
-
-
+        boardUI.hub.onCardTaskAdded = function (cardId, task) {
+            var card = ui.boardUI.findCardById(cardId);
+            card.onCardTaskAdded(task);
+            card.totalTaskCount(card.totalTaskCount() + 1);
+        }
+        boardUI.hub.onCardTaskUpdated = function (cardId, task) {
+            var card = ui.boardUI.findCardById(cardId);
+            card.onCardTaskUpdated(task);
+        }
+        boardUI.hub.onCardTaskDeleted = function (cardId, cardTaskId) {
+            var card = ui.boardUI.findCardById(cardId);
+            card.onCardTaskDeleted(cardTaskId);
+            card.totalTaskCount(card.totalTaskCount() - 1);
+        }
+        boardUI.hub.onCardTaskCompleted = function (cardId, task) {
+            var card = ui.boardUI.findCardById(cardId);
+            card.onCardTaskCompleted(task);
+            card.completedTaskCount(card.completedTaskCount() + 1);
+        }
+        boardUI.hub.onCardTaskUncompleted = function (cardId, cardTaskId) {
+            var card = ui.boardUI.findCardById(cardId);
+            card.onCardTaskUncompleted(cardTaskId);
+            card.completedTaskCount(card.completedTaskCount() - 1);
+        }
         boardUI.hub.onColumnAdded = function (column) {
             ui.boardUI.columns.insert(new Column(column, ui.boardUI), column.sequence);
         }
@@ -219,6 +245,8 @@
             $.boardcontext.current.openCardById(cardId);
             cardId = null;
         }
+
+        ko.bindingHandlers.sortable.isEnabled = $.boardcontext.current.hasAccess('RearrangeCards');
     
     }
 

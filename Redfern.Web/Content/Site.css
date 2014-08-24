@@ -470,3 +470,9 @@ ul.ui-autocomplete li a:hover
         */
      width:100%;
 }
+
+
+div.input-control label input[type=text]:focus, div.input-control label input[type=text]:active{
+    border-bottom-color:gray;
+    outline-color: transparent;
+}

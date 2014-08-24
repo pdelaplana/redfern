@@ -107,6 +107,8 @@ namespace Redfern.Core.Models
 
         public DbSet<CardComment> CardComments { get; set; }
 
+        public DbSet<CardTask> CardTasks { get; set; }
+
         public DbSet<CardAttachment> CardAttachments { get; set; }
 
     }

@@ -14,7 +14,7 @@ namespace Redfern.Web.Models
         public string TagName { get; set; }
     }
 
-    public class CardCommentModel
+    public class CardCommentViewModel
     {
         public int BoardId { get; set; }
         public int CommentId { get; set; }
@@ -34,6 +34,7 @@ namespace Redfern.Web.Models
         public int ColumnId { get; set; }
         public int Sequence { get; set; }
         public int CardTypeId { get; set; }
+        public string CardLabel { get; set; }
         public string Color { get; set; }
         public string CreatedByUserFullName { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -45,6 +46,8 @@ namespace Redfern.Web.Models
         public string[] Tags { get; set; }
         public int CommentCount { get; set; }
         public int AttachmentCount { get; set; }
+        public int CompletedTaskCount { get; set; }
+        public int TotalTaskCount { get; set; }
     }
 
     public class BoardColumnItem

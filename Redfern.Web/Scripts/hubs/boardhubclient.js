@@ -31,9 +31,14 @@
     self.onCardCommentAdded = function (cardComment) { }
     self.onCardCommentRemoved = function (cardId, commentId) { }
     self.onCardCommentUpdated = function (cardComment) { }
-    self.onCardColorChanged = function (cardId, cardTypeId, color) { }
+    self.onCardColorChanged = function (cardId, cardTypeId, label, color) { }
     self.onCardTagAdded = function (cardId, tagName) { }
     self.onCardTagRemoved = function (cardId, tagName) { }
+    self.onCardTaskAdded = function (cardId, cardTask) { }
+    self.onCardTaskUpdated = function (cardId, cardTask) { }
+    self.onCardTaskDeleted = function (cardId, cardTaskId) { }
+    self.onCardTaskCompleted = function (cardId, cardTask) { }
+    self.onCardTaskUncompleted = function (cardId, task) { }
 
     self.onColumnAdded = function (column) { }
     self.onColumnMoved = function (columnId, sequence) { }
@@ -89,6 +94,11 @@
         boardHub.client.onCardColorChanged = self.onCardColorChanged;
         boardHub.client.onCardTagAdded = self.onCardTagAdded;
         boardHub.client.onCardTagRemoved = self.onCardTagRemoved;
+        boardHub.client.onCardTaskAdded = self.onCardTaskAdded;
+        boardHub.client.onCardTaskUpdated = self.onCardTaskUpdated;
+        boardHub.client.onCardTaskDeleted = self.onCardTaskDeleted;
+        boardHub.client.onCardTaskCompleted = self.onCardTaskCompleted;
+        boardHub.client.onCardTaskUncompleted = self.onCardTaskUncompleted;
 
         self.notify = boardHub.server;
 

@@ -1,4 +1,21 @@
-﻿function CommentListItem(data) {
+﻿function CardTaskItem(data) {
+    var self = this;
+    self.cardTaskId = ko.observable(data.cardTaskId);
+    self.cardId = ko.observable(data.cardId);
+    self.description = ko.observable(data.description);
+    self.assignedToUser = ko.observable(data.assignedToUser);
+    self.assignedToUserFullName = ko.observable(data.assignedToUserFullName);
+    self.assignedDate = ko.observable(data.assignedDate);
+    self.dueDate = ko.observable(data.dueDate);
+    self.completedByUser = ko.observable(data.completedByUser);
+    self.completedByUserFullName = ko.observable(data.completedByUserFullName);
+    self.completedDate = ko.observable(data.completedDate);
+    self.taskNotes = ko.observable(data.taskNotes);
+
+    
+}
+
+function CommentListItem(data) {
     var self = this;
     self.boardId = ko.observable(data.boardId);
     self.cardId = ko.observable(data.cardId);
@@ -64,7 +81,6 @@ function AttachmentListItem(data) {
 
 function CardPropertiesDialog(elementId, source) {
 
-    
     var elementId = elementId,
         self = this;
 
@@ -83,11 +99,14 @@ function CardPropertiesDialog(elementId, source) {
     self.assignedToUserFullName = source.assignedToUserFullName;
     self.dueDate = source.dueDate;
     self.cardTypeId = source.cardTypeId;
+    self.cardLabel = source.cardLabel;
     self.color = source.color;
     self.tags = source.tags;
 
     self.commentCount = source.commentCount;
     self.attachmentCount = source.attachmentCount;
+    self.totalTaskCount = source.totalTaskCount;
+    self.completedTaskCount = source.completedTaskCount;
 
     self.cardTypes = source.parent.board.cardTypes;
     self.boardMembers = source.parent.board.members;
@@ -128,8 +147,9 @@ function CardPropertiesDialog(elementId, source) {
         repository.boardId = self.boardId();
         repository.color = newColor;
         repository.changeColor().done(function (result) {
-            self.cardTypeId(result.data.cardTypeId)
-            self.column.board.hub.notify.onCardColorChanged(result.data.boardId, result.data.cardId, result.data.cardTypeId, result.data.color, result.activityContext);
+            self.cardTypeId(result.data.cardTypeId);
+            self.cardLabel(result.data.cardLabel);
+            $.boardcontext.current.hub.notify.onCardColorChanged(result.data.boardId, result.data.cardId, result.data.cardTypeId, result.data.cardLabel, result.data.color, result.activityContext);
         })
     }
 
@@ -152,6 +172,8 @@ function CardPropertiesDialog(elementId, source) {
             $.boardcontext.current.hub.notify.onCardTagRemoved(self.boardId(), self.cardId(), result.data, result.activityContext);
         });
     }
+
+    
 
     self.members = function () {
         var members = $.map(self.boardMembers(), function (value) {
@@ -258,8 +280,7 @@ function CardPropertiesDialog(elementId, source) {
             repository.getAll().done(function (result) {
                 $.each(result, function (index, value) {
                     self.attachmentsList.attachments.push(new AttachmentListItem(value));
-                })
-               
+                }) 
             })
         },
         remove: function (attachment) {
@@ -272,6 +293,89 @@ function CardPropertiesDialog(elementId, source) {
                 self.attachmentCount(self.attachmentsList.attachments().length);
             });
         }
+    }
+
+    self.taskList = {
+        tasks: ko.observableArray(),
+        load: function(){
+            var repository = new CardTaskRepository();
+            repository.getAllForCard(self.boardId(), self.cardId()).done(function (result) {
+                $.each(result, function (index, value) {
+                    self.taskList.tasks.push(new CardTaskItem(value));
+                })
+            })
+
+        },
+        add: function (task, event) {
+            var repository = new CardTaskRepository();
+            repository.boardId = $.boardcontext.current.boardId();
+            repository.cardId = self.cardId();
+            repository.description = task.description;
+            repository.assignedToUser = task.assignedToUser;
+            repository.assignedDate = task.assignedDate;
+            repository.dueDate = task.dueDate;
+            repository.create().done(function (result) {
+                self.taskList.tasks.push(new CardTaskItem(result.data));
+                self.totalTaskCount(self.totalTaskCount() + 1);
+                $.boardcontext.current.hub.notify.onCardTaskAdded($.boardcontext.current.boardId(), result.data.cardId, result.data, result.activityContext);
+            });
+        },
+        update : function (task) {
+            var repository = new CardTaskRepository();
+            repository.boardId = $.boardcontext.current.boardId();
+            repository.cardTaskId = task.cardTaskId();
+            repository.cardId = task.cardId();
+            repository.description = task.description();
+            repository.assignedToUser = task.assignedToUser();
+            repository.assignedDate = task.assignedDate();
+            repository.dueDate = task.dueDate();
+            repository.update().done(function (result) {
+                $.boardcontext.current.hub.notify.onCardTaskUpdated($.boardcontext.current.boardId(), result.data.cardId, result.data, result.activityContext);
+            });
+        },
+        remove : function (task) {
+            var repository = new CardTaskRepository();
+            repository.boardId = $.boardcontext.current.boardId();
+            repository.cardTaskId = task.cardTaskId();
+            repository.cardId = task.cardId();
+            repository.delete().done(function (result) {
+                self.taskList.tasks.remove(task);
+                self.totalTaskCount(self.totalTaskCount() - 1);
+                if (task.completedDate != null)
+                    self.completedTaskCount(self.completedTaskCount() - 1);
+                $.boardcontext.current.hub.notify.onCardTaskDeleted($.boardcontext.current.boardId(), task.cardId(), task.cardTaskId(), result.activityContext);
+            });
+        }, 
+        complete : function (task) {
+            var repository = new CardTaskRepository();
+            repository.boardId = $.boardcontext.current.boardId();
+            repository.cardTaskId = task.cardTaskId();
+            repository.cardId = task.cardId();
+            repository.completedByUser = app.user.userName;
+            repository.completedDate = moment(new Date()).utc().toJSON();
+            return repository.complete().then(function (result) {
+                task.completedByUser(result.data.completedByUser);
+                task.completedDate(result.data.completedDate);
+                self.completedTaskCount(self.completedTaskCount() + 1);
+                $.boardcontext.current.hub.notify.onCardTaskCompleted($.boardcontext.current.boardId(), result.data.cardId, result.data, result.activityContext);
+            });
+        },
+        uncomplete : function (task) {
+            var repository = new CardTaskRepository();
+            repository.boardId = $.boardcontext.current.boardId();
+            repository.cardTaskId = task.cardTaskId();
+            repository.cardId = task.cardId();
+            repository.completedByUser = null;
+            repository.completedDate = null;
+            return repository.complete().then(function (result) {
+                //self.taskList.tasks.push(new CardTaskItem(result.data));
+                task.completedByUser(null);
+                task.completedDate(null);
+                self.completedTaskCount(self.completedTaskCount() - 1);
+                $.boardcontext.current.hub.notify.onCardTaskUncompleted($.boardcontext.current.boardId(), result.data.cardId, result.data.cardTaskId, result.activityContext);
+            });
+        }
+
     }
 
     self.setDueDate = function () {
@@ -413,12 +517,10 @@ function CardPropertiesDialog(elementId, source) {
                 self.commentThread.load();
                 self.activityStream.load();
                 self.attachmentsList.load();
-
+                self.taskList.load();
                 
                 ko.applyBindings(self, $(dialog).get(0));
 
-                // set address bar location
-                app.router.go('#/board/' + $.boardcontext.current.boardId() + '/card/' + self.cardId());
 
             },
             onClose: function () {

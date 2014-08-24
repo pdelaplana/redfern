@@ -14,12 +14,12 @@
                     </span>
                     <small class="text-muted">
                         Created by <span data-bind="text: createdByUserFullName"></span>, <span data-bind="text:createdDate().toLocalDate()"></span>
-                        - <b data-bind="text: selectedColumn().name()"></b> <a href="" style="font-size:x-small" data-bind="popModal: selectedColumn, popModalOptions: { html: $('#ChangeParentColumn').html()  }, visible: hasAccess('RearrangeCards')">(Change)</a>
+                        - <b data-bind="text: selectedColumn().name()"></b> <a href="" style="font-size:small" data-bind="popModal: selectedColumn, popModalOptions: { html: $('#ChangeParentColumn').html()  }, visible: hasAccess('RearrangeCards')">(Change)</a>
                         <!-- ko if: dueDate() != null -->
-                        - Due <b data-bind="text: dueDate() != null ? dueDate().toLocalDate() : 'None'"></b> <a href="" data-bind="popModalCalendar: dueDate, saveValue: setDueDate" style="font-size:x-small">(Change)</a>
+                        - Due <b data-bind="text: dueDate() != null ? dueDate().toLocalDate() : 'None'"></b> <a href="" data-bind="popModalCalendar: dueDate, saveValue: setDueDate" style="font-size:small">(Change)</a>
                         <!-- /ko -->
                         <!-- ko if: dueDate() == null -->
-                        - <a href="" data-bind="popModalCalendar: dueDate, saveValue: setDueDate" style="font-size:x-small">Set Due Date</a>
+                        - <a href="" data-bind="popModalCalendar: dueDate, saveValue: setDueDate" style="font-size:small">Set Due Date</a>
                         <!-- /ko -->
                     </small>
                 </div>
@@ -29,7 +29,19 @@
                     </div>
                 </div>
 
-                <div class="row push-down-40">
+                <div class="row push-down-20">
+                    <span class="subheader-secondary">Checklist</span>
+                    <ul class="unstyled">
+                        <!-- ko foreach: taskList.tasks -->
+                        <li data-bind="taskEdit: $data">
+                            
+                        </li>
+                        <!-- /ko -->
+                        <li data-bind="taskInput: taskList.add"></li>
+                    </ul>
+                </div>
+              
+                <div class="row push-down-20">
                     <span class="subheader-secondary">Conversations</span>
                     <div class="listview" style="width:100%" >
                         <div class="list no-border ol-transparent" style="width:100%">
@@ -61,9 +73,6 @@
                 </div>
                 <!-- /ko -->
 
-                <div class="row push-down-40" style="height:20px">&nbsp;</div>
-
-
             </div>
 
             <!-- left hand column -->
@@ -76,13 +85,13 @@
                     <!-- /ko -->
                     
                 </div>
-                <h5>Tags</h5>
+                <span class="subheader-secondary">Tags</span>
                 <div class="padding5">
                     <ul data-bind="tagit: tags, tagitOptions: { enabled: hasAccess('AddTag'), initialTags: tags(), addTag: tags.add, removeTag: tags.delete  }"></ul>
                 </div>
                 
                 
-                <h5 class="">Assigned to</h5>
+                <span class="subheader-secondary">Assigned To</span>
                 <div class="padding5 cursor-pointer  fg-transparent fg-hover-grayLight inline-block" style="width:100%" data-bind="popModal: assignedToUser, popModalOptions: { html: $('#Members').html(), placement:'bottomLeft'  }, enabled: hasAccess('ChangeCardAssignment')">
                     <!-- ko if: isAssigned -->
                     <img class="inline-block cursor-pointer" data-bind="attr: { src: userPhotoUrl() }" />
@@ -95,7 +104,7 @@
                         <span data-bind="text: assignee" style="width:100%"></span>
                     </div>
                 </div>
-                
+
                 <div class="push-down-15 as-block padding5">
                     <a href="" data-bind="click: removeCard, visible: hasAccess('DeleteCard')"><i class="icon-remove"></i> Delete Card</a>
                 </div>
