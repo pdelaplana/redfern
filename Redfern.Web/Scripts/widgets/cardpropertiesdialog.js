@@ -183,11 +183,13 @@ function CardPropertiesDialog(elementId, source) {
                 id: value.userName()
             }
         });
+        /*
         members.splice(0, 0, {
             label: self.boardOwnerFullName(),
             value: self.boardOwnerFullName(),
             id: self.boardOwner()
         })
+        */
         return members;
     }
 
@@ -218,6 +220,7 @@ function CardPropertiesDialog(elementId, source) {
                     self.commentThread.newComment('');
                     self.commentCount(self.commentThread.comments().length);
                     $.boardcontext.current.hub.notify.onCardCommentAdded(self.boardId(), result.data, result.activityContext);
+                    $.hubclientcontext.notificationsHub.notifyNewCommentPosted(self.cardId(), app.user.userName);
                 });
             }
         },

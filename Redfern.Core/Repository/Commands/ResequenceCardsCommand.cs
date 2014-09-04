@@ -25,8 +25,8 @@ namespace Redfern.Core.Repository.Commands
             BoardColumn targetColumn = db.BoardColumns.Where(c => c.ColumnId == this.TargetColumnId).SingleOrDefault();
             
             int counter = 1;
-            Card card;
-            Activity activity;
+            Card card = null;
+            Activity activity = null;
 
             foreach (var id in this.CardIds)
             {
@@ -45,7 +45,7 @@ namespace Redfern.Core.Repository.Commands
                             if (!card.ArchivedDate.HasValue)
                                     card.ArchivedDate = archivedDate;
                             activity = CreateArchiveCardActivity(card, db);
-                            result = this.CommandResult<Card>(card, db, activity);
+                            //result = this.CommandResult<Card>(card, db, activity);
                     
                         } 
                         else 
@@ -54,7 +54,7 @@ namespace Redfern.Core.Repository.Commands
                             card.ArchivedDate = null;
                             // and create a move activity
                             activity = CreateMoveCardActivity(card, db, targetColumn);
-                            result = this.CommandResult<Card>(card, db, activity);   
+                            //result = this.CommandResult<Card>(card, db, activity);   
                         }
                      
                     }
@@ -62,7 +62,7 @@ namespace Redfern.Core.Repository.Commands
                     {
                         // and create a move activity
                         activity = CreateMoveCardActivity(card, db);
-                        result = this.CommandResult<Card>(card, db, activity);   
+                        //result = this.CommandResult<Card>(card, db, activity);   
                     }
                 }
 
@@ -73,10 +73,10 @@ namespace Redfern.Core.Repository.Commands
             }
 
             
-
             db.SaveChanges();
 
-            return result;
+
+            return this.CommandResult<Card>(card, db, activity); ;
         }
 
         private Activity CreateMoveCardActivity(Card card, RedfernDb db, BoardColumn targetColumn = null)

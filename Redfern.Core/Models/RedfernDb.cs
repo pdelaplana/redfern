@@ -111,5 +111,7 @@ namespace Redfern.Core.Models
 
         public DbSet<CardAttachment> CardAttachments { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
+
     }
 }

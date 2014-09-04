@@ -48,7 +48,9 @@ namespace Redfern.Web
 
             bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
                         "~/Scripts/jquery.signalR-{version}.js",
-                        "~/Scripts/hubs/boardhubclient.js"
+                        "~/Scripts/hubs/boardhubclient.js",
+                        "~/Scripts/hubs/notificationshubclient.js",
+                        "~/Scripts/hubs/hubclientcontext.js"
                         ));
 
 
@@ -138,11 +140,17 @@ namespace Redfern.Web
                         "~/scripts/repositories/cardtaskrepository.js",
                         "~/scripts/repositories/userrepository.js",
                         "~/scripts/repositories/boardactivityrepository.js",
+                        "~/scripts/repositories/notificationrepository.js",
                         "~/scripts/widgets/appnavigationbar.js",
                         "~/scripts/widgets/createboarddialog.js",
                         "~/scripts/widgets/cardpropertiesdialog.js",
                         "~/scripts/widgets/errordialog.js",
                         "~/scripts/widgets/createboardtile.js",
+                        "~/scripts/viewmodels/boardactivity.js",
+                        "~/scripts/viewmodels/card.js",
+                        "~/scripts/viewmodels/column.js",
+                        "~/scripts/viewmodels/boardmember.js",
+                        "~/scripts/viewmodels/cardtype.js",
                         "~/scripts/views/boards.js",
                         "~/scripts/views/boardsidebar.js",
                         "~/scripts/views/boardui.js",

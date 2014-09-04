@@ -12,8 +12,11 @@ using System.IdentityModel.Tokens;
 using System.IdentityModel.Security;
 using System.IdentityModel.Services;
 using System.IdentityModel.Services.Configuration;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Redfern.Core.Models;
 using Redfern.Core.Migrations;
+using Redfern.Web.Application;
 using Redfern.Web.Application.Cache;
 
 namespace Redfern.Web
@@ -40,6 +43,8 @@ namespace Redfern.Web
             var tenantCache = DependencyResolver.Current.GetService<TenantsCache>();
             tenantCache.Init();
 
+
+           
         }
 
         

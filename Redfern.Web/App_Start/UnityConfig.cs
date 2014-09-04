@@ -1,5 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Practices.Unity;
 using Unity.Mvc5;
 using Livefrog.Commons.Services;
@@ -10,6 +12,7 @@ using Redfern.Core.Repository;
 using Redfern.Security;
 using Redfern.Web.Application;
 using Redfern.Web.Application.Cache;
+using Redfern.Web.Hubs;
 
 namespace Redfern.Web
 {
@@ -33,14 +36,24 @@ namespace Redfern.Web
             container.RegisterType<TenantsCache>();
             container.RegisterType<UserCache>();
 
+            // context
             container.RegisterType<RedfernContext, RedfernWebContext>("", new PerRequestLifetimeManager());
-            
+
+            // TODO: revisit DI in signalr hubs.  
+            // signalr  
+            //container.RegisterType<NotificationsHub, NotificationsHub>(new ContainerControlledLifetimeManager());
+            //container.RegisterType<IHubActivator, UnityHubActivator>(new ContainerControlledLifetimeManager());
+            //GlobalHost.DependencyResolver.Register(typeof(IHubActivator), () => new UnityHubActivator(container));
+
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 
 
             // webapi
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
+
+            
+            
         }
     }
 }

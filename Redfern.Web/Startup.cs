@@ -2,7 +2,9 @@
 using Microsoft.Owin;
 using Owin;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Newtonsoft.Json;
+using Redfern.Web.Application;
 using Redfern.Web.Application.Configuration;
 
 [assembly: OwinStartupAttribute(typeof(Redfern.Web.Startup))]
@@ -26,11 +28,14 @@ namespace Redfern.Web
             // This value must be no more than 1/3 of the DisconnectTimeout value.
             GlobalHost.Configuration.KeepAlive = TimeSpan.FromSeconds(10);
 
-            app.MapSignalR();
             ConfigureAuth(app);
-
+            
+            app.MapSignalR();
+            
             // ensure that Json propertynames are in camelcase emiited by signalr hubs 
-            GlobalHost.DependencyResolver.Register(typeof(JsonSerializer), () => JsonSerializerFactory.Value); 
+            GlobalHost.DependencyResolver.Register(typeof(JsonSerializer), () => JsonSerializerFactory.Value);
+
+          
 
         }
 

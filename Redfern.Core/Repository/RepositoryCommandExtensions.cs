@@ -9,6 +9,7 @@ namespace Redfern.Core.Repository
 {
     public static class RepositoryCommandExtensions
     {
+        
         public static CommandResult<TData> CommandResult<TData>(this IRepositoryCommand<TData> command, TData data, RedfernDb db, Activity activity)
         {
             return new CommandResult<TData>
@@ -17,6 +18,7 @@ namespace Redfern.Core.Repository
                 ActivityContext = new ActivityContext 
                 {
                     Description = activity.Description,
+                    ActivityId = activity.ActivityId,
                     ActivityDate = activity.ActivityDate,
                     Verb = activity.Verb,
                     Attribute = activity.Attribute,
@@ -61,6 +63,26 @@ namespace Redfern.Core.Repository
                     ExecutionTime = DateTime.UtcNow
                 }
 
+
+            };
+        }
+
+        public static CommandResult<TData> CommandResult<TData>(this IRepositoryCommand<TData> command, TData data, RedfernDb db, string activityDescription)
+        {
+            return new CommandResult<TData>
+            {
+                Data = data,
+                ActivityContext = new ActivityContext
+                {
+                    ActivityDate = DateTime.UtcNow,
+                    Description = activityDescription,
+                    ActorId = db.Context.ClientUserName
+                },
+                CommandContext = new CommandContext
+                {
+                    Initiator = db.Context.ClientUserName,
+                    ExecutionTime = DateTime.UtcNow
+                }
 
             };
         }

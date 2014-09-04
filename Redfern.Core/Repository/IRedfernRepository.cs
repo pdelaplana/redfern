@@ -18,6 +18,7 @@ namespace Redfern.Core.Repository
         IQueryable<Tag> Tags { get; }
         IQueryable<Activity> Activities { get; }
         IQueryable<CardAttachment> CardAttachments { get; }
+        IQueryable<Notification> Notifications { get; }
 
 
     }

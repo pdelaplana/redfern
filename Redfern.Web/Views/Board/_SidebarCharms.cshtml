@@ -1,10 +1,25 @@
 ﻿<div id="SidebarCharms" class="charms bg-grayDark slide-out-div">
-    <a class="handle bg-grayLight fg-white padding20" style="" href=""><i class="icon-wrench"></i> </a>
+    <a class="handle bg-grayLight fg-white opacity padding15" style="width:70px" href="">
+        <span class="block text-center">
+            <i class="icon-tools" style="font-size:xx-large"></i>
+        </span>
+        <!-- ko if: notifications().length > 0 -->
+        <span class="block push-down-20 text-center">
+            <i class="icon-broadcast"></i> <small data-bind="text: notifications().length"></small>
+        </span>
+        <!-- /ko -->
+        <!-- ko if: $.boardcontext.current.newActivitiesCounter() > 0-->
+        <span class="block push-down-20 text-center" data-bind="click: function(){ activeOption('activities') }">
+            <i class="icon-fire"></i> <small data-bind="text:$.boardcontext.current.newActivitiesCounter"></small>
+        </span>
+        <!--/ko -->
+    </a>
     <nav id="Sidebar" class="sidebar" data-bind="visible: activeOption() == 'main'">
         <ul>
             <li class="title">Board Options</li>
             <li data-bind=""><a href="" data-bind="click: function(){ activeOption('changeboardsettings') },visible: hasAccess('OpenBoardSettings') ">Settings</a></li>
-            <li data-bind="visible: hasAccess('ViewBoardActivities')"><a href="" data-bind="click: function(){ activeOption('activities') }">Activities</a></li>
+            <li data-bind="visible: hasAccess('ViewBoardActivities')"><a href="" data-bind="click: function(){ activeOption('activities') }">Activities  <span class="label place-right bg-red fg-white" data-bind="visible: $.boardcontext.current.newActivitiesCounter() > 0, text:$.boardcontext.current.newActivitiesCounter"></span></a></li>
+            <li data-bind="visible: hasAccess('ViewBoardNotifications')"><a href="" data-bind="click: function(){ activeOption('notifications') }">Notifications <span class="label place-right bg-red fg-white" data-bind="visible: notifications().length > 0, text: notifications().length"></span></a></li>
             @*
             <li data-bind="visible: viewMode() =='board'"><a href="" data-bind="click: function(){ viewMode('overview') }">Zoom out</a></li>
             <li data-bind="visible: viewMode() =='overview'"><a href="" data-bind="click: function(){ viewMode('board') }">Zoom in</a></li>    
@@ -80,7 +95,7 @@
                         <img class="icon " src="" data-bind="attr: { src : '/api/avatar/'+owner(), title : ownerFullName()+ ' (The Owner)' }" />
                     </div>
                     <!-- ko foreach: members -->
-                    <div class="tile half" data-bind="click: $parent.selectMember, css: { selected: selected }">
+                    <div class="tile half" data-bind="click: $parent.selectMember, css: { selected: selected }, visible:role() != 'Owner'">
                         <img class="icon " src='/api/avatar/patrick' data-bind="attr: { src: '/api/avatar/'+userName(), title: fullName() }" />
                     </div>
                     <!-- /ko -->
@@ -150,9 +165,6 @@
 
                     <span class="fg-grayLight ">Show card assigned to</span>
                     <div class="inline-block" style="width:100%;margin-top:5px">
-                        <div class="tile half" style="line-height:2!important" data-bind="click: function(){ filters.addAssigneeToFilter(owner()) } , css: { selected:  filters.isAssigneeSelected(owner())}">
-                            <img class="icon " src='/api/avatar/patrick' data-bind="attr: { src: '/api/avatar/'+owner(), title: ownerFullName() }" />
-                        </div>
                         <!-- ko foreach: members -->
                         <div class="tile half" style="line-height:2!important" data-bind="css: { selected: selected }, click: function(){ $parent.filters.addAssigneeToFilter(userName()) } , css: { selected:  $parent.filters.isAssigneeSelected(userName())}">
                             <img class="icon " src='/api/avatar/patrick' data-bind="attr: { src: '/api/avatar/'+userName(), title: fullName() }" />
@@ -197,13 +209,34 @@
                             <img class="icon push-down-5" data-bind="attr: { src: '/api/avatar/'+actorId() }" />
                             <div class="data fg-white">
                                 <span class="block" style="vertical-align:text-top" data-bind="html:text"></span>
+                                <span class="block fg-orange margin5" style="font-size:small;line-height:1" data-bind="html: additionalText"></span>
                                 <span class="text-muted list-subtitle" data-bind="timeago:activityDateInLocalTimezone"></span>
                             </div>
                         </div>
                     </div>
                 </div>
                 </div>
+            </li>
+        </ul>
+    </nav>
 
+    <nav id="Sidebar_notifications" class="sidebar" data-bind="visible: activeOption()=='notifications'">
+        <ul>
+            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Notifications</li>
+            <li>
+                <div id="notifications_wrapper" class="padding20" style="overflow-y:auto;overflow-x:hidden">
+                    <div class="listview small" data-bind="foreach: notifications ">
+                        <div class="list bg-dark" style="width:100%"  data-bind="click:open">
+                            <div class="list-content">
+                                <img class="icon push-down-5" data-bind="attr: { src: '/api/avatar/'+sender() }" />
+                                <div class="data fg-white">
+                                    <span class="block" style="vertical-align:text-top" data-bind="html:message"></span>
+                                    <span class="text-muted list-subtitle" data-bind="timeago:notificationDate"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </li>
         </ul>
     </nav>

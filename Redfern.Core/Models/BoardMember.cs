@@ -29,5 +29,7 @@ namespace Redfern.Core.Models
         public string UserName { get; set; }
 
         public BoardMemberRole Role { get; set; }
+
+        public DateTime? LastAccessedDate { get; set; }
     }
 }

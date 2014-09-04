@@ -16,6 +16,7 @@ namespace Redfern.Web.Application
         MakeBoardPublic,
 
         ViewBoardActivities,
+        ViewBoardNotifications,
 
         ViewCollaborators,
         AddColloborators,
@@ -82,6 +83,7 @@ namespace Redfern.Web.Application
                     RedfernAccessType.MakeBoardPublic,
 
                     RedfernAccessType.ViewBoardActivities,
+                    RedfernAccessType.ViewBoardNotifications,
 
                     RedfernAccessType.ViewCollaborators,
                     RedfernAccessType.AddColloborators,
@@ -136,6 +138,7 @@ namespace Redfern.Web.Application
                 return new RedfernAccessType[]
                 {
                     RedfernAccessType.ViewBoardActivities,
+                    RedfernAccessType.ViewBoardNotifications,
 
                     RedfernAccessType.ViewCollaborators,
                     RedfernAccessType.AddColloborators,

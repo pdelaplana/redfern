@@ -23,11 +23,25 @@ namespace Redfern.Web.Application
                 {
                     this.ClientUserName = HttpContext.Current.User.Identity.Name;
                     this.ClientUserFullName = userCache.GetFullName(this.ClientUserName);
+                    if (HttpContext.Current.Session != null)
+                        HttpContext.Current.Session["ClientUserName"] = this.ClientUserName;
+                    if (HttpContext.Current.Session != null)
+                        HttpContext.Current.Session["ClientUserFullName"] = this.ClientUserFullName;
                 }
                 else 
                 {
-                    this.ClientUserName = "Anonymous";
-                    this.ClientUserFullName = "Anonymous";
+                    // check if we've kept ClientUserName and ClientUserFullName in the session
+                    if (HttpContext.Current.Session != null)
+                    {
+                        this.ClientUserName = HttpContext.Current.Session["ClientUserName"] != null ? (String)HttpContext.Current.Session["ClientUserName"] : "Anonymous";
+                        this.ClientUserFullName = HttpContext.Current.Session["ClientUserFullName"] != null ? (String)HttpContext.Current.Session["ClientUserFullName"] : "Anonymous";
+                    }
+                    else
+                    {
+                        this.ClientUserName = "Anonymous";
+                        this.ClientUserFullName = "Anonymous";
+                    }
+                    
                 }
                 
                     

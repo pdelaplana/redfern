@@ -1,4 +1,6 @@
-﻿// First, checks if it isn't implemented yet.
+﻿// 
+// string extensions
+//
 if (!String.prototype.format) {
     String.prototype.format = function () {
         var args = arguments;
@@ -8,6 +10,18 @@ if (!String.prototype.format) {
               : match
             ;
         });
+    };
+}
+if (!String.prototype.stripHtml) {
+    String.prototype.stripHtml = function () {
+        return this.replace(/(<([^>]+)>)/ig, "")
+    };
+}
+if (!String.prototype.truncate) {
+    String.prototype.truncate = function (maxLength) {
+        var originalString = this;
+        maxLength = maxLength || 500;
+        return originalString >= maxLength ? originalString.substring(0, maxLength - 4) + "..." : originalString;
     };
 }
 

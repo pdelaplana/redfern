@@ -135,13 +135,25 @@
     <Compile Include="Migrations\201408240224435_ChangeFieldLengthsOfCardType.Designer.cs">
       <DependentUpon>201408240224435_ChangeFieldLengthsOfCardType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201408271240584_AddLastAccessedDate.cs" />
+    <Compile Include="Migrations\201408271240584_AddLastAccessedDate.Designer.cs">
+      <DependentUpon>201408271240584_AddLastAccessedDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201408301320032_AddNotification.cs" />
+    <Compile Include="Migrations\201408301320032_AddNotification.Designer.cs">
+      <DependentUpon>201408301320032_AddNotification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\CardAttachment.cs" />
     <Compile Include="Models\CardType.cs" />
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
     <Compile Include="Models\Configuration\CardConfiguration.cs" />
     <Compile Include="Models\Configuration\BoardColumnConfiguration.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\RedfernDbExtensions.cs" />
     <Compile Include="Repository\CommandResult.cs" />
+    <Compile Include="Repository\Commands\CreateNotificationCommand.cs" />
+    <Compile Include="Repository\Commands\DeleteNotificationCommand.cs" />
+    <Compile Include="Repository\Commands\UpdateBoardAccessedDateCommand.cs" />
     <Compile Include="Repository\Commands\DeleteCardTaskCommand.cs" />
     <Compile Include="Repository\Commands\CompleteCardTaskCommand.cs" />
     <Compile Include="Repository\Commands\UpdateCardTaskCommand.cs" />
@@ -268,6 +280,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201408240224435_ChangeFieldLengthsOfCardType.resx">
       <DependentUpon>201408240224435_ChangeFieldLengthsOfCardType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408271240584_AddLastAccessedDate.resx">
+      <DependentUpon>201408271240584_AddLastAccessedDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408301320032_AddNotification.resx">
+      <DependentUpon>201408301320032_AddNotification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

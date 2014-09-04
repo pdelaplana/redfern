@@ -23,6 +23,11 @@ namespace Redfern.Web.Hubs
             Groups.Add(Context.ConnectionId, boardId.ToString());
         }
 
+        public void Unsubscribe(int boardId)
+        {
+            Groups.Remove(Context.ConnectionId, boardId.ToString());
+        }
+
         public void DisplayMessage(int boardId, string message)
         {
             Clients.OthersInGroup(boardId.ToString()).displayMessage(message);

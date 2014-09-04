@@ -30,7 +30,6 @@
         *@
         @if (User.Identity.IsAuthenticated)
         {
-           
             <div class="element place-right">
                 <a href="#" class="dropdown-toggle">
                     <i class="icon-user"></i>
@@ -47,7 +46,8 @@
                     <li><a href="javascript:$('form#signout').submit()">Sign out</a></li>
                 </ul>
             </div>
-
+            <span class="element-divider place-right"></span>
+            <!-- ko template: 'notificationIcon' --><!--/ko-->
         }
         else
         {
@@ -76,6 +76,13 @@
 
     </div>
 </div>
+
+<script id="notificationIcon" type="text/html">
+    <!-- ko if: $.hubclientcontext.notificationsHub.notifications().length > 0-->
+    <a class="element place-right" href="" ><i class="icon-broadcast"></i> <span data-bind="text: $.hubclientcontext.notificationsHub.notifications().length"></span></a>
+    <span class="element-divider place-right" ></span>
+    <!-- /ko -->
+</script>
 
 @using (Html.BeginForm("signout", "account", FormMethod.Post, new { id = "signout" }))
 {

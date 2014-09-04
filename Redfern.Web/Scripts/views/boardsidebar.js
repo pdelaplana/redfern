@@ -19,6 +19,11 @@
     self.cardTypes = boardUI.cardTypes
     self.resequence = boardUI.columns.resequenceAll;
     
+    // subscriptions 
+    self.activeOption.subscribe(function (newValue) {
+        if (newValue == 'activities')
+            $.boardcontext.current.newActivitiesCounter(0);
+    })
 
     // computed observables
     self.canChangeSettings = ko.computed(function () {
@@ -36,6 +41,17 @@
     self.canRemoveMember = ko.computed(function () {
         return self.owner() == app.user.userName;
     });
+
+    self.notifications = ko.computed(function () {
+        return ko.utils.arrayFilter($.hubclientcontext.notificationsHub.notifications(), function (notification) {
+            
+            if (notification.objectType() == 'card') {
+                return notification.objectId().split(';')[0].split('=')[1] == $.boardcontext.current.boardId();
+            }
+            return false;
+
+        })
+    })
 
     // operations
     self.changeBoardName = function () {
@@ -272,8 +288,8 @@
     $('.slide-out-div').tabSlideOut({
         tabHandle: '.handle',                     //class of the element that will become your tab
         //pathToTabImage: '/content/images/contact_tab.gif', //path to the image for the tab //Optionally can be set using css
-        imageHeight: '122px',                     //height of tab image           //Optionally can be set using css
-        imageWidth: '50px',                       //width of tab image            //Optionally can be set using css
+        imageHeight: '222px',                     //height of tab image           //Optionally can be set using css
+        imageWidth: '150px',                       //width of tab image            //Optionally can be set using css
         tabLocation: 'right',                      //side of screen where tab lives, top, right, bottom, or left
         speed: 300,                               //speed of animation
         action: 'click',                          //options: 'click' or 'hover', action to trigger animation

@@ -75,6 +75,7 @@ namespace Redfern.Web.Models
         public int BoardId { get; set; }
         public string UserName { get; set; }
         public string FullName { get; set; }
+        public string Role { get; set; }
     }
 
     public class BoardViewModel
@@ -83,6 +84,7 @@ namespace Redfern.Web.Models
         public string Name { get; set; }
         public string Owner { get; set; }
         public string OwnerFullName { get; set; }
+        public DateTime? LastAccessedDate { get; set; }
         public bool IsPublic { get; set; }
         public bool ViewOnly { get; set; }
         public string[] AccessList { get; set; }

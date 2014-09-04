@@ -37,12 +37,14 @@
 	        }
 	        legis.app.ui.unblock();
 
-            
-
             */
-
-            
+   
         };
+
+        this.bind('unload', function (e, data) {
+            
+
+        })
 
         this.error = function (message, original_error) {
 

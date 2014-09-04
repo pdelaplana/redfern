@@ -16,6 +16,7 @@ namespace Redfern.Core.Repository
     {
         public string Text;
         public string Description;
+        public int ActivityId;
         public DateTime ActivityDate;
         public string Verb;
 

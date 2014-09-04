@@ -52,12 +52,21 @@ $(function () {
         });
     });
 
-
     app.ui.setWindowTitle('Home');
     app.start('app/#/boards');
 
     // keepalive
     KeepAlive();
+
+    // connect to signalr hub
+    $.hubclientcontext.start(function () {
+        // subscribe to the notifications hub
+        $.hubclientcontext.notificationsHub.subscribe(app.user.userName);
+    });
+
+    
+    
+
 })
 
 function KeepAlive() {

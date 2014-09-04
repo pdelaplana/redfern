@@ -26,6 +26,7 @@ namespace Redfern.Core.Repository.Commands
                 member = db.BoardMembers.Create();
                 member.BoardId = this.BoardId;
                 member.UserName = this.UserName;
+                member.Role = BoardMemberRole.Contributor;
                 member = db.BoardMembers.Add(member);
                 db.SaveChanges();
 

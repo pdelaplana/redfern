@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Redfern.Core.Models;
 using Redfern.Core.Repository;
+using Redfern.Core.Repository.Commands;
 using Redfern.Web.Application;
 using Redfern.Web.Models;
 
@@ -24,16 +25,22 @@ namespace Redfern.Web.Controllers
         {
             RedfernAccessType[] accessList;
             Board board = _repository.Get<Board>(id);
-
+            BoardMember member = board.Members.Where(m => m.UserName == User.Identity.Name).SingleOrDefault();
+           
             if (board.Owner == User.Identity.Name)
                 accessList = AccessControlList.ForOwner;
-            else if (board.Members.Count(member => member.UserName == User.Identity.Name)>0)
+            else if (member != null)
                 accessList = AccessControlList.ForCollaborator;
             else
                 accessList = AccessControlList.ForViewer;
             
             var model = AutoMapper.Mapper.Map<Board, BoardViewModel>(board);
+            model.LastAccessedDate = member != null ? member.LastAccessedDate : null;
             model.AccessList = AutoMapper.Mapper.Map<RedfernAccessType[], string[]>(accessList);
+
+            // update the lastaccesseddate
+            _repository.ExecuteCommand(new UpdateBoardAccessedDateCommand { BoardId = board.BoardId, UserName = User.Identity.Name });
+
             return PartialView("_index", model);
         }
 	}

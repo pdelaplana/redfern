@@ -56,5 +56,10 @@ namespace Redfern.Core.Repository
             get { return _db.CardAttachments.Where(t => t.TenantId == _db.Context.TenantID).AsQueryable();  }
         }
 
+        public IQueryable<Notification> Notifications
+        {
+            get { return _db.Notifications.Where(t => t.TenantId == _db.Context.TenantID).AsQueryable(); }
+        }
+
     }
 }

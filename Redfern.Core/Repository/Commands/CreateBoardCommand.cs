@@ -34,6 +34,13 @@ namespace Redfern.Core.Repository.Commands
             archivedColumn = db.BoardColumns.Add(archivedColumn);
             db.SaveChanges();
 
+            // add owner as boardmember
+            BoardMember member = db.BoardMembers.Create();
+            member.BoardId = board.BoardId;
+            member.UserName = db.Context.ClientUserName;
+            member.Role = BoardMemberRole.Owner;
+            member = db.BoardMembers.Add(member);
+            db.SaveChanges();
             // create CardTypes
             db.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Amber", ColorCode = "amber" });
             db.CardTypes.Add(new CardType { BoardId = board.BoardId, Name = "Yellow", ColorCode = "yellow" });

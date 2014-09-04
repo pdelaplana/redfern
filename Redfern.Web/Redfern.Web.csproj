@@ -244,6 +244,7 @@
     <Compile Include="API\CardCommentController.cs" />
     <Compile Include="API\DTO\FileUploadDTO.cs" />
     <Compile Include="API\FileController.cs" />
+    <Compile Include="API\NotificationController.cs" />
     <Compile Include="API\ProfileController.cs" />
     <Compile Include="API\Providers\InMemoryMultipartFormDataStreamProvider.cs" />
     <Compile Include="API\TagController.cs" />
@@ -253,6 +254,7 @@
     <Compile Include="Application\Cache\TenantsCache.cs" />
     <Compile Include="Application\Cache\UserCache.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\ActivityMappingProfile.cs" />
+    <Compile Include="Application\Configuration\Automapper\Profiles\NotificationsMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\GeneralMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\CardMappingProfile.cs" />
     <Compile Include="Application\Configuration\Automapper\Profiles\UserProfileMappingProfile.cs" />
@@ -264,6 +266,7 @@
     <Compile Include="Application\Configuration\FilteredCamelCasePropertyNamesContractResolver.cs" />
     <Compile Include="Application\RedfernWebContext.cs" />
     <Compile Include="Application\SigninHelper.cs" />
+    <Compile Include="Application\UnityHubActivator.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MetroUICSSBundleConfig.cs" />
@@ -285,6 +288,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\BoardHub.cs" />
+    <Compile Include="Hubs\NotificationsHub.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityListViewModel.cs" />
     <Compile Include="Models\AppNavigationBarViewModel.cs" />
@@ -293,6 +297,7 @@
     <Compile Include="Models\CardAttachmentListViewModel.cs" />
     <Compile Include="Models\CardTaskViewModel.cs" />
     <Compile Include="Models\EmailModels.cs" />
+    <Compile Include="Models\NotificationItem.cs" />
     <Compile Include="Models\ProfileViewModel.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
@@ -383,6 +388,8 @@
     <Content Include="Scripts\dropzone\images\spritemap.png" />
     <Content Include="Scripts\hubs\boardhubclient.js" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\hubs\hubclientcontext.js" />
+    <Content Include="Scripts\hubs\notificationshubclient.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.11.1.js" />
@@ -429,6 +436,7 @@
     <Content Include="Scripts\repositories\cardattachmentrepository.js" />
     <Content Include="Scripts\repositories\cardtaskrepository.js" />
     <Content Include="Scripts\repositories\cardtyperepository.js" />
+    <Content Include="Scripts\repositories\notificationrepository.js" />
     <Content Include="Scripts\repositories\tagrepository.js" />
     <Content Include="Scripts\repositories\useravatarrepository.js" />
     <Content Include="Scripts\repositories\userrepository.js" />
@@ -437,8 +445,13 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\viewmodels\boardactivity.js" />
+    <Content Include="Scripts\viewmodels\boardmember.js" />
     <Content Include="Scripts\viewmodels\boardviewmodel.js" />
+    <Content Include="Scripts\viewmodels\card.js" />
+    <Content Include="Scripts\viewmodels\cardtype.js" />
     <Content Include="Scripts\viewmodels\cardtypeviewmodel.js" />
+    <Content Include="Scripts\viewmodels\column.js" />
     <Content Include="Scripts\views\board.js" />
     <Content Include="Scripts\views\boardcontext.js" />
     <Content Include="Scripts\views\boardsidebar.js" />
