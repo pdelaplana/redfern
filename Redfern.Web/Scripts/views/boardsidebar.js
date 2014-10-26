@@ -193,19 +193,7 @@
     // members
     self.newMember = {
         userName: ko.observable(),
-        lookupUser: function (request, response) {
-            $.ajax({
-                url: '/api/user/',
-                type: 'GET',
-                dataType: 'json',
-                data: { name: request.term },
-                success: function (data) {
-                    response($.map(data, function (name, val) {
-                        return { label: name, value: name, id: val }
-                    }))
-                }
-            })
-        },
+       
         add: function () {
             if (self.newMember.userName() != null && self.newMember.userName() != '') {
                 var repository = new BoardMemberRepository();

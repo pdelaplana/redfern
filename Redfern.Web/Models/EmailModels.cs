@@ -22,4 +22,14 @@ namespace Redfern.Web.Models
         public string Code { get; set; }
 
     }
+
+    public class NewUserRegistrationEmail : Email
+    {
+        public string To { get; set; }
+        public string NewUserName { get; set; }
+        public string NewUserFullName { get; set; }
+        public string NewUserEmailAddress { get; set; }
+
+
+    }
 }

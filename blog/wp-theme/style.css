@@ -1,0 +1,11 @@
+/*
+Theme Name: WP Metro Theme By KVcodes
+Theme URI: http://kvcodes.com/
+Author: Kv Varadha
+Author URI: http://kvcodes.com/
+Description: A Simple theme creation for  Wp With Metro UI. 
+Version: 1.0
+*/
+@import url('css/iconFont.min.css'); 
+@import url('css/metro-bootstrap.min.css'); 
+@import url('css/metro-bootstrap-responsive.min.css');

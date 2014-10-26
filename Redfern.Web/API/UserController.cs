@@ -16,6 +16,7 @@ using Redfern.Web.Models;
 
 namespace Redfern.Web.API
 {
+    [RoutePrefix("api/users")]
     [Authorize]
     public class UserController : ApiController
     {
@@ -34,6 +35,7 @@ namespace Redfern.Web.API
         }
 
         // GET api/user
+        [Route("")]
         public IDictionary<string,string> Get(string name)
         {
             if (String.IsNullOrEmpty(name))
@@ -42,24 +44,11 @@ namespace Redfern.Web.API
                 return UserManager.Users.Where(u => u.UserName.Contains(name) || u.FullName.Contains(name) || u.Email.Contains(name)).ToDictionary(key => key.UserName, value => value.FullName);
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // ADDTOROLE api/user/id
-        [AcceptVerbs("addtorole")]
+        
+        
+        // ADDTOROLE api/users/id/add/admin
+        [Route("{id}/add/{role}")]
+        [HttpPost]
         public void AddToRole(string id, string role)
         {
             if (UserManager.GetRoles(id).Count(r => r == role) == 0)
@@ -68,7 +57,8 @@ namespace Redfern.Web.API
 
 
         // REMOVEFROMROLE api/user/id?role=admin
-        [AcceptVerbs("removefromrole")]
+        [Route("{id}/remove/{role}")]
+        [HttpPost]
         public void RemoveFromRole(string id, string role)
         {            
             if (UserManager.GetRoles(id).Count(r=>r == role) > 0)
@@ -76,7 +66,8 @@ namespace Redfern.Web.API
         }
 
         // SENDPASSWORDRESET api/user/id?role=admin
-        [AcceptVerbs("sendpasswordreset")]
+        [Route("{id}/sendpasswordreset")]
+        [HttpPost]
         public void SendPasswordReset(string id)
         {
             var user =  UserManager.FindById(id);
@@ -99,35 +90,40 @@ namespace Redfern.Web.API
         }
 
         // ENABLE api/user/id
-        [AcceptVerbs("enable")]
+        [Route("{id}/enable")]
+        [HttpPost]
         public void Enable(string id)
         {
             var user = UserManager.Users.Where(u => u.Id == id).SingleOrDefault();
             user.IsEnabled = true;
+            UserManager.Update(user);
         }
 
 
         // DISABLE api/user/id
-        [AcceptVerbs("disable")]
+        [Route("{id}/disable")]
+        [HttpPost]
         public void Disable(string id)
         {
             var user = UserManager.Users.Where(u => u.Id == id).SingleOrDefault();
             user.IsEnabled = false;
+            UserManager.Update(user);
         }
 
 
         //UNLOCK api/user/id
-        [AcceptVerbs("unlock")]
+        [Route("{id}/unlock")]
+        [HttpPost]
         public void Unlock(string id)
         {
             var user = UserManager.Users.Where(u => u.Id == id).SingleOrDefault();
             user.LockoutEndDateUtc = null;
+            UserManager.Update(user);
         }
 
 
-
-      
         // DELETE api/user/id
+        [Route("{id}")]
         public void Delete(string id)
         {
             var user = UserManager.Users.Where(u => u.Id == id).SingleOrDefault();

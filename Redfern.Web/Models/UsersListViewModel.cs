@@ -14,6 +14,7 @@ namespace Redfern.Web.Models
         public string[] Roles { get; set; }
         public bool? IsLockedOut{ get; set; }
         public bool? IsEnabled { get; set; }
+        public bool? EmailConfirmed { get; set; }
         public DateTime? SignupDate { get; set; }
         public DateTime? LastSigninDate { get; set; }
         public int NumberOfBoardsOwned { get; set; }

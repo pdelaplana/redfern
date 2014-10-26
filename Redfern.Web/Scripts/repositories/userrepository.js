@@ -6,44 +6,46 @@
     self.fullName = ko.observable();
     self.email = ko.observable();
 
-    function sendCommand(type, extraParams){
-        return $.ajax({
-            url: '/api/user/' + self.id() + (extraParams != null) ? '?'+extraParams : '',
-            type: type
-        });
-    }
-
     self.addToRole = function (role) {
         return $.ajax({
-            url: '/api/user/' + self.id() +'?role='+role,
-            type: 'addtorole'
+            url: '/api/users/' + self.id() + '/add/' + role,
+            type: 'post'
         });
     }
 
     self.removeFromRole = function (role) {
         return $.ajax({
-            url: '/api/user/' + self.id() + '?role=' + role,
-            type: 'removefromrole'
+            url: '/api/users/' + self.id() + '/remove/' + role,
+            type: 'post'
         });
     }
     
     self.sendPasswordReset = function () {
         return $.ajax({
-            url: '/api/user/' + self.id(),
-            type: 'sendpasswordreset'
+            url: '/api/users/' + self.id() + '/sendpasswordreset',
+            type: 'post'
         })
     }
 
     self.unlock = function () {
-        return sendCommand('unlock')
+        return $.ajax({
+            url: '/api/users/' + self.id() + '/unlock',
+            type: 'post'
+        })
     }
 
     self.disable = function () {
-      return sendCommand('disable')
+        return $.ajax({
+            url: '/api/users/' + self.id() + '/disable',
+            type: 'post'
+        })
     }
 
     self.enable = function () {
-        return sendCommand('enable')
+        return $.ajax({
+            url: '/api/users/' + self.id() + '/enable',
+            type: 'post'
+        })
     }
 
     

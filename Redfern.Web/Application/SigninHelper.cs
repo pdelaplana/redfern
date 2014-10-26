@@ -12,7 +12,7 @@ using Redfern.Security;
 
 namespace Redfern.Web.Application
 {
-    public enum SignInStatus
+    public enum RSignInStatus
     {
         Success,
         LockedOut,
@@ -77,49 +77,49 @@ namespace Redfern.Web.Application
             return await GetVerifiedUserIdAsync() != null;
         }
 
-        public async Task<SignInStatus> TwoFactorSignIn(string provider, string code, bool isPersistent, bool rememberBrowser)
+        public async Task<RSignInStatus> TwoFactorSignIn(string provider, string code, bool isPersistent, bool rememberBrowser)
         {
             var userId = await GetVerifiedUserIdAsync();
             if (userId == null)
             {
-                return SignInStatus.Failure;
+                return RSignInStatus.Failure;
             }
             var user = await UserManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return SignInStatus.Failure;
+                return RSignInStatus.Failure;
             }
             if (await UserManager.IsLockedOutAsync(user.Id))
             {
-                return SignInStatus.LockedOut;
+                return RSignInStatus.LockedOut;
             }
             if (await UserManager.VerifyTwoFactorTokenAsync(user.Id, provider, code))
             {
                 // When token is verified correctly, clear the access failed count used for lockout
                 await UserManager.ResetAccessFailedCountAsync(user.Id);
                 await SignInAsync(user, isPersistent, rememberBrowser);
-                return SignInStatus.Success;
+                return RSignInStatus.Success;
             }
             // If the token is incorrect, record the failure which also may cause the user to be locked out
             await UserManager.AccessFailedAsync(user.Id);
-            return SignInStatus.Failure;
+            return RSignInStatus.Failure;
         }
 
-        public async Task<SignInStatus> ExternalSignIn(ExternalLoginInfo loginInfo, bool isPersistent)
+        public async Task<RSignInStatus> ExternalSignIn(ExternalLoginInfo loginInfo, bool isPersistent)
         {
             var user = await UserManager.FindAsync(loginInfo.Login);
             if (user == null)
             {
-                return SignInStatus.Failure;
+                return RSignInStatus.Failure;
             }
             if (await UserManager.IsLockedOutAsync(user.Id))
             {
-                return SignInStatus.LockedOut;
+                return RSignInStatus.LockedOut;
             }
             return await SignInOrTwoFactor(user, isPersistent);
         }
 
-        private async Task<SignInStatus> SignInOrTwoFactor(RedfernUser user, bool isPersistent)
+        private async Task<RSignInStatus> SignInOrTwoFactor(RedfernUser user, bool isPersistent)
         {
             if (await UserManager.GetTwoFactorEnabledAsync(user.Id) &&
                 !await AuthenticationManager.TwoFactorBrowserRememberedAsync(user.Id))
@@ -127,23 +127,23 @@ namespace Redfern.Web.Application
                 var identity = new ClaimsIdentity(DefaultAuthenticationTypes.TwoFactorCookie);
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
                 AuthenticationManager.SignIn(identity);
-                return SignInStatus.RequiresTwoFactorAuthentication;
+                return RSignInStatus.RequiresTwoFactorAuthentication;
             }
             await SignInAsync(user, isPersistent, false);
-            return SignInStatus.Success;
+            return RSignInStatus.Success;
 
         }
 
-        public async Task<SignInStatus> PasswordSignIn(string userName, string password, bool isPersistent, bool shouldLockout)
+        public async Task<RSignInStatus> PasswordSignIn(string userName, string password, bool isPersistent, bool shouldLockout)
         {
             var user = await UserManager.FindByNameAsync(userName);
             if (user == null)
             {
-                return SignInStatus.NotFound;
+                return RSignInStatus.NotFound;
             }
             if (await UserManager.IsLockedOutAsync(user.Id))
             {
-                return SignInStatus.LockedOut;
+                return RSignInStatus.LockedOut;
             }
             if (await UserManager.CheckPasswordAsync(user, password))
             {
@@ -155,10 +155,10 @@ namespace Redfern.Web.Application
                 await UserManager.AccessFailedAsync(user.Id);
                 if (await UserManager.IsLockedOutAsync(user.Id))
                 {
-                    return SignInStatus.LockedOut;
+                    return RSignInStatus.LockedOut;
                 }
             }
-            return SignInStatus.Failure;
+            return RSignInStatus.Failure;
         }
     }
 }

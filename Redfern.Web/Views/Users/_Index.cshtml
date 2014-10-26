@@ -1,15 +1,16 @@
 ﻿@model Redfern.Web.Models.UsersListViewModel
 
 <div class="page-region">
-    <div class="page-region-content grid">
+    <div class="page-region-content grid fluid">
         <div class="row">
-            <div class="offset1 span11" >
+            <div class=" span9" >
                 <h2>Users</h2>
                 <table id="UsersList" class="table" >
                     <thead>
                         <tr>
                             <th>Full Name</th>
                             <th>Enabled</th>
+                            <th>Email Confirmed</th>
                             <th>Locked out</th>
                             <th>Member since</th>
                             <th>Last signin date</th>
@@ -25,6 +26,9 @@
                             </td>
                             <td style="text-align:center">
                                 <i data-bind="css:{ 'icon-checkbox': isEnabled, 'icon-checkbox-unchecked': !isEnabled() }"></i>
+                            </td>
+                            <td style="text-align:center">
+                                <i data-bind="css:{ 'icon-checkbox': emailConfirmed, 'icon-checkbox-unchecked': !emailConfirmed() }"></i>
                             </td>
                             <td style="text-align:center">
                                 <i data-bind="css:{ 'icon-checkbox': isLockedOut, 'icon-checkbox-unchecked': !isLockedOut() }"></i> 
@@ -67,5 +71,5 @@
 </div>
 
 <script type="text/javascript">
-    var model = @Html.Raw(JsonConvert.SerializeObject(Model));
+    var model = @Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings() { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
 </script>

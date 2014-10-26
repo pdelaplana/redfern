@@ -51,8 +51,8 @@
         ui.appNavigationBar.selectedMenu(model.name);
         ui.addPart('boardUI', boardUI).bindTo('#Board');
         ui.addPart('sidebar', boardUI.sidebar).bindTo('#SidebarCharms')
-        ui.addPart('oversight', boardUI).bindTo('#Oversight');
-        ui.addPart('expandedColumn', boardUI).bindTo('#ExpandedColumn');
+        //ui.addPart('oversight', boardUI).bindTo('#Oversight');
+        //ui.addPart('expandedColumn', boardUI).bindTo('#ExpandedColumn');
         
         $('.board-column-content').append('<div class="pinned" style="float:left;display:block; min-height:10px;height:10px;"/>');
 

@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
+using Redfern.Web.Application;
 
 namespace Redfern.Web
 {
@@ -27,6 +28,7 @@ namespace Redfern.Web
         {
             app.CreatePerOwinContext(Redfern.Security.RedfernSecurityContext.Create);
             app.CreatePerOwinContext<Redfern.Security.RedfernUserManager>(Redfern.Security.RedfernUserManager.Create);
+            app.CreatePerOwinContext<Redfern.Web.Application.RedfernSignInManager>(Redfern.Web.Application.RedfernSignInManager.Create);
             app.CreatePerOwinContext<Redfern.Security.RedfernRoleManager>(Redfern.Security.RedfernRoleManager.Create);
 
 

@@ -9,16 +9,17 @@
     function UserListItem(data) {
         var self = this;
         // observables
-        self.id = ko.observable(data.Id);
-        self.userName = ko.observable(data.UserName);
-        self.fullName = ko.observable(data.FullName);
-        self.email = ko.observable(data.Email);
-        self.roles = ko.observableArray(data.Roles);
-        self.isEnabled = ko.observable(data.IsEnabled);
-        self.isLockedOut = ko.observable(data.IsLockedOut);
-        self.signupDate = ko.observable(data.SignupDate);
-        self.numberOfBoardsOwned = ko.observable(data.NumberOfBoardsOwned)
-        self.lastSigninDate = ko.observable(data.LastSigninDate);
+        self.id = ko.observable(data.id);
+        self.userName = ko.observable(data.userName);
+        self.fullName = ko.observable(data.fullName);
+        self.email = ko.observable(data.email);
+        self.emailConfirmed = ko.observable(data.emailConfirmed);
+        self.roles = ko.observableArray(data.roles);
+        self.isEnabled = ko.observable(data.isEnabled);
+        self.isLockedOut = ko.observable(data.isLockedOut);
+        self.signupDate = ko.observable(data.signupDate);
+        self.numberOfBoardsOwned = ko.observable(data.numberOfBoardsOwned)
+        self.lastSigninDate = ko.observable(data.lastSigninDate);
 
         // computed
         self.signupDateInLocalTimeZone = ko.computed(function () {
@@ -53,7 +54,8 @@
             return ko.utils.arrayFirst(self.roles(), function (currentRole) {
                 return currentRole == role;
             }) != null;
-        } 
+        }
+
     }
 
     var self = this;
@@ -76,7 +78,6 @@
             self.addToRole(user, role);
     }
     self.addToRole = function (user, role) {
-        var user = user;
         var repository = new UserRepository();
         repository.id(user.id());
         repository.addToRole(role).done(function () {
@@ -84,7 +85,6 @@
         });
     }
     self.removeFromRole = function (user, role) {
-        var user = user;
         var repository = new UserRepository();
         repository.id(user.id());
         repository.removeFromRole(role).done(function () {
@@ -99,9 +99,11 @@
         });
     }
     self.unlockUser = function (user) {
-        var repository = new UserRepository();
+        var user = user,
+            repository = new UserRepository();
         repository.id(user.id());
         repository.unlock().done(function () {
+            user.isLockedOut(false);
             $.Notify.show('The user has been unlocked.');
         });
     }
@@ -109,6 +111,7 @@
         var repository = new UserRepository();
         repository.id(user.id());
         repository.enable().done(function () {
+            user.isEnabled(true);
             $.Notify.show('The user has been enabled.');
         });
     }
@@ -116,6 +119,7 @@
         var repository = new UserRepository();
         repository.id(user.id());
         repository.disable().done(function () {
+            user.isEnabled(false);
             $.Notify.show('The user has been disabled.');
         });
     }
@@ -130,7 +134,7 @@
         ui.setWindowTitle('Users');
 
         self.users.removeAll();
-        $.each(model.Users, function (index, value) {
+        $.each(model.users, function (index, value) {
             self.users.push(new UserListItem(value));
         })
 

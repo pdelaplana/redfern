@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Newtonsoft.Json.Serialization;
+using Redfern.Web.Application;
 
 namespace Redfern.Web
 {
@@ -12,7 +13,8 @@ namespace Redfern.Web
         {
             // Web API configuration and services
             var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
-            json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            //json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            json.SerializerSettings.ContractResolver = new CamelCaseExceptDictionaryKeysResolver();
 
             // Web API routes
             config.MapHttpAttributeRoutes();

@@ -6,7 +6,7 @@ Hi @Model.UserFullName,
 
 Please confirm the email address used with your Redfern account by clicking on the link below:
 
-@Html.Raw(Model.ConfirmEmailLink)
+<a href="@Html.Raw(Model.ConfirmEmailLink)">@Html.Raw(Model.ConfirmEmailLink)</a>
 
 It is important that we know the correct email address to use when sending password resets. 
 

@@ -21,6 +21,9 @@ namespace Redfern.Web.Controllers
     public class AccountController : Controller
     {
         private RedfernWebContext _context;
+        private RedfernUserManager _userManager;
+        private RedfernSignInManager _signInManager;
+
         private SigninHelper _signinHelper;
 
         private SigninHelper SigninHelper
@@ -35,13 +38,25 @@ namespace Redfern.Web.Controllers
             }
         }
 
-        private RedfernUserManager UserManager 
+        public RedfernUserManager UserManager 
         {
             get
             {
-                return HttpContext.GetOwinContext().GetUserManager<RedfernUserManager>();
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<RedfernUserManager>();
             }
+            private set { _userManager = value; }
+
         }
+
+        public RedfernSignInManager SignInManager
+        {
+            get
+            {
+                return _signInManager ?? HttpContext.GetOwinContext().Get<RedfernSignInManager>();
+            }
+            private set { _signInManager = value; }
+        }
+
 
         public AccountController(RedfernWebContext context)
         {
@@ -71,37 +86,36 @@ namespace Redfern.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Signin(LoginViewModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var result = await SigninHelper.PasswordSignIn(model.UserName, model.Password, model.RememberMe, true);
-                switch (result)
-                {
-                    case SignInStatus.Success:
-                        var user = await UserManager.FindByNameAsync(model.UserName);
-                        user.LastSignInDate = DateTime.UtcNow;
-                        UserManager.Update(user);
-                        return RedirectToLocal(returnUrl);
-                    case SignInStatus.NotFound:
-                        ModelState.AddModelError("", "Invalid user name or password");
-                        break;
-                    case SignInStatus.LockedOut:
-                        ModelState.AddModelError("", "This account has been locked out.");
-                        break;
-                    case SignInStatus.RequiresTwoFactorAuthentication:
-                        ModelState.AddModelError("", "This account requires two-factor authentication.");
-                        break;
-                        //return RedirectToAction("SendCode", new { ReturnUrl = returnUrl });
-                    case SignInStatus.Failure:
-                    default:
-                        ModelState.AddModelError("", "Invalid login attempt.");
-                        return View(model);
-                }
-               
-                
+                return View(model);
+            }
+            var user = await UserManager.FindByNameAsync(model.UserName);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
             }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            // To enable password failures to trigger account lockout, change to shouldLockout: true
+            var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                     user.LastSignInDate = DateTime.UtcNow;
+                     UserManager.Update(user);
+                    return RedirectToLocal(returnUrl);
+                case SignInStatus.LockedOut:
+                    return View("Lockout");
+                case SignInStatus.RequiresVerification:
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return View(model);
+            }
+
+           
         }
 
         //
@@ -119,15 +133,20 @@ namespace Redfern.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            ViewBag.UserEmail = "Test@hotmail.com";
+            return View("RegisterSuccess");
+
             if (ModelState.IsValid)
             {
                 var user = new RedfernUser() 
                 { 
-                    UserName = model.UserName, 
+                    UserName = model.UserName.ToLower(), 
                     FullName = model.FullName, 
                     Email = model.Email,
                     TenantId = _context.TenantID,
-                    SignupDate = DateTime.UtcNow
+                    SignupDate = DateTime.UtcNow,
+                    IsEnabled = true,
+                    EmailConfirmed = false
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -142,8 +161,19 @@ namespace Redfern.Web.Controllers
                     email.Code = code;
                     await email.SendAsync();
 
-                    await SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("index", "app");
+
+                    // send an email to the admin account that a new user has registered
+                    if (!String.IsNullOrEmpty(AppSettings.AdminEmail))
+                    {
+                        NewUserRegistrationEmail registrationEmail = new NewUserRegistrationEmail();
+                        registrationEmail.To = AppSettings.AdminEmail;
+                        registrationEmail.NewUserName = user.UserName;
+                        registrationEmail.NewUserFullName = user.FullName;
+                        registrationEmail.NewUserEmailAddress = user.Email;
+                        await registrationEmail.SendAsync();
+                    }
+                    ViewBag.UserEmail = user.Email;
+                    return View("RegisterSuccess");
                 }
                 else
                 {

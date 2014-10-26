@@ -456,7 +456,7 @@ ko.bindingHandlers.userLookup = {
         $(element).autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/api/user/',
+                    url: '/api/users/',
                     type: 'GET',
                     dataType: 'json',
                     data: { name: request.term },
