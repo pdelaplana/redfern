@@ -1,7 +1,28 @@
-﻿app.views.add('board', function () {
-    var self = this;
+﻿$.boardcontext = {
+    current: null,
+    utils: {
+        changeCardLabels: function (cardTypeId, label) {
+            // update all cards where name of cardtype may have changed
+            ko.utils.arrayForEach($.boardcontext.current.columns(), function (column) {
+                ko.utils.arrayForEach(column.cards(), function (card) {
+                    if (card.cardTypeId() == cardTypeId)
+                        card.cardLabel(label);
+                })
+            })
+        },
+        saveLastActivityId: function (activityId) {
+            $.cookie($.boardcontext.current.boardId() + ';LastActivityId', activityId, { expires: 10 });
+        },
+        getLastActivityId: function () {
+            return $.cookie($.boardcontext.current.boardId() + ';LastActivityId');
+        }
+    }
+}
 
-    var cardId;
+
+app.views.add('board', function () {
+    var self = this,
+        cardId = null;
 
     // register routes
     app.router.registerRoute('#/board/:id/card/:cardid', function (context) {
@@ -38,13 +59,7 @@
     var initialize = function () {
 
         $.hubclientcontext.boardHub.unsubscribe();
-        /*
-        if ($.boardcontext.current != null) {
-            $.boardcontext.current.stop() = null;
-            $.boardcontext.current.hub = null;
-            $.boardcontext.current = null;
-        }
-        */
+        
         var boardUI = new BoardViewModel(model);
         var ui = app.ui.extend();
         ui.setWindowTitle(model.name);
@@ -62,10 +77,12 @@
         // subscribe to changes to the board
         $.hubclientcontext.boardHub.subscribe(model.boardId);
 
+        // check if a card needs to be opened
         if (cardId != null) {
             $.boardcontext.current.openCardById(cardId);
             cardId = null;
         }
+
 
         ko.bindingHandlers.sortable.isEnabled = $.boardcontext.current.hasAccess('RearrangeCards');
     

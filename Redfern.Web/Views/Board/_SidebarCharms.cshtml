@@ -13,6 +13,11 @@
             <i class="icon-fire"></i> <small data-bind="text:$.boardcontext.current.newActivitiesCounter"></small>
         </span>
         <!--/ko -->
+        <!-- ko ifnot: filters.noSelection()  -->
+        <span class="block push-down-20 text-center">
+            <i class="icon-filter"></i> 
+        </span>
+        <!-- /ko -->
     </a>
     <nav id="Sidebar" class="sidebar" data-bind="visible: activeOption() == 'main'">
         <ul>
@@ -139,14 +144,14 @@
         </ul>
     </nav>
 
-    <nav id="Sidebar_Filter" class="sidebar" data-bind="visible: activeOption() == 'filter'">
+    <nav id="Sidebar_filter" class="sidebar" data-bind="visible: activeOption() == 'filter'">
         <ul>
             <li class="title">
                 <i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Filter
                 <button class="bg-red fg-white place-right" data-bind="click: filters.removeFilter">Clear All</button>
             </li>
             <li>
-                <div class="padding20">
+                <div class="padding20" style="overflow-y:auto;overflow-x:hidden">
                     <div class="input-control text">
                         <input type="text" placeholder="Filter by title..." data-bind="value: filters.title">
                         <button class="btn-search"></button>
@@ -155,7 +160,7 @@
                     <span class="fg-grayLight ">Filter by entering one or more tags</span>
                     <ul id="tags-container-filter"></ul>
 
-                    <span class="fg-grayLight ">Show cards with the following color</span>
+                    <span class="fg-grayLight ">Show cards with the following colors</span>
                     <div class="inline-block" style="width:100%;margin-top:5px">
                         <!-- ko foreach: cardTypes -->
                         <div class="tile quarter" style="line-height:2!important" data-bind="setTileColor: color, attr: { 'title': name }, click: $parent.filters.addColorToFilter, css: { selected: $parent.filters.isColorSelected(color()) }">
@@ -163,14 +168,25 @@
                         <!-- /ko -->
                     </div>
 
-                    <span class="fg-grayLight ">Show card assigned to</span>
+                    <span class="fg-grayLight ">Show card assigned to collaborators</span>
                     <div class="inline-block" style="width:100%;margin-top:5px">
                         <!-- ko foreach: members -->
-                        <div class="tile half" style="line-height:2!important" data-bind="css: { selected: selected }, click: function(){ $parent.filters.addAssigneeToFilter(userName()) } , css: { selected:  $parent.filters.isAssigneeSelected(userName())}">
+                        <div class="tile half" style="line-height:2!important" data-bind="click: function(){ $parent.filters.addAssigneeToFilter(userName()) } , css: { selected:  $parent.filters.isAssigneeSelected(userName())}">
                             <img class="icon " src='/api/avatar/patrick' data-bind="attr: { src: '/api/avatar/'+userName(), title: fullName() }" />
                         </div>
                         <!-- /ko -->
                     </div>
+
+                    <span class="fg-grayLight ">Show cards due: </span>
+                    <div class="inline-block" style="width:100%;margin-top:5px">
+                        <a href="" data-bind="click: function(){ filters.setPeriodDue('today') }, css: { 'bg-darker' : filters.isPeriodDueSelected('today') }">Today</a>
+                        <a href="" data-bind="click: function(){ filters.setPeriodDue('tomorrow') }, css: { 'bg-darker' : filters.isPeriodDueSelected('tomorrow') }">Tomorrow</a>
+                        <a href="" data-bind="click: function(){ filters.setPeriodDue('nextweek') }, css: { 'bg-darker' : filters.isPeriodDueSelected('nextweek') }">Next Week</a>
+                        <a href="" data-bind="click: function(){ filters.setPeriodDue('thisweek') }, css: { 'bg-darker' : filters.isPeriodDueSelected('thisweek') }">This Week</a>
+                        <a href="" data-bind="click: function(){ filters.setPeriodDue('thismonth') }, css: { 'bg-darker' : filters.isPeriodDueSelected('thismonth') }">This Month</a>
+                        <a href="" data-bind="click: function(){ filters.setPeriodDue('pastdue') }, css: { 'bg-darker' : filters.isPeriodDueSelected('pastdue') }">In the Past</a>
+                    </div>
+
 
                 </div>
             </li>

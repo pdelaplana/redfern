@@ -93,9 +93,11 @@
         tags: ko.observableArray(),
         cardTypes: ko.observableArray(),
         assignees: ko.observableArray(),
+        periodDue: ko.observable(),
         noSelection: function(){
             return (self.filters.tags().length == 0) &&
                     ((self.filters.title() == null) || (self.filters.title().length == 0)) &&
+                    ((self.filters.periodDue() == null) || (self.filters.periodDue().length == 0)) &&
                     (self.filters.cardTypes().length == 0) &&
                     (self.filters.assignees().length == 0);
         },
@@ -108,6 +110,15 @@
             return (ko.utils.arrayFirst(self.filters.assignees(), function (assignee) {
                 return assignee == userName;
             }) != null);
+        },
+        isPeriodDueSelected: function (periodDue) {
+            return periodDue == self.filters.periodDue();
+        },
+        setPeriodDue: function(periodDue){
+            if (self.filters.periodDue() == periodDue)
+                self.filters.periodDue('')
+            else
+                self.filters.periodDue(periodDue)
         },
         addColorToFilter: function (cardType) {
             if (self.filters.isColorSelected(cardType.color()))
@@ -137,6 +148,28 @@
                         if (self.filters.title() != null && self.filters.title().length > 0) {
                             if (card.title().toLowerCase().indexOf(self.filters.title()) !== -1)
                                 card.show(true);
+                        }
+                        if (self.filters.periodDue() != null) {
+                            var diffDays = moment(card.dueDate()).diff(moment(), 'days');
+                            switch (self.filters.periodDue())
+                            {
+                                case 'today':
+                                    if (diffDays == 0) card.show(true);
+                                    break;
+                                case 'tomorrow':
+                                    if (diffDays == 1) card.show(true)
+                                    break;
+                                case 'thisweek':
+                                    if ((diffDays < 8) && (diffDays > 0)) card.show(true)
+                                    break;
+                                case 'nextweek':
+                                    if (diffDays > 7 && diffDays < 15) card.show(true)
+                                    break;
+                                case 'pastdue':
+                                    if (diffDays < 0) card.show(true)
+                                    break;
+                            }
+                            
                         }
                         if (self.filters.tags().length > 0) {
                             ko.utils.arrayForEach(self.filters.tags(), function (tag) {
@@ -169,11 +202,16 @@
             self.filters.cardTypes.removeAll();
             self.filters.assignees.removeAll();
             self.filters.title(null);
+            self.filters.periodDue(null);
             $('#tags-container-filter').tagit('reset');
         }
     }
 
     self.filters.title.subscribe(function (newValue) {
+        self.filters.applyFilter();
+    })
+
+    self.filters.periodDue.subscribe(function (newValue) {
         self.filters.applyFilter();
     })
 
@@ -293,6 +331,7 @@
         // resize the height columns div when window resizes 
         $('#Sidebar_columns').find('ul li:nth-child(2) > div').height($(this).outerHeight() - 180);
         $('#Sidebar_activities').find('ul li:nth-child(2) > div').height($(this).outerHeight() - 180);
+        $('#Sidebar_filter').find('ul li:nth-child(2) > div').height($(this).outerHeight() - 180);
     });
 
     // trigger the resize

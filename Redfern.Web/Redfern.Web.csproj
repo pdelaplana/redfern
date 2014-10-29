@@ -513,7 +513,6 @@
     <Content Include="Scripts\views\board.js" />
     <Content Include="Scripts\views\boardcontext.js" />
     <Content Include="Scripts\views\boardsidebar.js" />
-    <Content Include="Scripts\views\boardui.js" />
     <Content Include="Scripts\jquery.flip.js" />
     <Content Include="Scripts\jquery.flip.min.js" />
     <Content Include="Scripts\jquery.flippy.js" />

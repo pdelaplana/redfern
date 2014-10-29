@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.SignalR;
@@ -19,6 +20,7 @@ namespace Redfern.Web.Hubs
         public NotificationsHub(IRedfernRepository repository)
         {
             _repository = repository;
+
         }
 
         public NotificationsHub() { }
@@ -38,7 +40,7 @@ namespace Redfern.Web.Hubs
             Groups.Remove(Context.ConnectionId, userName);
         }
 
-        public void notifyNewAssignment(int cardId, string sender, string recipient)
+        public void NotifyNewAssignment(int cardId, string sender, string recipient)
         {
             var repository = DependencyResolver.Current.GetService<IRedfernRepository>();
             Card card = repository.Cards.Where(c => c.CardId  == cardId).SingleOrDefault();
@@ -77,6 +79,8 @@ namespace Redfern.Web.Hubs
             }
             
         }
+
+        
 
     }
 }
