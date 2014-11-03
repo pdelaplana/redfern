@@ -19,6 +19,7 @@ namespace Redfern.Core.Repository.Commands
         public NotificationType NotificationType { get; set; }
         public string ObjectType { get; set; }
         public string ObjectId { get; set; }
+        public string ObjectDescription { get; set; }
 
         public CommandResult<Notification> Execute(RedfernDb db)
         {
@@ -30,6 +31,7 @@ namespace Redfern.Core.Repository.Commands
             notification.NotificationType = this.NotificationType;
             notification.ObjectType = this.ObjectType;
             notification.ObjectId = this.ObjectId;
+            notification.ObjectDescription = this.ObjectDescription;
             notification = db.Notifications.Add(notification);
             db.SaveChanges();
 

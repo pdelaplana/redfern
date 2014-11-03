@@ -87,7 +87,7 @@
                 </div>
                 <span class="subheader-secondary">Tags</span>
                 <div class="padding5">
-                    <ul data-bind="tagit: tags, tagitOptions: { enabled: hasAccess('AddTag'), initialTags: tags(), addTag: tags.add, removeTag: tags.delete  }"></ul>
+                    <ul data-bind="tagit: tags, tagitOptions: { enabled: hasAccess('AddTag'), sourceUrl: '/api/tag?boardid='+$.boardcontext.current.boardId(), initialTags: tags(), addTag: tags.add, removeTag: tags.delete  }"></ul>
                 </div>
                 
                 

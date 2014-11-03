@@ -125,7 +125,8 @@ input[type=text]:disabled{
 /**************************************** 
  *    Board Activity Stream styles
  ****************************************/
-#activities_wrapper .listview .list .list-content .data {
+#activities_wrapper .listview .list .list-content .data,
+#notifications_wrapper .listview .list .list-content .data {
     font-size:smaller;
     min-width:0;
     line-height:initial;

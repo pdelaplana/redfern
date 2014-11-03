@@ -51,10 +51,11 @@ namespace Redfern.Web.Hubs
                 Message = "assigned you a card",
                 NotificationType = NotificationType.AssignCard,
                 ObjectType = "card",
-                ObjectId = String.Format("BoardId={0};CardId={1}", card.BoardId.ToString(), card.CardId.ToString())
+                ObjectId = String.Format("BoardId={0};CardId={1}", card.BoardId.ToString(), card.CardId.ToString()),
+                ObjectDescription = card.Title
             };
             var result = repository.ExecuteCommand(command);
-            Clients.Group(recipient).notify(AutoMapper.Mapper.Map<Notification, NotificationItem>(result.Data));
+            Clients.Group(recipient).notify(AutoMapper.Mapper.Map<Notification, NotificationViewModel>(result.Data));
         }
 
         public void NotifyNewCommentPosted(int cardId, string sender)
@@ -72,10 +73,11 @@ namespace Redfern.Web.Hubs
                     Message = "posted comment to your card.",
                     NotificationType = NotificationType.NewCommentPosted,
                     ObjectType = "card",
-                    ObjectId = String.Format("BoardId={0};CardId={1}", card.BoardId.ToString(), card.CardId.ToString())
+                    ObjectId = String.Format("BoardId={0};CardId={1}", card.BoardId.ToString(), card.CardId.ToString()),
+                    ObjectDescription = card.Title
                 };
                 var result = repository.ExecuteCommand(command);
-                Clients.Group(card.AssignedToUser).notify(AutoMapper.Mapper.Map<Notification, NotificationItem>(result.Data));
+                Clients.Group(card.AssignedToUser).notify(AutoMapper.Mapper.Map<Notification, NotificationViewModel>(result.Data));
             }
             
         }

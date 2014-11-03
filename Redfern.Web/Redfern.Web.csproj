@@ -305,7 +305,7 @@
     <Compile Include="Models\CardAttachmentListViewModel.cs" />
     <Compile Include="Models\CardTaskViewModel.cs" />
     <Compile Include="Models\EmailModels.cs" />
-    <Compile Include="Models\NotificationItem.cs" />
+    <Compile Include="Models\NotificationViewModel.cs" />
     <Compile Include="Models\ProfileViewModel.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
@@ -650,6 +650,7 @@
     <Content Include="Scripts\views\users.js" />
     <Content Include="Scripts\views\profile.js" />
     <Content Include="Scripts\widgets\appnavigationbar.js" />
+    <Content Include="Scripts\widgets\boardfilters.js" />
     <Content Include="Scripts\widgets\errordialog.js" />
     <Content Include="Scripts\widgets\cardpropertiesdialog.js" />
     <Content Include="Scripts\widgets\createboarddialog.js" />

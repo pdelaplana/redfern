@@ -117,6 +117,7 @@ function MarkdownEditor(observable, viewModel) {
             disableTabHandling: true,
             disableAutoIndent: true,
             resizebar: false,
+            NewWindowForExternalLinks: true,
             cmd_img: function (ctx) {
                 //alert('to be implemented');
             },
@@ -575,15 +576,18 @@ ko.bindingHandlers.tagit = {
             observable = valueAccessor();
 
         var options = $.extend({
-            initialTags: null,
+            initialTags: [],
             triggerKeys: ['enter', 'tab'],
             enabled: true,
+            minLength: 0,
+            allowNewTags: true,
             tagSource: function (request, response) {
                 $.ajax({
-                    url: '/api/tag/',
+                    //url: '/api/tag/',
+                    url:bindings.tagitOptions.sourceUrl,
                     type: 'GET',
                     dataType: 'json',
-                    data: { name: request.term, boardId: bindingContext.$data.boardId() },
+                    data: { name: request.term },
                     success: function (data) {
                         response($.map(data, function (name, val) {
                             return { label: name, value: name, id: val }
@@ -612,7 +616,8 @@ ko.bindingHandlers.tagit = {
     },
     update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var data = ko.utils.unwrapObservable(valueAccessor());
-        $(element).tagit('reset');
+        //$(element).tagit('reset');
+        $(element).tagit('fill', data);
     }
 }
 
@@ -675,6 +680,9 @@ ko.bindingHandlers.wikiEditor = {
             observable = valueAccessor(),
             markdown = new MarkdownDeep.Markdown(),
             contentContainer = $('<div/>').addClass('markdown-content');
+
+        // set markdown options
+        markdown.NewWindowForExternalLinks = true;
 
         var edit = function (event) {
             contentContainer.fadeOut(function () {

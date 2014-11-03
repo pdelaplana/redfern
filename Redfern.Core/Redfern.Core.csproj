@@ -143,6 +143,10 @@
     <Compile Include="Migrations\201408301320032_AddNotification.Designer.cs">
       <DependentUpon>201408301320032_AddNotification.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201411012133185_AddObjectDescrptionToNotifications.cs" />
+    <Compile Include="Migrations\201411012133185_AddObjectDescrptionToNotifications.Designer.cs">
+      <DependentUpon>201411012133185_AddObjectDescrptionToNotifications.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\CardAttachment.cs" />
     <Compile Include="Models\CardType.cs" />
     <Compile Include="Models\Configuration\CardTagConfiguration.cs" />
@@ -286,6 +290,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201408301320032_AddNotification.resx">
       <DependentUpon>201408301320032_AddNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411012133185_AddObjectDescrptionToNotifications.resx">
+      <DependentUpon>201411012133185_AddObjectDescrptionToNotifications.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

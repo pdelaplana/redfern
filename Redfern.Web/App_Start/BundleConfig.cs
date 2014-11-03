@@ -145,6 +145,7 @@ namespace Redfern.Web
                         "~/scripts/widgets/createboarddialog.js",
                         "~/scripts/widgets/cardpropertiesdialog.js",
                         "~/scripts/widgets/errordialog.js",
+                        "~/scripts/widgets/boardfilters.js",
                         "~/scripts/widgets/createboardtile.js",
                         "~/scripts/viewmodels/boardactivity.js",
                         "~/scripts/viewmodels/card.js",

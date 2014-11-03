@@ -17,7 +17,7 @@ namespace Redfern.Web.Application.Configuration.Automapper.Profiles
         protected override void Configure()
         {
             
-            Mapper.CreateMap<Notification, NotificationItem>()
+            Mapper.CreateMap<Notification, NotificationViewModel>()
                 .ForMember(dest => dest.RecipientUserFullName, opts => opts.ResolveUsing<CacheUserFullNameResolver>().FromMember(src => src.RecipientUser))
                 .ForMember(dest => dest.SenderUserFullName, opts => opts.ResolveUsing<CacheUserFullNameResolver>().FromMember(src => src.SenderUser));
 

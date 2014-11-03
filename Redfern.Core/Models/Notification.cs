@@ -41,5 +41,10 @@ namespace Redfern.Core.Models
 
         [MaxLength(30)]
         public string ObjectId { get; set; }
+        
+        [MaxLength(100)]
+        public string ObjectDescription { get; set; }
+
+
     }
 }

@@ -50,18 +50,33 @@ function Notification(data) {
     self.sender = ko.observable(data.senderUser);
     self.senderFullName = ko.observable(data.senderUserFullName);
     self.notificationType = ko.observable(data.notificationType);
+    self.objectType = ko.observable(data.objectType);
+    self.objectId = ko.observable(data.objectId);
+    self.objectDescription = ko.observable(data.objectDescription);
+    // for due and overdue crs
+    self.dueDate = ko.observable(data.dueDate);
     self.message = ko.computed(function () {
         if (self.notificationType() == 'AssignCard') {
             return '{0} assigned a card to you.'.format(self.senderFullName());
         } 
         else if (self.notificationType() == 'NewCommentPosted') { 
             return '{0} posted a comment to your card.'.format(self.senderFullName());
+        }
+        else if (self.notificationType() == 'DueCard') {
+            var dueDays = moment(self.dueDate()).diff(moment(), 'days'),
+                dueDate = moment(self.dueDate()).format('ll');
+            if (dueDays < 0) {
+                return 'The card <b>"{0}"</b> is overdue by <b>{1}</b> days; was due on {2}.'.format(self.objectDescription(), Math.abs(dueDays), dueDate);
+            } else if (dueDays == 0) {
+                return 'The card <b>"{0}"</b> is due today.'.format(self.objectDescription(), dueDays, dueDate);
+
+            } else {
+                return 'The card <b>"{0}"</b> is due in <b>{1}</b> days on <b>{2}</b>.'.format(self.objectDescription(), dueDays, dueDate);
+            }
         } else
             return 'You have been notified';
     })
-    self.notificationType = ko.observable(data.notificationType);
-    self.objectType = ko.observable(data.objectType);
-    self.objectId = ko.observable(data.objectId);
+    
 
     self.open = function () {
         if (self.objectType() == 'card') {
@@ -70,11 +85,13 @@ function Notification(data) {
             app.router.go('#/board/{0}/card/{1}'.format(boardId, cardId));
 
             // delete the notification
-            var repository = new NotificationRepository();
-            repository.notificationId = self.notificationId();
-            repository.remove().done(function (result) {
-                $.hubclientcontext.notificationsHub.notifications.remove(self);
-            })
+            if (self.notificationId() > 0) {
+                var repository = new NotificationRepository();
+                repository.notificationId = self.notificationId();
+                repository.remove().done(function (result) {
+                    $.hubclientcontext.notificationsHub.notifications.remove(self);
+                })
+            }
         } else {
             //do nothing
         }

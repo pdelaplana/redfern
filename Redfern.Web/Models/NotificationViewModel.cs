@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Redfern.Web.Models
 {
-    public class NotificationItem
+    public class NotificationViewModel
     {
         public int NotificationId { get; set; }
 
@@ -26,7 +26,7 @@ namespace Redfern.Web.Models
         public string NotificationType { get; set; }
 
         public string ObjectType { get; set; }
-
         public string ObjectId { get; set; }
+        public string ObjectDesription { get; set; }
     }
 }

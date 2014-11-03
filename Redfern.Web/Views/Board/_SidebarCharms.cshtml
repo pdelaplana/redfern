@@ -158,7 +158,7 @@
                     </div>
 
                     <span class="fg-grayLight ">Filter by entering one or more tags</span>
-                    <ul id="tags-container-filter"></ul>
+                    <ul data-bind="tagit: filters.tags, tagitOptions: { enabled: true, allowNewTags: false, sourceUrl: '/api/tag?boardid='+$.boardcontext.current.boardId(), addTag: filters.addTag, removeTag: filters.removeTag }"></ul>
 
                     <span class="fg-grayLight ">Show cards with the following colors</span>
                     <div class="inline-block" style="width:100%;margin-top:5px">
@@ -244,7 +244,12 @@
                     <div class="listview small" data-bind="foreach: notifications ">
                         <div class="list bg-dark" style="width:100%"  data-bind="click:open">
                             <div class="list-content">
+                                <!-- ko if: notificationType() == 'DueCard'  -->
+                                <i class="icon icon-alarm fg-white"></i>
+                                <!-- /ko -->
+                                <!-- ko if: notificationType() != 'DueCard'  -->
                                 <img class="icon push-down-5" data-bind="attr: { src: '/api/avatar/'+sender() }" />
+                                <!-- /ko -->
                                 <div class="data fg-white">
                                     <span class="block" style="vertical-align:text-top" data-bind="html:message"></span>
                                     <span class="text-muted list-subtitle" data-bind="timeago:notificationDate"></span>

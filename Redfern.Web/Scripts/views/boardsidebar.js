@@ -43,14 +43,42 @@
     });
 
     self.notifications = ko.computed(function () {
-        return ko.utils.arrayFilter($.hubclientcontext.notificationsHub.notifications(), function (notification) {
+        // get any general notifications
+        var notifications = ko.utils.arrayFilter($.hubclientcontext.notificationsHub.notifications(), function (notification) {
             
             if (notification.objectType() == 'card') {
                 return notification.objectId().split(';')[0].split('=')[1] == $.boardcontext.current.boardId();
             }
             return false;
-
         })
+
+        // get notifications of due or over due cards on the board
+        var dueCards = [],
+            columns = $.boardcontext.current.columns;
+        $.each(columns(), function (x,column) {
+            $.each(column.cards(), function (y,card) {
+                if (card.dueDate() != null) {
+                    dueCards.push(new Notification({
+                            notificationId: 0,
+                            notificationDate: moment(),
+                            sender: 'None',
+                            senderUserFullName: 'None',
+                            notificationType: 'DueCard',
+                            objectType: 'card',
+                            objectId: 'BoardId={0};CardId={1}'.format(card.boardId(), card.cardId()),
+                            objectDescription: card.title(),
+                            dueDate: card.dueDate()
+                        }));
+                }
+            })
+        })
+        if (dueCards.length > 0) {
+            dueCards.sort(function (a, b) {
+                return new Date(a.dueDate()) - new Date(b.dueDate());
+            })
+        }
+
+        return notifications.concat(dueCards);
     })
 
     // operations
@@ -88,146 +116,9 @@
         });
     }
 
-    self.filters = {
-        title: ko.observable(),
-        tags: ko.observableArray(),
-        cardTypes: ko.observableArray(),
-        assignees: ko.observableArray(),
-        periodDue: ko.observable(),
-        noSelection: function(){
-            return (self.filters.tags().length == 0) &&
-                    ((self.filters.title() == null) || (self.filters.title().length == 0)) &&
-                    ((self.filters.periodDue() == null) || (self.filters.periodDue().length == 0)) &&
-                    (self.filters.cardTypes().length == 0) &&
-                    (self.filters.assignees().length == 0);
-        },
-        isColorSelected: function(color){
-            return (ko.utils.arrayFirst(self.filters.cardTypes(), function (cardType) {
-                return cardType.color() == color;
-            }) != null);
-        },
-        isAssigneeSelected: function (userName) {
-            return (ko.utils.arrayFirst(self.filters.assignees(), function (assignee) {
-                return assignee == userName;
-            }) != null);
-        },
-        isPeriodDueSelected: function (periodDue) {
-            return periodDue == self.filters.periodDue();
-        },
-        setPeriodDue: function(periodDue){
-            if (self.filters.periodDue() == periodDue)
-                self.filters.periodDue('')
-            else
-                self.filters.periodDue(periodDue)
-        },
-        addColorToFilter: function (cardType) {
-            if (self.filters.isColorSelected(cardType.color()))
-                self.filters.cardTypes.remove(cardType);
-            else 
-                self.filters.cardTypes.push(cardType);
-        },
-        addAssigneeToFilter: function (assignee) {
-            if (self.filters.isAssigneeSelected(assignee))
-                self.filters.assignees.remove(assignee);
-            else
-                self.filters.assignees.push(assignee);
-        },
-        applyFilter: function () {
-            if (self.filters.noSelection()) {
-                ko.utils.arrayForEach(self.columns(), function (column) {
-                    $.boardcontext.current.enableSorting($.boardcontext.current.hasAccess('RearrangeCards'));
-                    ko.utils.arrayForEach(column.cards(), function (card) {
-                        card.show(true);
-                    })
-                });
-            } else {
-                ko.utils.arrayForEach(self.columns(), function (column) {
-                    $.boardcontext.current.enableSorting(false);
-                    ko.utils.arrayForEach(column.cards(), function (card) {
-                        card.show(false);
-                        if (self.filters.title() != null && self.filters.title().length > 0) {
-                            if (card.title().toLowerCase().indexOf(self.filters.title()) !== -1)
-                                card.show(true);
-                        }
-                        if (self.filters.periodDue() != null) {
-                            var diffDays = moment(card.dueDate()).diff(moment(), 'days');
-                            switch (self.filters.periodDue())
-                            {
-                                case 'today':
-                                    if (diffDays == 0) card.show(true);
-                                    break;
-                                case 'tomorrow':
-                                    if (diffDays == 1) card.show(true)
-                                    break;
-                                case 'thisweek':
-                                    if ((diffDays < 8) && (diffDays > 0)) card.show(true)
-                                    break;
-                                case 'nextweek':
-                                    if (diffDays > 7 && diffDays < 15) card.show(true)
-                                    break;
-                                case 'pastdue':
-                                    if (diffDays < 0) card.show(true)
-                                    break;
-                            }
-                            
-                        }
-                        if (self.filters.tags().length > 0) {
-                            ko.utils.arrayForEach(self.filters.tags(), function (tag) {
-                                if ($.inArray(tag, card.tags()) > -1) {
-                                    card.show(true);
-                                }
-                            })
-                        }
-                        if (self.filters.cardTypes().length > 0) {
-                            ko.utils.arrayForEach(self.filters.cardTypes(), function (cardType) {
-                                if (card.color() == cardType.color()) {
-                                    card.show(true);
-                                }
-                            })
-                        }
-                        if (self.filters.assignees().length > 0) {
-                            ko.utils.arrayForEach(self.filters.assignees(), function (assignee) {
-                                if (card.assignedToUser() == assignee) {
-                                    card.show(true);
-                                }
-                            })
-                        }
-                    });
-                });
-            }
-            
-        },
-        removeFilter: function () {
-            self.filters.tags.removeAll();
-            self.filters.cardTypes.removeAll();
-            self.filters.assignees.removeAll();
-            self.filters.title(null);
-            self.filters.periodDue(null);
-            $('#tags-container-filter').tagit('reset');
-        }
-    }
+    self.filters = new BoardFilters(self.columns);
 
-    self.filters.title.subscribe(function (newValue) {
-        self.filters.applyFilter();
-    })
-
-    self.filters.periodDue.subscribe(function (newValue) {
-        self.filters.applyFilter();
-    })
-
-    self.filters.tags.subscribe(function (changes) {
-        self.filters.applyFilter();
-    }, null, "arrayChange")
-   
-    self.filters.cardTypes.subscribe(function (changes) {
-        self.filters.applyFilter();
-    }, null, "arrayChange")
-
-    self.filters.assignees.subscribe(function (changes) {
-        self.filters.applyFilter();
-    }, null, "arrayChange")
-
-
+    
     // members
     self.newMember = {
         userName: ko.observable(),
@@ -338,31 +229,5 @@
     $(window).resize();
 
    
-
-    $('#tags-container-filter').tagit({
-        allowNewTags: false,
-        triggerKeys: ['enter', 'tab'],
-        tagSource: function (request, response) {
-            $.ajax({
-                //url: '/api/{0}/tags/'.format(self.boardId()),
-                url: '/api/tag',
-                type: 'GET',
-                dataType: 'json',
-                data: { name: request.term, boardId: self.boardId() },
-                success: function (data) {
-                    response($.map(data, function (name, val) {
-                        return { label: name, value: name, id: val }
-                    }))
-                }
-            })
-        },
-        tagsChanged: function (tagValue, action, element) {
-            if (action == 'added') {
-                self.filters.tags.push(tagValue);
-            } else if (action == 'popped') {
-                self.filters.tags.remove(tagValue);
-            }
-        }
-    })
-
+    
 }
