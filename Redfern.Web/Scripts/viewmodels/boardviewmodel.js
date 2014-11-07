@@ -42,6 +42,7 @@ function BoardViewModel(data) {
     self.name = ko.observable(data.name);
     self.owner = ko.observable(data.owner);
     self.ownerFullName = ko.observable(data.ownerFullName);
+    self.archiveDate = ko.observable(data.archiveDate);
     self.isPublic = ko.observable(data.isPublic);
     self.viewOnly = ko.observable(data.viewOnly);
     self.accessList = ko.observableArray(data.accessList);

@@ -453,6 +453,8 @@
     <Content Include="Scripts\jquery.ddslick.js" />
     <Content Include="Scripts\jquery.fileinput.js" />
     <Content Include="Scripts\jquery.helpers.js" />
+    <Content Include="Scripts\jquery.quickflip.min.js" />
+    <Content Include="Scripts\jquery.quickflip.source.js" />
     <Content Include="Scripts\jquery.signalR-2.1.2.js" />
     <Content Include="Scripts\jquery.signalR-2.1.2.min.js" />
     <Content Include="Scripts\jquery.tabslideout.js" />
@@ -505,6 +507,7 @@
     <Content Include="Scripts\sammy-0.7.5.min.js" />
     <Content Include="Scripts\viewmodels\boardactivity.js" />
     <Content Include="Scripts\viewmodels\boardmember.js" />
+    <Content Include="Scripts\viewmodels\boardsviewmodel.js" />
     <Content Include="Scripts\viewmodels\boardviewmodel.js" />
     <Content Include="Scripts\viewmodels\card.js" />
     <Content Include="Scripts\viewmodels\cardtype.js" />
@@ -513,10 +516,6 @@
     <Content Include="Scripts\views\board.js" />
     <Content Include="Scripts\views\boardcontext.js" />
     <Content Include="Scripts\views\boardsidebar.js" />
-    <Content Include="Scripts\jquery.flip.js" />
-    <Content Include="Scripts\jquery.flip.min.js" />
-    <Content Include="Scripts\jquery.flippy.js" />
-    <Content Include="Scripts\jquery.flippy.min.js" />
     <Content Include="Scripts\jquery.nanoscroller.js" />
     <Content Include="Scripts\jquery.nanoscroller.min.js" />
     <Content Include="Scripts\jquery.tagit.js" />
@@ -651,10 +650,12 @@
     <Content Include="Scripts\views\profile.js" />
     <Content Include="Scripts\widgets\appnavigationbar.js" />
     <Content Include="Scripts\widgets\boardfilters.js" />
+    <Content Include="Scripts\widgets\boardslist.js" />
     <Content Include="Scripts\widgets\errordialog.js" />
     <Content Include="Scripts\widgets\cardpropertiesdialog.js" />
     <Content Include="Scripts\widgets\createboarddialog.js" />
     <Content Include="Scripts\widgets\createboardtile.js" />
+    <Content Include="Scripts\widgets\unarchiveboarddialog.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -43,4 +43,19 @@
         });
     }
 
+    self.archive= function () {
+        return $.ajax({
+            url: '/api/boards/' + self.boardId + '/archive',
+            type: 'post',
+            data: { BoardId: self.boardId }
+        });
+    }
+
+    self.unarchive = function () {
+        return $.ajax({
+            url: '/api/boards/' + self.boardId + '/unarchive',
+            type: 'post',
+            data: { BoardId: self.boardId }
+        });
+    }
 }

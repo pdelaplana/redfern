@@ -1,10 +1,19 @@
-﻿//
+﻿
+//
+// global objects
+//
+$.boards = null;
+
+
+
+//
 // create application object
 //
 var app = new Application({
     appTitle: 'Redfern',
     appContainer: '#application-container'
 });
+
 
 $(function () {
 
@@ -42,6 +51,10 @@ $(function () {
     app.user.userName = authenticatedUser.UserName;
     app.user.fullName = authenticatedUser.FullName;
     
+    // create the global boards list object - this is used by the appnavbar 
+    $.boards = new BoardsList();
+
+    // create the app bar
     app.ui.addPart('appNavigationBar', new AppNavigationBar()).bindTo('#AppNavigationBar');
    
     // register routes 
@@ -52,7 +65,7 @@ $(function () {
         });
     });
 
-    app.ui.setWindowTitle('Home');
+    app.ui.setWindowTitle('Boards');
     app.start('app/#/boards');
 
     // keepalive
@@ -65,8 +78,7 @@ $(function () {
     });
 
     
-    
-
+   
 })
 
 function KeepAlive() {

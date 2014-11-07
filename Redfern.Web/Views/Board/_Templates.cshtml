@@ -2,55 +2,71 @@
 <script type="text/html" id="board-template">
     <div class="inline" data-bind="adjustBoardWidth: { settings: { columnCount: columns.filterByVisible().length, columnWidth: columnWidth()   }  } ">
         <div class="board" data-bind="sortable: { data: columns, isEnabled: hasAccess('RearrangeColumns'), afterMove: columns.resequenceAll, options:{ placeholder: BoardColumnPlaceHolder, handle: '.board-column-header *' }  }">
-            <div class="board-column border" data-bind="visible: show, adjustColumnHeight:$parent.height">
-                <div class="board-column-wrapper">
-                    <div class="board-column-header ntm ntp clearfix cursor-move">
-                        <h4 class="ntm ntp">
-                            <strong data-bind="truncatedText: name, maxTextLength:18"></strong>
-                            <span class="text-muted">
-                                <small>
-                                    (<span data-bind="text: visibleCardCount"></span> cards)
-                                </small>
-                                <i class="icon-filter" data-bind="visible: $.boardcontext.current.enableSorting() == false"></i>
-                            </span>
-                            <i class="icon-cog place-right" style="cursor:pointer; font-size:smaller" data-bind="columnProperties:'ColumnPropertiesForm', visible: !isArchiveColumn() && $parent.hasAccess('OpenColumnProperties')"></i>
-                            <i class="icon-pop-out place-right" style="cursor:pointer" data-bind="click:expand"></i>
-                        </h4>
-                    </div>
-                    <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled: $.boardcontext.current.enableSorting , options: { placeholder: CardPlaceHolder, items:'a.tile:not(.pinned)',  scroll: true} }">
-                        <a class="tile double" data-bind="attr: { href: '#/board/'+boardId()+'/card/'+cardId() }, visible: show, setTileColor: color, archived : $parent.isArchiveColumn()">
-                            <div class="tile-content">
-                                <div class="padding10" style="overflow:hidden">
-                                    <p>
-                                        <span class="" data-bind="cardLabelDisplay: cardLabel"></span>
-                                        <span class="fg-white " data-bind="truncatedText: title, maxTextLength:80"></span>
-                                    </p>
+            <div class="board-column border flip-container" data-bind="visible: show, adjustColumnHeight:$parent.height">
+                <div class="flipper">
+                    <div class="board-column-wrapper front">
+                        <div class="board-column-header ntm ntp clearfix cursor-move">
+                            <h4 class="ntm ntp">
+                                <strong data-bind="truncatedText: name, maxTextLength:18"></strong>
+                                <span class="text-muted">
+                                    <small>
+                                        (<span data-bind="text: visibleCardCount"></span> cards)
+                                    </small>
+                                    <i class="icon-filter" data-bind="visible: $.boardcontext.current.enableSorting() == false"></i>
+                                </span>
+                                <i class="icon-redo place-right" style="cursor:pointer; font-size:smaller" data-bind="flipColumn:{},visible: !isArchiveColumn() && $parent.hasAccess('OpenColumnProperties')"></i>
+                                <i class="icon-pop-out place-right" style="cursor:pointer" data-bind="click:expand"></i>
+                            </h4>
+                        </div>
+                        <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled: $.boardcontext.current.enableSorting() && $parent.hasAccess('RearrangeCards') , options: { placeholder: CardPlaceHolder, items:'a.tile:not(.pinned)',  scroll: true} }">
+                            <a class="tile double" data-bind="attr: { href: '#/board/'+boardId()+'/card/'+cardId() }, visible: show, setTileColor: color, archived : $parent.isArchiveColumn()">
+                                <div class="tile-content">
+                                    <div class="padding10" style="overflow:hidden">
+                                        <p>
+                                            <span class="" data-bind="cardLabelDisplay: cardLabel"></span>
+                                            <span class="fg-white " data-bind="truncatedText: title, maxTextLength:80"></span>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="brand">
-                                <div class="label">
-                                    <span class="no-margin icon-locked fg-white" data-bind="visible: $.boardcontext.current.enableSorting() == false"></span>
-                                    <!-- ko ifnot: $.boardcontext.current.options.showCardAge -->
-                                    <span class="no-margin fg-white icon-calendar" style="" data-bind="visible:dueDate()!=null, attr:{ title: dueDate()!=null ? dueDate().toLocalDate() : '' }"> <small data-bind="text: dueDate()!=null ? dueDate().toLocalDate('MMM D') : '' "></small></span>
-                                    <span class="no-margin fg-white icon-comments-4" data-bind="visible: commentCount()>0"> <small data-bind="text: commentCount"></small></span>
-                                    <span class="no-margin fg-white icon-tag" data-bind="visible: tags().length >0"> <small data-bind="text: tags().length"></small></span>
-                                    <span class="no-margin fg-white icon-attachment" data-bind="visible: attachmentCount() >0"> <small data-bind="text: attachmentCount"></small></span>
-                                    <span class="no-margin fg-white icon-list" data-bind="visible: totalTaskCount() >0"> <small data-bind="text: completedTaskCount"></small>/<small data-bind="text: totalTaskCount"></small></span>
-                                    <!-- /ko -->
-                                    <!--ko if: $.boardcontext.current.options.showCardAge -->
-                                    <span class="no-margin fg-white"> <small data-bind="timeago: createdDateInLocalTimezone"></small></span>
-                                    <!-- /ko -->
+                                <div class="brand">
+                                    <div class="label">
+                                        <span class="no-margin icon-locked fg-white" data-bind="visible: $.boardcontext.current.enableSorting() == false"></span>
+                                        <!-- ko ifnot: $.boardcontext.current.options.showCardAge -->
+                                        <span class="no-margin fg-white icon-calendar" style="" data-bind="visible:dueDate()!=null, attr:{ title: dueDate()!=null ? dueDate().toLocalDate() : '' }"> <small data-bind="text: dueDate()!=null ? dueDate().toLocalDate('MMM D') : '' "></small></span>
+                                        <span class="no-margin fg-white icon-comments-4" data-bind="visible: commentCount()>0"> <small data-bind="text: commentCount"></small></span>
+                                        <span class="no-margin fg-white icon-tag" data-bind="visible: tags().length >0"> <small data-bind="text: tags().length"></small></span>
+                                        <span class="no-margin fg-white icon-attachment" data-bind="visible: attachmentCount() >0"> <small data-bind="text: attachmentCount"></small></span>
+                                        <span class="no-margin fg-white icon-list" data-bind="visible: totalTaskCount() >0"> <small data-bind="text: completedTaskCount"></small>/<small data-bind="text: totalTaskCount"></small></span>
+                                        <!-- /ko -->
+                                        <!--ko if: $.boardcontext.current.options.showCardAge -->
+                                        <span class="no-margin fg-white"> <small data-bind="timeago: createdDateInLocalTimezone"></small></span>
+                                        <!-- /ko -->
+                                    </div>
                                 </div>
+                                <img src="" class="padding5 place-bottom-right" data-bind="visible: assignedToUser() != null && assignedToUser().length > 0, attr: { src: '/api/avatar/'+assignedToUser() +'?height=25', title: assignedToUserFullName() }" />
+                            </a>
+                        </div>
+                        <div class="board-column-footer">
+                            <div class="padding10">
+                                <p class="fg-grayLight fg-gray fg-hover-grayDarker" data-bind="visible: $parent.hasAccess('AddCard')"><span data-bind="addCard: newCard.title, create: newCard.save"><i class="icon-plus"></i> Add a card...</span> </p>
                             </div>
-                            <img src="" class="padding5 place-bottom-right" data-bind="visible: assignedToUser() != null && assignedToUser().length > 0, attr: { src: '/api/avatar/'+assignedToUser() +'?height=25', title: assignedToUserFullName() }" />
-                        </a>
-                    </div>
-                    <div class="board-column-footer">
-                        <div class="padding10">
-                            <p class="fg-grayLight fg-gray fg-hover-grayDarker" data-bind="visible: $parent.hasAccess('AddCard')"><span data-bind="addCard: newCard.title, create: newCard.save"><i class="icon-plus"></i> Add a card...</span> </p>
                         </div>
                     </div>
+                    <div class="back">
+                        <form>
+                            <h4 class="ntp ntm"><i class="icon-undo revert" style="cursor:pointer" data-bind="flipColumn:{}"></i> Column Properties </h4>
+                            <label>Name</label>
+                            <div class="input-control text">
+                                <input type="text" data-bind="value: name" value="" />
+                            </div>
+                            <button class="primary" data-role="save-btn" data-bind="click: update">Save</button>
+                            <hr />
+                            <p>To delete this column, remove all cards tacked to it.</p>
+                            <button class="bg-red fg-white" data-role="delete-btn" data-bind="click: remove">Delete</button>
+                        </form>
+                    </div>
                 </div>
+
             </div>
         </div>
 
@@ -67,55 +83,71 @@
 <script id="column-properties-template" type="text/html">
     <div id="ExpandedColumn" data-bind="">
         <div data-bind="with: columns.selected">
-            <div class="board-column border" data-bind="maximizeColumn: maximixed, adjustColumnHeight:$parent.height">
-                <div class="board-column-wrapper">
-                    <div class="board-column-header ntm ntp clearfix">
-                        <h4 class="ntm ntp">
-                            <strong data-bind="text: name"></strong>
-                            <span class="text-muted">
-                                <small>
-                                    (<span data-bind="text: visibleCardCount"></span> cards)
-                                </small>
-                                <i class="icon-filter" data-bind="visible: $.boardcontext.current.enableSorting() == false"></i>
-                            </span>
-                            <i class="icon-forward place-right" style="cursor:pointer" data-bind="columnProperties:'ColumnPropertiesForm', visible: !isArchiveColumn() && $parent.hasAccess('OpenColumnProperties')"></i>
-                            <i class="icon-pop-in place-right" style="cursor:pointer" data-bind="click:function(){ $parent.viewMode('board') }"></i>
-                        </h4>
-                    </div>
-                    <div class="board-column-content content" data-bind="sortable: { data: cards, afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled: $.boardcontext.current.enableSorting, options: { placeholder: CardPlaceHolder, items: ' a.tile:not(.pinned)', scroll: true} }">
-                        <a class="tile double bg-amber" data-bind="attr: { href: '#/board/'+boardId()+'/card/'+cardId() }, visible: show, setTileColor: color, archived : $parent.isArchiveColumn() ">
-                            <div class="tile-content">
-                                <div class="padding10">
-                                    <p>
-                                        <span class="" data-bind="cardLabelDisplay: cardLabel"></span>
-                                        <span class="fg-white " data-bind="truncatedText: title, maxTextLength:80"></span>
-                                    </p>
+            <div class="board-column border flip-container" data-bind="maximizeColumn: maximixed, adjustColumnHeight:$parent.height">
+                <div class="flipper">
+                    <div class="board-column-wrapper front" style="width:100%">
+                        <div class="board-column-header ntm ntp clearfix">
+                            <h4 class="ntm ntp">
+                                <strong data-bind="text: name"></strong>
+                                <span class="text-muted">
+                                    <small>
+                                        (<span data-bind="text: visibleCardCount"></span> cards)
+                                    </small>
+                                    <i class="icon-filter" data-bind="visible: $.boardcontext.current.enableSorting() == false"></i>
+                                </span>
+                                <i class="icon-forward place-right" style="cursor:pointer" data-bind="flipColumn:{}, visible: !isArchiveColumn() && $parent.hasAccess('OpenColumnProperties')"></i>
+                                <i class="icon-pop-in place-right" style="cursor:pointer" data-bind="click:function(){ $parent.viewMode('board') }"></i>
+                            </h4>
+                        </div>
+                        <div class="board-column-content content" data-bind="sortable: { data: cards, afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled: $.boardcontext.current.enableSorting, options: { placeholder: CardPlaceHolder, items: ' a.tile:not(.pinned)', scroll: true} }">
+                            <a class="tile double bg-amber" data-bind="attr: { href: '#/board/'+boardId()+'/card/'+cardId() }, visible: show, setTileColor: color, archived : $parent.isArchiveColumn() ">
+                                <div class="tile-content">
+                                    <div class="padding10">
+                                        <p>
+                                            <span class="" data-bind="cardLabelDisplay: cardLabel"></span>
+                                            <span class="fg-white " data-bind="truncatedText: title, maxTextLength:80"></span>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="brand">
-                                <div class="label">
-                                    <span class="no-margin icon-locked fg-white" data-bind="visible: $.boardcontext.current.enableSorting() == false"></span>
-                                    <!-- ko ifnot: $.boardcontext.current.options.showCardAge -->
-                                    <span class="no-margin fg-white icon-calendar" style="" data-bind="visible:dueDate()!=null, attr:{ title: dueDate()!=null ? dueDate().toLocalDate() : '' }"> <small data-bind="text: dueDate()!=null ? dueDate().toLocalDate('MMM D') : '' "></small></span>
-                                    <span class="no-margin fg-white icon-comments-4" data-bind="visible: commentCount()>0"> <small data-bind="text: commentCount"></small></span>
-                                    <span class="no-margin fg-white icon-tag" data-bind="visible: tags().length >0"> <small data-bind="text: tags().length"></small></span>
-                                    <span class="no-margin fg-white icon-attachment" data-bind="visible: attachmentCount() >0"> <small data-bind="text: attachmentCount"></small></span>
-                                    <span class="no-margin fg-white icon-list" data-bind="visible: totalTaskCount() >0"> <small data-bind="text: completedTaskCount"></small>/<small data-bind="text: totalTaskCount"></small></span>
-                                    <!-- /ko -->
-                                    <!--ko if: $.boardcontext.current.options.showCardAge -->
-                                    <span class="no-margin fg-white"> <small data-bind="timeago: createdDateInLocalTimezone"></small></span>
-                                    <!-- /ko -->
+                                <div class="brand">
+                                    <div class="label">
+                                        <span class="no-margin icon-locked fg-white" data-bind="visible: $.boardcontext.current.enableSorting() == false"></span>
+                                        <!-- ko ifnot: $.boardcontext.current.options.showCardAge -->
+                                        <span class="no-margin fg-white icon-calendar" style="" data-bind="visible:dueDate()!=null, attr:{ title: dueDate()!=null ? dueDate().toLocalDate() : '' }"> <small data-bind="text: dueDate()!=null ? dueDate().toLocalDate('MMM D') : '' "></small></span>
+                                        <span class="no-margin fg-white icon-comments-4" data-bind="visible: commentCount()>0"> <small data-bind="text: commentCount"></small></span>
+                                        <span class="no-margin fg-white icon-tag" data-bind="visible: tags().length >0"> <small data-bind="text: tags().length"></small></span>
+                                        <span class="no-margin fg-white icon-attachment" data-bind="visible: attachmentCount() >0"> <small data-bind="text: attachmentCount"></small></span>
+                                        <span class="no-margin fg-white icon-list" data-bind="visible: totalTaskCount() >0"> <small data-bind="text: completedTaskCount"></small>/<small data-bind="text: totalTaskCount"></small></span>
+                                        <!-- /ko -->
+                                        <!--ko if: $.boardcontext.current.options.showCardAge -->
+                                        <span class="no-margin fg-white"> <small data-bind="timeago: createdDateInLocalTimezone"></small></span>
+                                        <!-- /ko -->
+                                    </div>
                                 </div>
+                                <img src="" class="padding5 place-bottom-right" data-bind="visible: assignedToUser() != null && assignedToUser().length > 0, attr: { src: '/api/avatar/'+assignedToUser() +'?height=25', title: assignedToUserFullName() }" />
+                            </a>
+                        </div>
+                        <div class="board-column-footer">
+                            <div class="padding10">
+                                <p class="fg-grayLight fg-gray fg-hover-grayDarker" data-bind="visible: $parent.hasAccess('AddCard')"><span data-bind="addCard: newCard.title, create: newCard.save"><i class="icon-plus"></i> Add a card...</span> </p>
                             </div>
-                            <img src="" class="padding5 place-bottom-right" data-bind="visible: assignedToUser() != null && assignedToUser().length > 0, attr: { src: '/api/avatar/'+assignedToUser() +'?height=25', title: assignedToUserFullName() }" />
-                        </a>
-                    </div>
-                    <div class="board-column-footer">
-                        <div class="padding10">
-                            <p class="fg-grayLight fg-gray fg-hover-grayDarker" data-bind="visible: $parent.hasAccess('AddCard')"><span data-bind="addCard: newCard.title, create: newCard.save"><i class="icon-plus"></i> Add a card...</span> </p>
                         </div>
                     </div>
+                    <div class="back" style="width:100%">
+                        <form>
+                            <h4 class="ntp ntm"><i class="icon-undo revert" style="cursor:pointer" data-bind="flipColumn:{}"></i> Column Properties </h4>
+                            <label>Name</label>
+                            <div class="input-control text">
+                                <input type="text" data-bind="value: name" value="" />
+                            </div>
+                            <button class="primary" data-role="save-btn" data-bind="click: update">Save</button>
+                            <hr />
+                            <p>To delete this column, remove all cards tacked to it.</p>
+                            <button class="bg-red fg-white" data-role="delete-btn" data-bind="click: remove">Delete</button>
+                        </form>
+                    </div>
                 </div>
+                
             </div>
         </div>
     </div>

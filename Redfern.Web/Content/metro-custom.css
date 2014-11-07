@@ -677,3 +677,14 @@ li.media{
   list-style: none;
 }
 
+/************************************ 
+ *   horizontal menu 
+ ************************************/
+.metro nav.horizontal-menu ul{
+    margin-left:0;
+}
+
+.metro nav.horizontal-menu ul li a.selected{
+    font-weight:600;
+    border-bottom:solid 2px #e51400!important;
+}

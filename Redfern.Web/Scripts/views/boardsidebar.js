@@ -88,8 +88,9 @@
         repository.name=self.name();
         repository.update().done(function (result) {
             $.Notify.show('Board name has been changed.');
-            BoardContext.current.hub.notify.onBoardNameChanged(result.data.boardId, result.data.name, result.activityContext);
-            app.ui.appNavigationBar.updateBoardName(self.boardId(), self.name());
+            $.boardcontext.current.hub.notify.onBoardNameChanged(result.data.boardId, result.data.name, result.activityContext);
+            var board = $.boards.all.findByProperty('boardId', result.data.boardId);
+            board.name(result.data.name);
             app.ui.appNavigationBar.selectedMenu(self.name());
         });
     }
@@ -101,7 +102,9 @@
         repository.isPublic=self.isPublic();
         repository.changeVisibility().done(function (result) {
             $.Notify.show('Board visibility has been changed.');
-            BoardContext.current.hub.notify.onBoardVisibilityChanged(result.data.boardId, result.data.isPublic, result.activityContext);
+            $.boardcontext.current.hub.notify.onBoardVisibilityChanged(result.data.boardId, result.data.isPublic, result.activityContext);
+            var board = $.boards.all.findByProperty('boardId', result.data.boardId);
+            board.isPublic(result.data.isPublic);
         });
     }
 
@@ -112,7 +115,7 @@
         repository.columnId = column.columnId();
         repository.hidden = !column.show();
         repository.toggle().done(function (result) {
-            BoardContext.current.hub.notify.onColumnVisibilityChanged(result.data.boardId, result.data.columnId, !result.data.hidden, result.activityContext);
+            $.boardcontext.current.hub.notify.onColumnVisibilityChanged(result.data.boardId, result.data.columnId, !result.data.hidden, result.activityContext);
         });
     }
 
@@ -196,12 +199,28 @@
             var repository = new BoardRepository();
             repository.boardId = self.boardId();
             repository.remove().done(function () {
-                app.ui.appNavigationBar.removeBoardMenuItem(self.boardId());
+                $.boards.remove(self.boardId());
                 app.router.go('/#/boards');       
             });
         }
     }
-    
+
+    // archive the current board
+    self.archive = function () {
+        if (confirm('This will archive this board.  Continue?')) {
+            var repository = new BoardRepository();
+            repository.boardId = self.boardId();
+            repository.archive().done(function (result) {
+                var board = $.boards.all.findByProperty('boardId', result.data.boardId);
+                board.archiveDate(result.data.archiveDate);
+                app.router.go('/#/boards');
+            });
+        }
+
+    }
+
+
+    // TODO: create a custom knockout binding
     $('.slide-out-div').tabSlideOut({
         tabHandle: '.handle',                     //class of the element that will become your tab
         //pathToTabImage: '/content/images/contact_tab.gif', //path to the image for the tab //Optionally can be set using css

@@ -8,11 +8,11 @@
         <div class="element">
             <a class="dropdown-toggle" href="#" data-bind="text: selectedMenu">@( !String.IsNullOrEmpty(ViewBag.SelectedMenu) ? ViewBag.SelectedMenu : "All Boards")</a>
             <ul class="dropdown-menu dark" data-role="dropdown" style="z-index:999">
-                <!-- ko foreach: boardsList -->
+                <!-- ko foreach: menuItems -->
                 <li><a href="" data-bind="attr: { href: '#/board/'+boardId() }, text: name"></a></li>
                 <!-- /ko -->
                 <li class="divider"></li>
-                <li><a href="#@Url.Action("index", "boards")">Show All</a></li>
+                <li><a href="#@Url.Action("index", "boards")">All Boards</a></li>
 
             </ul>
         </div>
@@ -42,6 +42,8 @@
                     <li class="divider"></li>
                     <li><a href="#/users">Users </a></li>
                     }
+                    <li class="divider"></li>
+                    <li><a href="#/credits">About</a></li>
                     <li class="divider"></li>
                     <li><a href="javascript:$('form#signout').submit()">Sign out</a></li>
                 </ul>

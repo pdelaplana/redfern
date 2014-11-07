@@ -133,9 +133,7 @@ namespace Redfern.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            ViewBag.UserEmail = "Test@hotmail.com";
-            return View("RegisterSuccess");
-
+            
             if (ModelState.IsValid)
             {
                 var user = new RedfernUser() 

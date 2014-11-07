@@ -155,6 +155,8 @@
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\RedfernDbExtensions.cs" />
     <Compile Include="Repository\CommandResult.cs" />
+    <Compile Include="Repository\Commands\UnarchiveBoardCommand.cs" />
+    <Compile Include="Repository\Commands\ArchiveBoardCommand.cs" />
     <Compile Include="Repository\Commands\CreateNotificationCommand.cs" />
     <Compile Include="Repository\Commands\DeleteNotificationCommand.cs" />
     <Compile Include="Repository\Commands\UpdateBoardAccessedDateCommand.cs" />

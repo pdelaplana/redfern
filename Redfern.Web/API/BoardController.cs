@@ -30,9 +30,10 @@ namespace Redfern.Web.API
         }
 
         [Route("")]
-        public BoardListItem Post([FromBody]CreateBoardCommand command)
+        public WebApiResult<BoardListItem> Post([FromBody]CreateBoardCommand command)
         {
-            return AutoMapper.Mapper.Map<Board, BoardListItem>(_repository.ExecuteCommand(command).Data as Board);
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<Board>, WebApiResult<BoardListItem>>(result);
         }
 
         [Route("{id:int}")]
@@ -45,6 +46,22 @@ namespace Redfern.Web.API
         [Route("{id:int}/changevisibility")]
         [HttpPost]
         public WebApiResult<BoardListItem> ChangeVisibility(int id, [FromBody]ChangeBoardVisibilityCommand command)
+        {
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<Board>, WebApiResult<BoardListItem>>(result);
+        }
+
+        [Route("{id:int}/archive")]
+        [HttpPost]
+        public WebApiResult<BoardListItem> Archive(int id, [FromBody]ArchiveBoardCommand  command)
+        {
+            var result = _repository.ExecuteCommand(command);
+            return AutoMapper.Mapper.Map<CommandResult<Board>, WebApiResult<BoardListItem>>(result);
+        }
+
+        [Route("{id:int}/unarchive")]
+        [HttpPost]
+        public WebApiResult<BoardListItem> Archive(int id, [FromBody]UnarchiveBoardCommand command)
         {
             var result = _repository.ExecuteCommand(command);
             return AutoMapper.Mapper.Map<CommandResult<Board>, WebApiResult<BoardListItem>>(result);

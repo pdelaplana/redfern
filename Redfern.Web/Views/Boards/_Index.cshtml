@@ -1,7 +1,18 @@
 ﻿
 
 <div class="page-region">
-    <div class="page-region-content" id="Boards" data-bind="template:'boardslist'">
+    <div class="page-region-content" id="Boards" >
+        <nav class="horizontal-menu">
+            <ul>
+                <li><a href="#" data-bind="click: function(){ selectedView('myboards') }, css: { 'selected': selectedView() == 'myboards' }">My Boards <small class="" data-bind="text:'('+$.boards.myBoards().length+')'"></small></a></li>
+                <li><a href="#" data-bind="click: function(){ selectedView('shared') }, css: { 'selected': selectedView() == 'shared' }">Shared with Me <small class="" data-bind="text:'('+$.boards.sharedBoards().length+')'"></small> </a></li>
+                <li><a href="#" data-bind="click: function(){ selectedView('public') }, css: { 'selected': selectedView() == 'public' }">Public Boards <small class="" data-bind="text:'('+$.boards.publicBoards().length+')'"></small> </a></li>
+                <li><a href="#" data-bind="click: function(){ selectedView('archived') }, css: { 'selected': selectedView() == 'archived' }">Archived Boards <small class="" data-bind="text:'('+$.boards.archivedBoards().length+')'"></small> </a></li>
+            </ul>
+        </nav>
+
+        <div data-bind="template:'boardslist'"></div>
+
     </div>
 </div>
 
@@ -55,10 +66,11 @@
 </script>
 
 <script id="boardslist" type="text/html">
-    <div class="tile-area no-padding no-margin">
-        <div class="tile-group no-margin padding5 ntp" style="width:100%">
-            <h2 class="ntm ntp">My Boards</h2>
-            <!-- ko foreach: myBoards -->
+    <div class="no-padding no-margin">
+        <!-- ko if: selectedView() == 'myboards' -->
+        <div class="no-margin ntp" style="width:100%">
+            
+            <!-- ko foreach: $.boards.myBoards -->
             <a href="" class="tile double bg-darkCrimson" data-bind="attr: { href: '#/board/'+boardId() }">
                 <div class="tile-content">
                     <div class="padding10 text-left">
@@ -72,17 +84,19 @@
                 </div>
             </a> 
             <!-- /ko -->            
-            <div class="bg-grayLighter text-center" data-bind="visible: myBoards().length == 0" style="height:120px;padding-top:30px" >
-
-                <img src="/content/images/about-grey-64.png" />
-                <span class="center fg-darker readable-text"  >You have not created any boards yet.  Click <a href="" data-bind="click: app.ui.appNavigationBar.createBoard">here</a> to create your first board.</span>
+            <div class="text-center" data-bind="visible: $.boards.myBoards().length == 0" style="height:120px;padding-top:30px">
+                <span class="center fg-white bg-red padding20" style="font-size:12pt">
+                    <i class="icon-info"></i>
+                    You have not created any boards yet.  Click <a href="" data-bind="click: app.ui.appNavigationBar.createBoard">here</a> to create your first board.
+                </span>
             </div>
-            
         </div>
+        <!-- /ko -->
 
-        <div class="tile-group no-margin padding5 ntp" style="width:100%" data-bind="visible: sharedBoards().length > 0">
-            <h2>Shared with Me</h2>
-            <!-- ko foreach: sharedBoards -->
+
+        <!-- ko if: selectedView() == 'shared' -->
+        <div class="tile-group no-margin padding5 ntp" style="width:100%" >
+            <!-- ko foreach: $.boards.sharedBoards -->
             <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
                 <div class="tile-content">
                     <div class="padding10 text-left">
@@ -96,12 +110,18 @@
                 </div>
             </a>
             <!-- /ko -->
-            <p data-bind="visible: sharedBoards().length == 0">No boards have been shared with you.</p>
+            <div class="text-center" data-bind="visible: $.boards.sharedBoards().length == 0" style="height:120px;padding-top:30px">
+                <span class="center fg-white bg-red padding20" style="font-size:12pt">
+                    <i class="icon-info"></i>
+                    No one has shared any boards with you.
+                </span>
+            </div>
         </div>
+        <!-- /ko -->
 
-        <div class="tile-group no-margin padding5 ntp" style="width:100%" data-bind="visible: publicBoards().length > 0">
-            <h2>Public Boards</h2>
-            <!-- ko foreach: publicBoards -->
+        <!-- ko if: selectedView() == 'public' -->
+        <div class="tile-group no-margin padding5 ntp" style="width:100%">
+            <!-- ko foreach: $.boards.publicBoards -->
             <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
                 <div class="tile-content">
                     <div class="padding10 text-left">
@@ -115,11 +135,55 @@
                 </div>
             </a>
             <!-- /ko -->
-            <p class="" data-bind="visible: publicBoards().length == 0">No public boards are available.</p>
+            <div class="text-center" data-bind="visible: $.boards.publicBoards().length == 0" style="height:120px;padding-top:30px">
+                <span class="fg-white bg-red padding20" style="font-size:12pt">
+                    <i class="icon-info"></i>
+                    No public boards are available.
+                </span>
+            </div>
 
         </div>
+        <!-- /ko -->
+
+        <!-- ko if: selectedView() == 'archived' -->
+        <div class="tile-group no-margin padding5 ntp" style="width:100%">
+            <!-- ko foreach: $.boards.archivedBoards -->
+            <a href="" class="tile double bg-darkCobalt" data-bind="click: $parent.unarchiveBoard">
+                <div class="tile-content">
+                    <div class="padding10 text-left">
+                        <h4 class="fg-white no-margin" data-bind="text:name"></h4>
+                        <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                    </div>
+                </div>
+                <div class="brand">
+                    <div class="label"><span class="no-margin fg-white"><span class="icon-grid-view"></span></span></div>
+                    <div class="badge"></div>
+                </div>
+            </a>
+            <!-- /ko -->
+            <div class="text-center" data-bind="visible: $.boards.archivedBoards().length == 0" style="height:120px;padding-top:30px">
+                <span class="fg-white bg-red padding20" style="font-size:12pt">
+                    <i class="icon-info"></i>
+                    You have no archived boards.
+                </span>
+            </div>
+
+        </div>
+        <!-- /ko -->
 
     </div>
-
     
+    
+</script>
+
+<script id="UnarchiveBoardDialog" type="text/html">
+    <div class="padding10">
+        <p>The board <b data-bind="text: name"></b> has been archived.</p>
+        <p>To open this board, you will need to unarchive it first which would require that you have an extra licence to be available to use.</p>
+        <p>Do you want to unarchive this board?</p>
+    </div>
+    <div class="padding10 place-right">
+        <button class="primary" data-bind="click:unarchive">Yes</button>
+        <button class="link" data-bind="click: cancel">No</button>
+    </div>
 </script>

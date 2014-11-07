@@ -33,6 +33,7 @@ namespace Redfern.Web
                         "~/scripts/jquery.autosize.js",
                         "~/scripts/popModal.js",
                         "~/scripts/jquery.colorbox.js",
+                        "~/scripts/jquery.quickflip.min.js",
                         "~/scripts/rangyinputs-jquery-1.1.2.js"
                         ));
 
@@ -141,8 +142,10 @@ namespace Redfern.Web
                         "~/scripts/repositories/userrepository.js",
                         "~/scripts/repositories/boardactivityrepository.js",
                         "~/scripts/repositories/notificationrepository.js",
+                        "~/scripts/widgets/boardslist.js",
                         "~/scripts/widgets/appnavigationbar.js",
                         "~/scripts/widgets/createboarddialog.js",
+                        "~/scripts/widgets/unarchiveboarddialog.js",
                         "~/scripts/widgets/cardpropertiesdialog.js",
                         "~/scripts/widgets/errordialog.js",
                         "~/scripts/widgets/boardfilters.js",
@@ -152,6 +155,7 @@ namespace Redfern.Web
                         "~/scripts/viewmodels/column.js",
                         "~/scripts/viewmodels/boardmember.js",
                         "~/scripts/viewmodels/cardtype.js",
+                        "~/scripts/viewmodels/boardsviewmodel.js",
                         "~/scripts/viewmodels/boardviewmodel.js",
                         "~/scripts/views/boards.js",
                         "~/scripts/views/boardsidebar.js",

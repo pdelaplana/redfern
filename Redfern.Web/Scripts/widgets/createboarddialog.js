@@ -10,12 +10,11 @@
             repository.name = self.name();
             repository.create().done(function (result) {
                 $.Dialog.close();
-                app.router.go('/#/board/' + result.boardId);
-                app.ui.appNavigationBar.addBoardMenuItem(result);
+                app.router.go('/#/board/' + result.data.boardId);
+                $.boards.all.push(new BoardItem(result.data));
             });
         }
     }
-
 
     return {
         open: function () {

@@ -18,15 +18,16 @@
     }
 }
 
-<div id="wrapper">
-    <header class="page" style="height:8px!important">
+<div class="page">
+    <header class="" style="height:8px!important">
         @Html.Partial("_AppNavigationBar")
     </header>
-    <section class="page" style="padding-top:50px;">
+    <section class="" style="padding-top:25px;">
         @RenderBody()
     </section>
+    <footer class="">
+
+    </footer>
 </div>
 
-<footer class="page">
-    @Html.Partial("_Footer")
-</footer>
+

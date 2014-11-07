@@ -386,13 +386,13 @@ ko.bindingHandlers.adjustColumnHeight = {
         var columnHeight = valueAccessor(),
             column = element;
 
-        $(column).height(columnHeight()-140);
-        $('.board-column-content', column).height(columnHeight() - 210);
+        $(column).height(columnHeight()-118);
+        $('.board-column-content', column).height(columnHeight() - 187);
 
         $(window).resize(function () {
             columnHeight($(window).height());
-            $(column).height(columnHeight() - 140);
-            $('.board-column-content', column).height(columnHeight() - 210);
+            $(column).height(columnHeight() - 118);
+            $('.board-column-content', column).height(columnHeight() - 187);
 
         })
         
@@ -1212,3 +1212,23 @@ ko.bindingHandlers.cardLabelDisplay = {
     }
 }
 
+
+/**
+ * bindinghandler to flip a column between properties and card view
+ * 
+ */
+ko.bindingHandlers.flipColumn = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        
+        //$(boardColumnWrapper).quickFlip();
+
+        $(element).click(function (event) {
+            var flipContainer = $(element).parents('div.flip-container');
+            flipContainer.toggleClass('flip');
+            
+        })
+
+
+    },
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) { }
+}
