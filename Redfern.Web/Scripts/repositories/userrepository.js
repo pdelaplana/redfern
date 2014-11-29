@@ -51,7 +51,7 @@
     
     self.remove = function () {
         return $.ajax({
-            url: '/api/user/'+self.id(),
+            url: '/api/users/'+self.id(),
             type: 'delete'
         });
     }

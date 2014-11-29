@@ -31,6 +31,7 @@
                     <div class="label"><span data-bind="text: ownerFullName"></span></div>
                     <div class="badge"></div>
                 </div>
+                
             </a>
             <!-- /ko -->
             <!-- ko foreach: sharedBoards -->
@@ -71,16 +72,19 @@
         <div class="no-margin ntp" style="width:100%">
             
             <!-- ko foreach: $.boards.myBoards -->
-            <a href="" class="tile double bg-darkCrimson" data-bind="attr: { href: '#/board/'+boardId() }">
+            <a href="" class="tile double bg-darkBlue" data-bind="attr: { href: '#/board/'+boardId() }">
                 <div class="tile-content">
                     <div class="padding10 text-left">
-                        <h4 class="fg-white no-margin" data-bind="text:name"></h4>
-                        <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                        <h4 class="fg-white no-margin span2" data-bind="text:name"></h4>
+                        <h1 class="fg-white place-top-right margin10" data-bind="text: cardCount"></h1>
                     </div>
                 </div>
                 <div class="brand">
-                    <div class="label"><span data-bind="text: ownerFullName"></span></div>
-                    <div class="badge"></div>
+                    <div class="padding5">
+                        <!-- ko foreach: collaborators -->
+                        <img src="" class="" data-bind="attr: { src: '/api/avatar/'+$data +'?height=25', title: $data }" />
+                        <!-- /ko -->
+                    </div>
                 </div>
             </a> 
             <!-- /ko -->            
@@ -97,16 +101,19 @@
         <!-- ko if: selectedView() == 'shared' -->
         <div class="tile-group no-margin padding5 ntp" style="width:100%" >
             <!-- ko foreach: $.boards.sharedBoards -->
-            <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
+            <a href="" class="tile double bg-blue" data-bind="attr: { href: '#/board/'+boardId() }">
                 <div class="tile-content">
                     <div class="padding10 text-left">
-                        <h4 class="fg-white no-margin" data-bind="text:name"></h4>
-                        <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                        <h4 class="fg-white no-margin span2" data-bind="text:name"></h4>
+                        <h1 class="fg-white place-top-right margin10" data-bind="text: cardCount"></h1>
                     </div>
                 </div>
                 <div class="brand">
-                    <div class="label" data-bind="text: ownerFullName"></div>
-                    <div class="badge"></div>
+                    <div class="padding5">
+                        <!-- ko foreach: collaborators -->
+                        <img src="" class="" data-bind="attr: { src: '/api/avatar/'+$data +'?height=25', title: $data }" />
+                        <!-- /ko -->
+                    </div>
                 </div>
             </a>
             <!-- /ko -->
@@ -122,16 +129,19 @@
         <!-- ko if: selectedView() == 'public' -->
         <div class="tile-group no-margin padding5 ntp" style="width:100%">
             <!-- ko foreach: $.boards.publicBoards -->
-            <a href="" class="tile double bg-darkCobalt" data-bind="attr: { href: '#/board/'+boardId() }">
+            <a href="" class="tile double bg-blue" data-bind="attr: { href: '#/board/'+boardId() }">
                 <div class="tile-content">
                     <div class="padding10 text-left">
-                        <h4 class="fg-white no-margin" data-bind="text:name"></h4>
-                        <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                        <h4 class="fg-white no-margin span2" data-bind="text:name"></h4>
+                        <h1 class="fg-white place-top-right margin10" data-bind="text: cardCount"></h1>
                     </div>
                 </div>
                 <div class="brand">
-                    <div class="label"><span class="no-margin fg-white"><span class="icon-grid-view"></span></span></div>
-                    <div class="badge"></div>
+                    <div class="padding5">
+                        <!-- ko foreach: collaborators -->
+                        <img src="" class="" data-bind="attr: { src: '/api/avatar/'+$data +'?height=25', title: $data }" />
+                        <!-- /ko -->
+                    </div>
                 </div>
             </a>
             <!-- /ko -->
@@ -148,16 +158,19 @@
         <!-- ko if: selectedView() == 'archived' -->
         <div class="tile-group no-margin padding5 ntp" style="width:100%">
             <!-- ko foreach: $.boards.archivedBoards -->
-            <a href="" class="tile double bg-darkCobalt" data-bind="click: $parent.unarchiveBoard">
+            <a href="" class="tile double bg-dark" data-bind="click: $parent.unarchiveBoard">
                 <div class="tile-content">
                     <div class="padding10 text-left">
-                        <h4 class="fg-white no-margin" data-bind="text:name"></h4>
-                        <h1 class="fg-white" data-bind="text: cardCount"></h1>
+                        <h4 class="fg-white no-margin span2" data-bind="text:name"></h4>
+                        <h1 class="fg-white place-top-right margin10" data-bind="text: cardCount"></h1>
                     </div>
                 </div>
                 <div class="brand">
-                    <div class="label"><span class="no-margin fg-white"><span class="icon-grid-view"></span></span></div>
-                    <div class="badge"></div>
+                    <div class="padding5">
+                    <!-- ko foreach: collaborators -->
+                    <img src="" class="" data-bind="attr: { src: '/api/avatar/'+$data +'?height=25', title: $data }" />
+                    <!-- /ko -->
+                </div>
                 </div>
             </a>
             <!-- /ko -->

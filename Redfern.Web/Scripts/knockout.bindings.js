@@ -589,3 +589,29 @@ ko.bindingHandlers.hover = {
     }
 }
 
+/**
+ * Metro UI Dropdown
+ * 
+ */
+ko.bindingHandlers.dropdown = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var bindings = allBindings(),
+            value = valueAccessor(),
+            dropdownMenu = $(element).next('.dropdown-menu');
+
+        // enable dropdown
+        dropdownMenu.dropdown();
+
+        // handle click event on dropdown options
+        dropdownMenu.find('li>a').click(function (event) {
+            value($(this).text());
+            if (bindings.prefix != null)
+                $(element).text(bindings.prefix + ' ' + value());
+            else
+                $(element).text(value());
+            event.preventDefault();
+        })
+
+    }
+}
+

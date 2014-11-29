@@ -24,7 +24,7 @@ namespace Redfern.Web.API
         }
 
         // GET api/notification/user
-        [Route("{user:alpha}")]
+        [Route("{user}")]
         public IList<NotificationViewModel> Get(string user) 
         {
             return AutoMapper.Mapper.Map<IList<Notification>, IList<NotificationViewModel>>(_repository.Notifications.Where(n => n.RecipientUser == user && !n.ReadDate.HasValue).ToList());

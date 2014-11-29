@@ -17,7 +17,7 @@
     self.isArchived = ko.observable(data.isArchived);
     self.boardId = ko.observable(data.boardId);
     self.columnId = ko.observable(data.columnId);
-    self.columnName = column.name;
+    self.columnName = ko.computed(function () { return self.parent.name(); });
     self.sequence = ko.observable(data.sequence);
     self.tags = ko.observableArray(data.tags)
     self.commentCount = ko.observable(data.commentCount);

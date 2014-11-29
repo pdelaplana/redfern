@@ -18,7 +18,7 @@
                                 <i class="icon-pop-out place-right" style="cursor:pointer" data-bind="click:expand"></i>
                             </h4>
                         </div>
-                        <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled: $.boardcontext.current.enableSorting() && $parent.hasAccess('RearrangeCards') , options: { placeholder: CardPlaceHolder, items:'a.tile:not(.pinned)',  scroll: true} }">
+                        <div class="board-column-content content" data-bind="sortable: { data: cards,  afterMove:resequenceAllCards, connectClass:'board-column-content', isEnabled: $.boardcontext.current.enableSorting() && $parent.hasAccess('RearrangeCards') , options: { placeholder: CardPlaceHolder, items:'a.tile:not(.pinned)',  scroll: true, zIndex:1000, stack:'.tile'} }">
                             <a class="tile double" data-bind="attr: { href: '#/board/'+boardId()+'/card/'+cardId() }, visible: show, setTileColor: color, archived : $parent.isArchiveColumn()">
                                 <div class="tile-content">
                                     <div class="padding10" style="overflow:hidden">
@@ -155,14 +155,41 @@
 </script>
 
 <script id="board-list-template" type="text/html">
-    <table class="table">
-        <thead>
-            <tr>Description</tr>
-            <tr>Assigned To</tr>
-        </thead>
-        <tbody data-bind="">
+    <div class="padding15">
+        <nav class="horizontal-menu">
+            <ul>
+                <li>
+                    <a class="dropdown-toggle" href="#" data-bind="dropdown:sortBy, prefix: 'Sort By:'">Sort By: Title</a>
+                    <ul class="dropdown-menu" >
+                        <li><a href="#" data-option-val="title">Title</a></li>
+                        <li><a href="#" data-option-val="assignedToUser">Assignee</a></li>
+                        <li><a href="#" data-option-val="parent().name">Column</a></li>
+                        <li><a href="#" data-option-val="color">Color</a></li>
+                        <li><a href="#" data-option-val="dueDate">Due Date</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <table class="table hovered" style="width:85%">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>Description</td>
+                    <td>Column</td>
+                    <td>Assigned To</td>
+                    <td>Due</td>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: cards">
+                <tr data-bind="visible:show">
+                    <td><span class="label" data-bind="setTileColor:color"></span></td>
+                    <td><span data-bind="cardLabelDisplay: cardLabel"></span> <a data-bind="text:title, attr: { href: '#/board/'+boardId()+'/card/'+cardId() }"></a></td>
+                    <td><span data-bind="text:parent.name()"></span></td>
+                    <td><span data-bind="text:assignedToUserFullName()"></span></td>
+                    <td><span data-bind="text:dueDate() != null ? dueDate().toLocalDate() : '-'"></span></td>
 
-        </tbody>
-    </table>
-
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </script>

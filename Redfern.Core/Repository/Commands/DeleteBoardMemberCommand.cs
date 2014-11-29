@@ -18,7 +18,10 @@ namespace Redfern.Core.Repository.Commands
         public CommandResult<bool> Execute(RedfernDb db)
         {
             BoardMember member = db.BoardMembers.Find(this.BoardMemberId);
+            if (member == null) return this.CommandResult<bool>(false, db, "Member not found.");
            
+            // else
+
             // create the activity
             Activity activity = db.Activities.Create();
             activity.ActivityDate = DateTime.UtcNow;

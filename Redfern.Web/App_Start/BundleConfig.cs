@@ -105,6 +105,8 @@ namespace Redfern.Web
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                         "~/scripts/knockout-{version}.js",
                         "~/scripts/knockout.mapping-latest.js",
+                        "~/scripts/knockout.mapping-latest.js",
+                        "~/scripts/knockout-animate.js",
                         "~/scripts/knockout.functions.js",
                         "~/scripts/knockout.bindings.js",
                         "~/scripts/knockout.bindings.markdowndeep.js",
@@ -184,6 +186,7 @@ namespace Redfern.Web
                       "~/scripts/dropzone/css/dropzone.css",
                       "~/content/colorbox.css",
                       "~/content/popModal.css",
+                      "~/content/animate.css",
                       "~/content/site.css"));
         }
     }

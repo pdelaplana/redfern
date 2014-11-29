@@ -49,7 +49,6 @@ function BoardViewModel(data) {
     self.lastAccessedDate = ko.observable(data.lastAccessedDate);
 
 
-    self.cards = ko.observableArray();
     self.columns = ko.observableArray();
     self.members = ko.observableArray();
     self.cardTypes = ko.observableArray();
@@ -123,6 +122,39 @@ function BoardViewModel(data) {
 
     }
 
+    self.sortBy = ko.observable();
+    // computed array of cards
+    self.cards = ko.computed(function () {
+
+        var cards = [];
+        $.each(self.columns(), function (x, column) {
+            if (column.show()) {
+                $.each(column.cards(), function (y, card) {
+                    cards.push(card);
+                })
+            }
+        })
+        return cards.sort(function (a, b) {
+            var textA, textB, sortBy = 'title';
+            if (self.sortBy() == 'Due Date') {
+                if( a.dueDate() == null) 
+                    return 0;
+                else
+                    return  moment(a.dueDate()).isAfter(b.dueDate()) ? 1 : -1;
+            } else {
+                if (self.sortBy() == 'Assignee') {
+                    sortBy = 'assignedToUserFullName';
+                } else if (self.sortBy() == 'Color') {
+                    sortBy = 'color';
+                } else if (self.sortBy() == 'Column') {
+                    sortBy = 'columnName';
+                }
+                textA = ko.unwrap(a[sortBy]).toUpperCase();
+                textB = ko.unwrap(b[sortBy]).toUpperCase();
+            } 
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+    });
 
     self.hasAccess = function (accessType) {
         return ko.utils.arrayFirst(self.accessList(), function (item) {
@@ -130,12 +162,15 @@ function BoardViewModel(data) {
         }) != null;
     }
 
+    // 
     self.options = {
         showCardAge: ko.observable(false)
     }
 
 
-    //*** Do initialization stuff here ****
+
+
+    // *** Do initialization stuff here ****
 
     // assign this to global BoardContext object
     BoardContext.current = self;

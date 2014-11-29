@@ -12,8 +12,8 @@
         repository.boardId = BoardContext.current.boardId();
         repository.boardMemberId = self.boardMemberId();
         return repository.remove().then(function (result) {
-            BoardContext.current.hub.notify.onCollaboratorRemoved(BoardContext.current.boardId(), self.userName(), result.activityContext);
-            BoardContext.current.members.remove(self)
+            $.boardcontext.current.hub.notify.onCollaboratorRemoved($.boardcontext.current.boardId(), self.userName(), result.activityContext);
+            $.boardcontext.current.members.remove(self)
         });
     }
 }

@@ -5,6 +5,10 @@
         <!-- ko if: (viewMode() == 'board') -->
         <div data-bind="template:{ name: 'board-template', data: $data}"></div>
         <!-- /ko -->
+        <!-- ko if: (viewMode() == 'list') -->
+        <div data-bind="template:{ name: 'board-list-template', data: $data}"></div>
+        <!-- /ko -->
+
         <!-- ko if: (viewMode() == 'columnview') -->
         <div data-bind="template:{ name: 'column-properties-template', data: $data}"></div>
         <!-- /ko -->

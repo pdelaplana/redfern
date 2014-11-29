@@ -81,7 +81,9 @@
         return notifications.concat(dueCards);
     })
 
+    //
     // operations
+    //
     self.changeBoardName = function () {
         var repository = new BoardRepository();
         repository.boardId=self.boardId();

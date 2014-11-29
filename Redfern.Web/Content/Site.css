@@ -484,31 +484,50 @@ div.input-control label input[type=text]:focus, div.input-control label input[ty
 
 /* entire container, keeps perspective */
 .flip-container {
-	perspective: 1000;
+    /*
+    perspective: 1000;
 	transform-style: preserve-3d;
-
+    */
+	
     /* 1 */
     /* For Firefox <= 15 to apply perspective. Without these two lines transformation will be flat.
     This fix, however, doesn’t apply if we put overflow property on the element being fixed.
-    */
     -moz-transform: perspective(1000px);
     -moz-transform-style: preserve-3d;
     
+
     -webkit-perspective: 1000;
     -moz-perspective: 1000;
     -o-perspective: 1000;
-    perspective: 1000; 
+
+     */
+    
+    perspective: 1000;
+
+
 }
 
+
 .flipper{
+	/*
+    transform-style: preserve-3d;
+    
     -moz-transform: perspective(1000px);
     -moz-transform-style: preserve-3d;
-
+    */
+	
+	/* flip speed goes here */
+	transition: 0.9s;
+	
     position: relative;
 }
 
 /* flip the pane when hovered */
-.flip-container.flip .flipper {
+.flip-container.flip .back {
+    transform: rotateY(0deg);
+}
+
+.flip-container.flip .front {
     transform: rotateY(180deg);
 }
 
@@ -520,7 +539,7 @@ div.input-control label input[type=text]:focus, div.input-control label input[ty
     }
 
       
-    /*  ie flip the pane when hovered */
+    /*  ie flip the pane  */
     .flip-container.flip .back  {
         transform: rotateY(0deg);
     }
@@ -530,9 +549,7 @@ div.input-control label input[type=text]:focus, div.input-control label input[ty
 }
 
 .front {
-    /*Fix for Chrome, version <= 22*/    
-   
-      -webkit-transform: rotateY(0deg);
+    
 
     /* or this
     -webkit-transform: translate3d(0, 0, 0);
@@ -541,63 +558,47 @@ div.input-control label input[type=text]:focus, div.input-control label input[ty
 }
 
 
-
-.flip-container .front, .flip-container .back {
-	width: 100%;
-
-
-	/*
-        width: 285px;
-        height: 480px;
-
-	*/
-}
-
-/* flip speed goes here */
-.flipper {
-	transition: 0.6s;
-	transform-style: preserve-3d;
-
-	position: relative;
-}
-
 /* hide back of pane during swap */
 .front, .back {
-	backface-visibility: hidden;
+	/*
+    backface-visibility: hidden;
 	transition: 0.6s;
 	transform-style: preserve-3d;
+	*/
+    backface-visibility: hidden;
+	transition: 0.6s;
 
-	position: absolute;
-	top: 0;
-	left: 0;
+
+    width:100%;
+    
 }
 
 /*  UPDATED! front pane, placed above back */
 .front {
-	z-index: 2;
-	transform: rotateY(0deg);
+    /*
+    z-index: 2;
+    transform: rotateY(0deg);
+    -webkit-transform: rotateY(0deg);    
+    */
+    /*Fix for Chrome, version <= 22*/    
+    
+    z-index: 2;
 }
 
 /* back, initially hidden pane */
 .back {
-	transform: rotateY(-180deg);
-}
-
-/* 
-	Some vertical flip updates 
-*/
-.vertical.flip-container {
-	position: relative;
-}
-
-.vertical .back {
-	transform: rotateX(180deg);
-}
-
-.vertical.flip-container:hover .back {
-	transform: rotateX(0deg);
-}
-
-.vertical.flip-container:hover .front {
-	transform: rotateX(180deg);
+    /*
+    -webkit-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+    position: absolute;
+	top: 0;
+	left: 0;
+    */
+    /*Fix for Chrome, version <= 22*/  
+    transform: rotateY(-180deg);
+    position: absolute;
+	top: 0;
+	left: 0;
+    
+	
 }

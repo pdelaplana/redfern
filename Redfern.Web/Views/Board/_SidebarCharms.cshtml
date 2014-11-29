@@ -19,24 +19,50 @@
         </span>
         <!-- /ko -->
     </a>
-    <nav id="Sidebar" class="sidebar" data-bind="visible: activeOption() == 'main'">
+    <nav id="Sidebar" class="sidebar" data-bind="slideVisible: activeOption()=='main', direction:'right', directionOut:'right', duration:400, durationOut:400">
         <ul>
             <li class="title">Board Options</li>
-            <li data-bind=""><a href="" data-bind="click: function(){ activeOption('changeboardsettings') },visible: hasAccess('OpenBoardSettings') ">Settings</a></li>
+            <li data-bind=""><a href="" data-bind="click: function(){ activeOption('changepreferences') },visible:true">Preferences</a></li>
+
             <li data-bind="visible: hasAccess('ViewBoardActivities')"><a href="" data-bind="click: function(){ activeOption('activities') }">Activities  <span class="label place-right bg-red fg-white" data-bind="visible: $.boardcontext.current.newActivitiesCounter() > 0, text:$.boardcontext.current.newActivitiesCounter"></span></a></li>
             <li data-bind="visible: hasAccess('ViewBoardNotifications')"><a href="" data-bind="click: function(){ activeOption('notifications') }">Notifications <span class="label place-right bg-red fg-white" data-bind="visible: notifications().length > 0, text: notifications().length"></span></a></li>
             @*
-            <li data-bind="visible: viewMode() =='board'"><a href="" data-bind="click: function(){ viewMode('overview') }">Zoom out</a></li>
-            <li data-bind="visible: viewMode() =='overview'"><a href="" data-bind="click: function(){ viewMode('board') }">Zoom in</a></li>    
+                <li data-bind="visible: viewMode() =='board'"><a href="" data-bind="click: function(){ viewMode('overview') }">Zoom out</a></li>
+                <li data-bind="visible: viewMode() =='overview'"><a href="" data-bind="click: function(){ viewMode('board') }">Zoom in</a></li>
             *@
             <li data-bind="visible: hasAccess('ViewCollaborators')"><a href="" data-bind="click: function(){ activeOption('members') }">Collaborators</a></li>
             <li data-bind="visible: hasAccess('RelabelColors')"><a href="" data-bind="click: function(){ activeOption('colors') }">Colors</a></li>
             <li data-bind="visible: hasAccess('RearrangeColumns') && viewMode() == 'board'"><a href="" data-bind="click: function(){ activeOption('columns') }">Columns</a></li>
             <li data-bind="visible: hasAccess('FilterCards')"><a href="" data-bind="click: function(){ activeOption('filter') }">Filter</a></li>
+            <li data-bind=""><a href="" data-bind="click: function(){ activeOption('changeboardsettings') },visible: hasAccess('OpenBoardSettings') ">Settings</a></li>
         </ul>
     </nav>
 
-    <nav id="Sidebar_BoardSettings" class="sidebar" data-bind="visible: activeOption() == 'changeboardsettings'">
+    <nav id="Sidebar_Prefences" class="sidebar" data-bind="visible: activeOption() == 'changepreferences', direction:'right', directionOut:'right'">
+        <ul>
+            <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Preferences</li>
+            <li>
+                <div class="padding15">
+                    <p class="text-muted">Layout...</p>
+                    <div class="button-set">
+                        <button data-bind="css:{ 'active': viewMode() == 'board' }, click: function(){ viewMode('board');}" title="Show as Board"><i class="icon-grid"></i></button>
+                        <button data-bind="css:{ 'active': viewMode() == 'list' }, click: function(){ viewMode('list');}" title="Show as List"><i class="icon-list"></i></button>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="padding15">
+                    <p class="text-muted">Show age of cards...</p>
+                    <div class="button-set">
+                        <button data-bind="css:{ 'active': $.boardcontext.current.options.showCardAge() }, click: function(){ $.boardcontext.current.options.showCardAge() ? $.boardcontext.current.options.showCardAge(false) : $.boardcontext.current.options.showCardAge(true)}" title="Show age of cards"><i class="icon-calendar"></i></button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+    </nav>
+
+    <nav id="Sidebar_BoardSettings" class="sidebar" data-bind="visible: activeOption() == 'changeboardsettings', direction:'right', directionOut:'right'">
         <ul>
             <li class="title"><i class="icon-arrow-left-3 fg-white" style="cursor:pointer" data-bind="click: function(){ activeOption('main') }"></i> Settings</li>
             <li>
@@ -68,20 +94,7 @@
                     <button class="bg-red fg-white" data-bind="click: archive">Archive</button>
                 </div>
             </li>
-            <li>
-                <div class="padding15">
-                    <p class="text-muted">Additional options...</p>
-                    <div class="input-control checkbox">
-                        <label class="text-muted">
-                            <input type="checkbox" data-bind="checked: BoardContext.current.options.showCardAge" />
-                            <span class="check"></span>
-                            Show age of cards
-                        </label>
-                        
-                    </div>
-                    
-                </div>
-            </li>
+           
         </ul>
     </nav>
 
